@@ -30,13 +30,13 @@ require_once 'GPhpThread.php';
 class MyThread extends GPhpThread {
 	public function run() {
 		echo 'Hello, I am a thread with id ' . getmypid() . "!\n";
-		usleep(mt_rand(0, 5000000));
+		//usleep(mt_rand(0, 5000000));
 		if ($this->criticalSection->lock()) {
 			echo "=--- locked " . getmypid() . "\n";
 			$this->criticalSection->addOrUpdateResource('IAM', getmypid());
 			$this->criticalSection->addOrUpdateResource('IAMNOT', '0xdead1');
 			$this->criticalSection->removeResource('IAMNOT');
-			while (!$this->criticalSection->unlock()) usleep(200000);
+			$this->criticalSection->unlock();
 			echo "=--- unlocked " . getmypid() . "\n";
 		}
 	}
@@ -48,11 +48,12 @@ $criticalSection = new GPhpThreadCriticalSection();
 
 $thr1 = new MyThread($criticalSection);
 $thr2 = new MyThread($criticalSection);
-
 $thr1->start();
 $thr2->start();
+
 echo "Thread returned: " . $thr1->join() . "\n";
 echo "Thread returned: " . $thr2->join() . "\n";
+
 $thr1 = null;
 $thr2 = null;
 

@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-define("DEBUG_MODE", true);
+//define("DEBUG_MODE", true);
 
 declare(ticks=1);
 
@@ -90,7 +90,7 @@ class GPhpThreadIntercom /* {{{ */
 			$read = $except = null;
 
 			$commChanFdArr = $this->commChanFdArr;
-			stream_select($read, $commChanFdArr, $except, 10);
+			if (stream_select($read, $commChanFdArr, $except, 1) == 0) return false;
 
 			while ($dataLength > 0)	{
 				$bytesWritten = fwrite($this->commChanFdArr[0], $data);
@@ -98,7 +98,7 @@ class GPhpThreadIntercom /* {{{ */
 				$dataLength -= $bytesWritten;
 				if ($dataLength > 0) {
 					$commChanFdArr = $this->commChanFdArr;
-					if (stream_select($read, $commChanFdArr, $except, 0, 200000) == 0)
+					if (stream_select($read, $commChanFdArr, $except, 10) == 0)
 						return false;
 					$data = substr($data, 0, $bytesWritten);
 				}
@@ -118,7 +118,7 @@ class GPhpThreadIntercom /* {{{ */
 		$write = $except = null;		
 		$data = null;
 		
-		if (stream_select($commChanFdArr, $write, $except, 10) == 0) return $data;
+		if (stream_select($commChanFdArr, $write, $except, 1) == 0) return $data;
 		
 		do {
 			$d = fread($this->commChanFdArr[0], 1);
@@ -127,30 +127,31 @@ class GPhpThreadIntercom /* {{{ */
 			$commChanFdArr = $this->commChanFdArr;
 		} while ($d !== false && stream_select($commChanFdArr, $write, $except, 0, 200000) != 0);
 
-		if (defined('DEBUG_MODE')) echo $data . '[' . getmypid() . "] received\n"; // 4 DEBUGGING1
+		if (defined('DEBUG_MODE')) echo $data . '[' . getmypid() . "] received\n"; // 4 DEBUGGING
 		return $data;
 	} /* }}} */
 	
 	public function isReceiveingDataAvailable() { /* {{{ */
 		if (!$this->success || !$this->isReadMode) return false;
 		if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) return false;
-		
-		$_commChanFdArr = $this->commChanFdArr;
-		$write = $except = null;
-		return (stream_select($_commChanFdArr, $write, $except, 0, 12000) != 0);
+
+		$commChanFdArr = $this->commChanFdArr;
+		return (stream_select($commChanFdArr, $write = null, $except = null, 0, 55000) != 0);
 	} /* }}} */
 } /* }}} */
 
 class GPhpThreadCriticalSection /* {{{ */
 {
-	private $myPid;
-	private $creatorPid;
+	private $myPid; // point of view of the current instance
+	private $creatorPid; // point of view of the current instance
+	
 	private $ownerPid = false;
 	private $pipeDir = '';
 	private $dataContainer = array();
 	
 	private $intercomWrite = null;
 	private $intercomRead = null;
+	private $intercomInterlocutorPid = null;
 	
 	private $uniqueId = 0;
 	private static $seed = 0;
@@ -192,13 +193,15 @@ class GPhpThreadCriticalSection /* {{{ */
 	
 	public function initialize($afterForkPid) { /* {{{ */
 		$this->uniqueId = GPhpThreadCriticalSection::$seed++;
-		GPhpThreadCriticalSection::$instancesListAArr["{$this->uniqueId}"] = $this;
 		
 		$this->myPid = getmypid();
 		
 		$retriesLimit = 60;
 		
 		if ($this->myPid == $this->creatorPid) { // parent
+			$this->intercomInterlocutorPid = $afterForkPid;
+			GPhpThreadCriticalSection::$instancesListAArr["{$this->uniqueId}"] = $this; // TODO TESTME, FIXME maybe
+			krsort(GPhpThreadCriticalSection::$instancesListAArr);
 			$i = 0;
 			do {
 				$this->intercomWrite = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_s{$this->myPid}-d{$afterForkPid}", false, true);
@@ -221,6 +224,7 @@ class GPhpThreadCriticalSection /* {{{ */
 				}
 			} while ($i < $retriesLimit);
 		} else { // child
+			$this->intercomInterlocutorPid = $this->creatorPid;
 			$i = 0;
 			do {
 				$this->intercomWrite = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_s{$this->myPid}-d{$this->creatorPid}", false, true);
@@ -246,11 +250,11 @@ class GPhpThreadCriticalSection /* {{{ */
 		
 		if (!$this->intercomWrite->isInitialized())	$this->intercomWrite = null;
 		if (!$this->intercomRead->isInitialized())	$this->intercomRead = null;
+		if ($this->intercomWrite == null || $this->intercomRead == null) $this->intercomInterlocutorPid = null;
 		
-		if ($this->intercomRead === null || $this->intercomWrite === null)
+		if ($this->intercomInterlocutorPid === null)
 			unset(GPhpThreadCriticalSection::$instancesListAArr["{$this->uniqueId}"]);
 	} /* }}} */
-	
 	
 	private function encodeMessage($msg, $name, $value) { /* {{{ */
 		// 2 decimal digits message code, 10 decimal digits PID,
@@ -276,43 +280,87 @@ class GPhpThreadCriticalSection /* {{{ */
 		else $value = null;
 	} /* }}} */
 	
+	private function isIntercomBroken() { /* {{{ */
+		return (empty($this->intercomWrite) || 
+				empty($this->intercomRead) || 
+				empty($this->intercomInterlocutorPid) ||
+				!$this->isPidAlive($this->intercomInterlocutorPid));
+	} /* }}} */
+	
+	private function send($operation, $resourceName, $resourceValue) { /* {{{ */
+		if ($this->isIntercomBroken()) return false;
+		
+		$isSent = false;
+		$isAlive = true;
+		
+		$msg = $this->encodeMessage($operation, $resourceName, $resourceValue);
+		
+		do {
+			$isSent = $this->intercomWrite->send($msg, strlen($msg));
+			if (!$isSent) {
+				$isAlive = $this->isPidAlive($this->intercomInterlocutorPid);
+				if ($isAlive) usleep(mt_rand(10000, 200000));
+			}
+			
+		} while ((!$isSent) && $isAlive);
+		
+		return $isSent;		
+	} /* }}} */
+	
+	private function receive(&$message, &$pid, &$resourceName, &$resourceValue) { /* {{{ */
+		if ($this->isIntercomBroken()) return false;
+
+		$data = null;
+		$isDataEmpty = false;
+		$isAlive = true;
+		
+		do {
+			$data = $this->intercomRead->receive();
+			$isDataEmpty = empty($data);
+			if ($isDataEmpty) {
+				$isAlive = $this->isPidAlive($this->intercomInterlocutorPid);
+				if ($isAlive) usleep(mt_rand(10000, 200000));
+			}
+		} while ($isDataEmpty && $isAlive);
+
+		if (!$isDataEmpty)
+			$this->decodeMessage($data, $message, $pid, $resourceName, $resourceValue);
+		
+		return !$isDataEmpty;
+	} /* }}} */
+	
 	private function requestLock() { /* {{{ */
-		if ($this->intercomWrite === null || $this->intercomRead === null) return false;
+		$msg = $pid = $name = $value = null;
+		
+		if (!$this->send(GPhpThreadCriticalSection::$LOCKSYN, $name, $value)) return false;
+		
+		if (!$this->receive($msg, $pid, $name, $value)) return false;
 
-		$pid = $name = $value = null;
-
-		$msg = $this->encodeMessage(GPhpThreadCriticalSection::$LOCKSYN, $name, $value);		
-		if (!$this->intercomWrite->send($msg, strlen($msg))) return false;
-
-		if (empty($ans = $this->intercomRead->receive())) return false;
-		$this->decodeMessage($ans, $msg, $pid, $name, $value);
-
-		if ($msg != GPhpThreadCriticalSection::$LOCKACK) return false;
+		if ($msg != GPhpThreadCriticalSection::$LOCKACK)
+			return false;
 
 		$this->ownerPid = $this->myPid;
 		return true;
 	} /* }}} */
 	
 	private function requestUnlock() { /* {{{ */
-		if ($this->intercomWrite === null || $this->intercomRead === null) return false;
-
-		$pid = $name = $value = null;
-
-		$msg = $this->encodeMessage(GPhpThreadCriticalSection::$UNLOCKSYN, $name, $value);
-		if (!$this->intercomWrite->send($msg, strlen($msg))) return false;
-
-		if (empty($ans = $this->intercomRead->receive())) return false;
-		$this->decodeMessage($ans, $msg, $pid, $name, $value);
+		$msg = $pid = $name = $value = null;
 		
-		if ($msg != GPhpThreadCriticalSection::$UNLOCKACK) return false;
+		if (!$this->send(GPhpThreadCriticalSection::$UNLOCKSYN, $name, $value))
+			return false;
+			
+		if (!$this->receive($msg, $pid, $name, $value))
+			return false;
+		
+		if ($msg != GPhpThreadCriticalSection::$UNLOCKACK)
+			return false;
 
-		$this->ownerPid = false;
+		$this->ownerPid = $this->myPid;
 		return true;
 	} /* }}} */
 	
 	private function updateDataContainer($actionType, $name, $value) { /* TESTME {{{ */
 		$result = false;
-		if ($this->intercomWrite === null || $this->intercomRead === null) return $result;
 		
 		$msg = null;
 		$pid = null;
@@ -320,10 +368,8 @@ class GPhpThreadCriticalSection /* {{{ */
 		switch ($actionType) {
 			case GPhpThreadCriticalSection::$ADDORUPDATEACT:
 				if ($name === null || $name === '') break;
-				$addreq = $this->encodeMessage(GPhpThreadCriticalSection::$ADDORUPDATESYN, $name, $value);
-				if (!$this->intercomWrite->send($addreq, strlen($addreq))) break;
-				if (empty($resp = $this->intercomRead->receive())) break;
-				$this->decodeMessage($resp, $msg, $pid, $name, $_value = null);
+				if (!$this->send(GPhpThreadCriticalSection::$ADDORUPDATESYN, $name, $value)) break;
+				if (!$this->receive($msg, $pid, $name, $value)) break;
 				if ($msg == GPhpThreadCriticalSection::$ADDORUPDATEACK) { 
 					$result = true;
 					$this->dataContainer[$name] = $value;
@@ -332,10 +378,8 @@ class GPhpThreadCriticalSection /* {{{ */
 
 			case GPhpThreadCriticalSection::$ERASEACT:
 				if ($name === null || $name === '') break;
-				$addreq = $this->encodeMessage(GPhpThreadCriticalSection::$ERASESYN, $name, $value);
-				if (!$this->intercomWrite->send($addreq, strlen($addreq))) break;
-				if (empty($resp = $this->intercomRead->receive())) break;
-				$this->decodeMessage($resp, $msg, $pid, $name, $value);
+				if (!$this->send(GPhpThreadCriticalSection::$ERASESYN, $name, $value)) break;
+				if (!$this->receive($msg, $pid, $name, $value)) break;
 				if ($msg == GPhpThreadCriticalSection::$ERASEACK) {
 					$result = true;
 					unset($this->dataContainer[$name]);
@@ -344,10 +388,8 @@ class GPhpThreadCriticalSection /* {{{ */
 
 			case GPhpThreadCriticalSection::$READACT:
 				if ($name === null || $name === '') break;
-				$addreq = $this->encodeMessage(GPhpThreadCriticalSection::$READSYN, $name, $value);
-				if (!$this->intercomWrite->send($addreq, strlen($addreq))) break;
-				if (empty($resp = $this->intercomRead->receive())) break;
-				$this->decodeMessage($resp, $msg, $pid, $name, $value);
+				if (!$this->send(GPhpThreadCriticalSection::$READSYN, $name, $value)) break;
+				if (!$this->receive($msg, $pid, $name, $value)) break;
 				if ($msg == GPhpThreadCriticalSection::$READACK) {
 					$result = true;
 					$this->dataContainer[$name] = $value;
@@ -355,11 +397,8 @@ class GPhpThreadCriticalSection /* {{{ */
 			break;
 			
 			case GPhpThreadCriticalSection::$READALLACT:
-				$addreq = $this->encodeMessage(GPhpThreadCriticalSection::$READALLSYN, $name, $value);
-				if (!$this->intercomWrite->send($addreq, strlen($addreq))) break;
-				$resp = $this->intercomRead->receive();
-				if (empty($resp)) break;
-				$this->decodeMessage($resp, $msg, $pid, $name, $value);
+				if (!$this->send(GPhpThreadCriticalSection::$READALLSYN, $name, $value)) break;
+				if (!$this->receive($msg, $pid, $name, $value)) break;
 				if ($msg == GPhpThreadCriticalSection::$READALLACK) {
 					$result = true;
 					$this->dataContainer = $value;
@@ -376,94 +415,87 @@ class GPhpThreadCriticalSection /* {{{ */
 		return false;
 	} /* }}} */
 		
-	public static function dispatch($useBlocking = false) { /* TODO TESTME {{{ */	
+	public static function dispatch($useBlocking = false) { /* TODO TESTME {{{ */
+		
+		$_mypid = getmypid();
+		foreach (GPhpThreadCriticalSection::$instancesListAArr as &$instance) {
+			if ($instance->creatorPid != $_mypid) return; // prevent any threads to run their own dispatchers
+		}
+		
 		foreach (GPhpThreadCriticalSection::$instancesListForRemovalAArr as $inst) {
 			unset(GPhpThreadCriticalSection::$instancesListAArr[$inst]);
 		}
 		GPhpThreadCriticalSection::$instancesListForRemovalAArr = array();
-			
+		
 		foreach (GPhpThreadCriticalSection::$instancesListAArr as &$instance) {
+			
+			//echo "Dispatch " . getmypid() . " {$instance->intercomInterlocutorPid} {" . mt_rand(0, 4000000) . "\n";
 		
 			if (!$useBlocking) {
-				if (!$instance->intercomRead->isReceiveingDataAvailable()) continue;
-			}		
-			
-			$req = $instance->intercomRead->receive();
-			if (!$req) continue;
-			
+				if (!$instance->intercomRead->isReceiveingDataAvailable()) 
+				continue;
+			}
+
 			$msg = $pid = $name = $value = null;
-			$instance->decodeMessage($req, $msg, $pid, $name, $value);
+
+			if (!$instance->receive($msg, $pid, $name, $value))	continue;
 			
 			switch ($msg) {
 				case GPhpThreadCriticalSection::$LOCKSYN:
 					if ($instance->ownerPid !== false && $instance->ownerPid != $pid && $instance->isPidAlive($instance->ownerPid)) {
-						$resp = $instance->encodeMessage(GPhpThreadCriticalSection::$LOCKNACK, null, $pid);
-						$r = $instance->intercomWrite->send($resp, strlen($resp));
+						$instance->send(GPhpThreadCriticalSection::$LOCKNACK, null, $pid);
 						continue;
 					}
-					$resp = $instance->encodeMessage(GPhpThreadCriticalSection::$LOCKACK, null, $pid);
-					if (!$instance->intercomWrite->send($resp, strlen($resp))) continue;
+					if (!$instance->send(GPhpThreadCriticalSection::$LOCKACK, null, $pid)) continue;
 					$instance->ownerPid = $pid;
 				break;
 				
 				case GPhpThreadCriticalSection::$UNLOCKSYN:
 					if ($instance->ownerPid === false) {
-						$resp = $instance->encodeMessage(GPhpThreadCriticalSection::$UNLOCKACK, null, $pid);
-						if (!$instance->intercomWrite->send($resp, strlen($resp))) continue;
+						if (!$instance->send(GPhpThreadCriticalSection::$UNLOCKACK, null, $pid)) continue;
 					}
 					$isOwnerAlive = $instance->isPidAlive($instance->ownerPid);
 					if (!$isOwnerAlive || $instance->ownerPid == $pid) {
 						if (!$isOwnerAlive) $instance->ownerPid = false;
-						$resp = $instance->encodeMessage(GPhpThreadCriticalSection::$UNLOCKACK, null, $pid);
-						if (!$instance->intercomWrite->send($resp, strlen($resp))) continue;
+						if (!$instance->send(GPhpThreadCriticalSection::$UNLOCKACK, null, $pid)) continue;
 						$instance->ownerPid = false;
 					} else {
-						$resp = $instance->encodeMessage(GPhpThreadCriticalSection::$UNLOCKNACK, null, null);
-						$instance->intercomWrite->send($resp, strlen($resp));
-						continue;
+						$instance->send(GPhpThreadCriticalSection::$UNLOCKNACK, null, null);
 					}
 				break;
 				
 				case GPhpThreadCriticalSection::$ADDORUPDATESYN:
 					if ($instance->ownerPid !== $pid) {
-						$resp = $instance->encodeMessage(GPhpThreadCriticalSection::$ADDORUPDATENACK, null, null);
-						$instance->intercomWrite->send($resp, strlen($resp));
+						$instance->send(GPhpThreadCriticalSection::$ADDORUPDATENACK, null, null);
 						continue;
 					}
-					$resp = $instance->encodeMessage(GPhpThreadCriticalSection::$ADDORUPDATEACK, $name, null);
-					if (!$instance->intercomWrite->send($resp, strlen($resp))) continue;
+					if (!$instance->send(GPhpThreadCriticalSection::$ADDORUPDATEACK, $name, null)) continue;
 					$instance->dataContainer[$name] = $value;
 				break;
 				
 				case GPhpThreadCriticalSection::$ERASESYN:
 					if ($instance->ownerPid !== $pid) {
-						$resp = $instance->encodeMessage(GPhpThreadCriticalSection::$ERASENACK, null, null);
-						$instance->intercomWrite->send($resp, strlen($resp));
+						$instance->send(GPhpThreadCriticalSection::$ERASENACK, null, null);
 						continue;
 					}
-					$resp = $instance->encodeMessage(GPhpThreadCriticalSection::$ERASEACK, $name, null);
-					if (!$instance->intercomWrite->send($resp, strlen($resp))) continue;
+					if (!$instance->send(GPhpThreadCriticalSection::$ERASEACK, $name, null)) continue;
 					unset($instance->dataContainer[$name]);
 				break;
 				
 				case GPhpThreadCriticalSection::$READSYN:
 					if ($instance->ownerPid !== $pid) {
-						$resp = $instance->encodeMessage(GPhpThreadCriticalSection::$READNACK, null, null);
-						$instance->intercomWrite->send($resp, strlen($resp));
+						$instance->send(GPhpThreadCriticalSection::$READNACK, null, null);
 						continue;
 					}
-					$resp = $instance->encodeMessage(GPhpThreadCriticalSection::$READACK, $name, $instance->dataContainer[$name]);
-					if (!$instance->intercomWrite->send($resp, strlen($resp))) continue;
+					$instance->send(GPhpThreadCriticalSection::$READACK, $name, $instance->dataContainer[$name]);
 				break;
 				
 				case GPhpThreadCriticalSection::$READALLSYN:
 					if ($instance->ownerPid !== $pid) {
-						$resp = $instance->encodeMessage(GPhpThreadCriticalSection::$READALLNACK, null, null);
-						$instance->intercomWrite->send($resp, strlen($resp));
+						$instance->send(GPhpThreadCriticalSection::$READALLNACK, null, null);
 						continue;
 					}
-					$resp = $instance->encodeMessage(GPhpThreadCriticalSection::$READALLACK, null, $instance->dataContainer);
-					if (!$instance->intercomWrite->send($resp, strlen($resp))) continue;
+					$instance->send(GPhpThreadCriticalSection::$READALLACK, null, $instance->dataContainer);
 				break;
 			}
 		}
@@ -471,33 +503,36 @@ class GPhpThreadCriticalSection /* {{{ */
 
 	public function lock($useBlocking = true) { /* {{{ */
 		if ($this->doIOwnIt()) return true;
-		
-		if ($this->ownerPid === false || !$this->isPidAlive($this->ownerPid)) {
-			if ($this->myPid == $this->creatorPid) { // local lock request
-				$this->ownerPid = $this->myPid;
+
+		do {
+			if ($this->ownerPid === false || !$this->isPidAlive($this->ownerPid)) {
+				if ($this->myPid == $this->creatorPid) { // local lock request
+					$this->ownerPid = $this->myPid;
+					return true;
+				}
+				
+				do {
+					$res = $this->requestLock();
+
+					if ($useBlocking && !$res) {
+						if ($this->isIntercomBroken()) return false;
+						usleep(mt_rand(10000, 200000));
+					}
+				} while ($useBlocking && !$res);
+				
+				if (!$res) return false;
+
+				if (!$this->updateDataContainer(self::$READALLACT, null, null)) {
+					$this->unlock();
+					return false;
+				}
 				return true;
 			}
 			
-			do {
-				echo "REQUESTVAME (" . getmypid() . ") !!!\n";
-				$res = $this->requestLock();
-
-				if ($useBlocking && !$res) {
-					if (!$this->isPidAlive($this->creatorPid)) return false;
-					usleep(mt_rand(70000, 250000));
-				}
-				if ($res) break;
-			} while ($useBlocking);
-			
-			if (!$res) return false;
-
-			if (!$this->updateDataContainer(self::$READALLACT, null, null)) {
-				$this->unlock();
-				return false;
-			}
-			return true;
+			if ($useBlocking) usleep(mt_rand(10000, 200000));
 		}
-		return false;
+		while ($useBlocking);
+		
 	} /* }}} */
 	
 	public function unlock() { /* {{{ */
@@ -506,9 +541,7 @@ class GPhpThreadCriticalSection /* {{{ */
 				$this->ownerPid = false;
 				return true;
 			}
-			if (!$this->isPidAlive($this->creatorPid)) return true;
-			if (!$this->requestUnlock()) return false;
-			return true;
+			return $this->requestUnlock();
 		}
 		return false;
 	} /* }}} */
@@ -580,7 +613,6 @@ abstract class GPhpThread /* {{{ */
 	} /* }}} */
 	
 	public function __destruct() { /* {{{ */
-		$this->stop();
 	} /* }}} */
 	
 	public final function getExitCode() { /* {{{ */
@@ -588,29 +620,28 @@ abstract class GPhpThread /* {{{ */
 	} /* }}} */
 	
 	private function amIParent() { /* {{{ */
-		if ($this->childPid > 0 || $this->childPid == -1) return true;
-		return false;
+		return ($this->childPid > 0 ? true : false);
 	} /* }}} */
 	
 	abstract public function run();	
 	
 	public final function start() { /* {{{ */
+		if ($this->childPid !== null) exit(0);
+
 		$this->childPid = pcntl_fork();
 		if ($this->childPid == -1) return false;
 		if ($this->criticalSection !== null) $this->criticalSection->initialize($this->childPid);
 		if (!$this->amIParent()) { // child
-			if (GPhpThread::$isCriticalSectionDispatcherRegistered) { // no dispatchers needed in the childs; this means that no threads withing threads creation is possible
-				unregister_tick_function('GPhpThreadCriticalSection::dispatch');
-				GPhpThread::$isCriticalSectionDispatcherRegistered = false;
-			}			
-			$this->childPid = -99;
+			// no dispatchers needed in the childs; this means that no threads withing threads creation is possible
+			unregister_tick_function('GPhpThreadCriticalSection::dispatch');
 			$this->run();
 			$this->stop();
-		} else if ($this->criticalSection !== null)	{ // parent
-			if (!GPhpThread::$isCriticalSectionDispatcherRegistered) {
-				if (register_tick_function('GPhpThreadCriticalSection::dispatch')) {
+		} else {
+			if ($this->criticalSection !== null &&  
+				$this->childPid != -1 &&
+				!GPhpThread::$isCriticalSectionDispatcherRegistered) { // parent
+				if (register_tick_function('GPhpThreadCriticalSection::dispatch'))
 					GPhpThread::$isCriticalSectionDispatcherRegistered = true;
-				}
 			}
 		}
 	} /* }}} */
@@ -620,47 +651,43 @@ abstract class GPhpThread /* {{{ */
 			$r = posix_kill($this->childPid, ($force == false ? 15 : 9));
 			if ($r) {
 				if ($this->join()) $this->childPid = null;
-				if ($this->criticalSection !== null) {
+				if ($this->criticalSection !== null)
 					$this->criticalSection->finalize();
-				}
 			}
 			return $r;
 		}
-		
 		// child
-		if ($this->childPid == -1) return false;
-		
-		if ($this->childPid !== null)
-			exit(0);
+		if ($this->childPid == -1) return false;		
+		exit(0);
 	} /* }}} */
 	
 	public final function join($useBlocking = true) {	/* {{{ */
-		if ($this->amIParent() && $this->childPid !== null) {
+		if ($this->amIParent()) {
 			$status = null;
+			$res = 0;
 			if ($useBlocking) {
-				$res = 0;
 				while (($res = pcntl_waitpid($this->childPid, $status, WNOHANG)) == 0) usleep(mt_rand(80000, 250000));
+
 				if ($res > 0 && pcntl_wifexited($status)) {
 					$this->exitCode = pcntl_wexitstatus($status);
 					if ($this->criticalSection !== null) $this->criticalSection->finalize();
 				} else {
 					$this->exitCode = false;
 				}
-				
+			} else {
+				$res = pcntl_waitpid($this->childPid, $status, WNOHANG);
 				if ($res > 0 && $this->criticalSection !== null) $this->criticalSection->finalize();
-				return $res;
-			}
-			$res = pcntl_waitpid($this->childPid, $status, WNOHANG);
-			if ($res > 0 && $this->criticalSection !== null) $this->criticalSection->finalize();
-			if ($res > 0 && pcntl_wifexited($status)) {
-				$this->exitCode = pcntl_wexitstatus($status);
-				if ($this->criticalSection !== null) $this->criticalSection->finalize();
-			} else if ($res == -1) {
-				$this->exitCode = false;
+				if ($res > 0 && pcntl_wifexited($status)) {
+					$this->exitCode = pcntl_wexitstatus($status);
+					if ($this->criticalSection !== null) $this->criticalSection->finalize();
+				} else if ($res == -1) {
+					$this->exitCode = false;
+				}
 			}
 			return $res;
-		}		
-		return false;
+		}
+		if ($this->childPid == -1) return false;
+		exit(255);
 	} /* }}} */
 } /* }}} */
 ?>
