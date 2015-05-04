@@ -215,7 +215,7 @@ class GPhpThreadCriticalSection /* {{{ */
 			
 			$i = 0;
 			do {
-				$this->intercomRead = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_s{$afterForkPid}-d{$this->myPid}", true, false);
+				$this->intercomRead = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_s{$afterForkPid}-d{$this->myPid}", true, true);
 				if ($this->intercomRead->isInitialized()) {
 					$i = $retriesLimit;
 				} else {
