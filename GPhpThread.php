@@ -505,7 +505,7 @@ class GPhpThreadCriticalSection /* {{{ */
 		if ($this->doIOwnIt()) return true;
 
 		do {
-			if ($this->ownerPid === false || !$this->isPidAlive($this->ownerPid)) {
+			if (!$this->doIOwnIt() || !$this->isPidAlive($this->ownerPid)) {
 				if ($this->myPid == $this->creatorPid) { // local lock request
 					$this->ownerPid = $this->myPid;
 					return true;
@@ -531,7 +531,7 @@ class GPhpThreadCriticalSection /* {{{ */
 			
 			if ($useBlocking) usleep(mt_rand(10000, 200000));
 		}
-		while ($useBlocking);
+		while ($useBlocking && !$this->doIOwnIt());
 		
 	} /* }}} */
 	
@@ -670,10 +670,12 @@ abstract class GPhpThread /* {{{ */
 
 				if ($res > 0 && pcntl_wifexited($status)) {
 					$this->exitCode = pcntl_wexitstatus($status);
-					if ($this->criticalSection !== null) $this->criticalSection->finalize();
 				} else {
 					$this->exitCode = false;
 				}
+				
+				if ($this->criticalSection !== null) $this->criticalSection->finalize();
+				$this->childPid = null;
 			} else {
 				$res = pcntl_waitpid($this->childPid, $status, WNOHANG);
 				if ($res > 0 && $this->criticalSection !== null) $this->criticalSection->finalize();
@@ -682,6 +684,11 @@ abstract class GPhpThread /* {{{ */
 					if ($this->criticalSection !== null) $this->criticalSection->finalize();
 				} else if ($res == -1) {
 					$this->exitCode = false;
+				}
+				
+				if ($res != 0) {
+					if ($this->criticalSection !== null) $this->criticalSection->finalize();
+					$this->childPid = null;
 				}
 			}
 			return $res;
