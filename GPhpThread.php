@@ -216,7 +216,7 @@ class GPhpThreadCriticalSection /* {{{ */
 			krsort(GPhpThreadCriticalSection::$instancesListAArr);
 			$i = 0;
 			do {
-				$this->intercomWrite = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_s{$this->myPid}-d{$afterForkPid}", false, true);
+				$this->intercomWrite = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_{$this->uniqueId}_s{$this->myPid}-d{$afterForkPid}", false, true);
 				if ($this->intercomWrite->isInitialized()) {
 					$i = $retriesLimit;
 				} else {
@@ -227,7 +227,7 @@ class GPhpThreadCriticalSection /* {{{ */
 			
 			$i = 0;
 			do {
-				$this->intercomRead = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_s{$afterForkPid}-d{$this->myPid}", true, true);
+				$this->intercomRead = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_{$this->uniqueId}_s{$afterForkPid}-d{$this->myPid}", true, true);
 				if ($this->intercomRead->isInitialized()) {
 					$i = $retriesLimit;
 				} else {
@@ -239,7 +239,7 @@ class GPhpThreadCriticalSection /* {{{ */
 			$this->intercomInterlocutorPid = $this->creatorPid;
 			$i = 0;
 			do {
-				$this->intercomWrite = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_s{$this->myPid}-d{$this->creatorPid}", false, true);
+				$this->intercomWrite = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_{$this->uniqueId}_s{$this->myPid}-d{$this->creatorPid}", false, true);
 				if ($this->intercomWrite->isInitialized()) {
 					$i = $retriesLimit;
 				} else {
@@ -250,7 +250,7 @@ class GPhpThreadCriticalSection /* {{{ */
 			
 			$i = 0;
 			do {
-				$this->intercomRead = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_s{$this->creatorPid}-d{$this->myPid}", true, false);
+				$this->intercomRead = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_{$this->uniqueId}_s{$this->creatorPid}-d{$this->myPid}", true, false);
 				if ($this->intercomRead->isInitialized()) {
 					$i = $retriesLimit;
 				} else {
