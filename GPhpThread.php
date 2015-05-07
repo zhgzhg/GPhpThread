@@ -651,6 +651,8 @@ abstract class GPhpThread /* {{{ */
 	private $childPid = null;
 	private $exitCode = null;
 	
+	private $amIStarted = false;
+	
 	private $uniqueId = 0;
 	private static $seed = 0;
 	
@@ -685,23 +687,28 @@ abstract class GPhpThread /* {{{ */
 			unregister_tick_function('GPhpThreadCriticalSection::dispatch');
 			$this->run();
 			$this->stop();
-		} else {
-			if ($this->criticalSection !== null &&  
-				$this->childPid != -1 &&
-				!GPhpThread::$isCriticalSectionDispatcherRegistered) { // parent
-				if (register_tick_function('GPhpThreadCriticalSection::dispatch'))
-					GPhpThread::$isCriticalSectionDispatcherRegistered = true;
+		} else { // parent
+			if ($this->childPid != -1) {
+				$this->amIStarted = true;
+
+				if ($this->criticalSection !== null &&
+					!GPhpThread::$isCriticalSectionDispatcherRegistered) {
+					if (register_tick_function('GPhpThreadCriticalSection::dispatch'))
+						GPhpThread::$isCriticalSectionDispatcherRegistered = true;
+				}
 			}
 		}
 	} /* }}} */
 	
 	public final function stop($force = false) { /* {{{ */
+		if (!$this->amIStarted) return false;
 		if ($this->amIParent() && $this->childPid !== null) { // parent
 			$r = posix_kill($this->childPid, ($force == false ? 15 : 9));
 			if ($r) {
 				if ($this->join()) $this->childPid = null;
 				if ($this->criticalSection !== null)
 					$this->criticalSection->finalize($this->uniqueId);
+				$this->amIStarted = false;
 			}
 			return $r;
 		}
@@ -710,7 +717,8 @@ abstract class GPhpThread /* {{{ */
 		exit(0);
 	} /* }}} */
 	
-	public final function join($useBlocking = true) {	/* {{{ */
+	public final function join($useBlocking = true) { /* {{{ */		
+		if (!$this->amIStarted) return false;
 		if ($this->amIParent()) {
 			$status = null;
 			$res = 0;
@@ -725,12 +733,14 @@ abstract class GPhpThread /* {{{ */
 				
 				if ($this->criticalSection !== null) $this->criticalSection->finalize($this->uniqueId);
 				$this->childPid = null;
+				$this->amIStarted = false;
 			} else {
 				$res = pcntl_waitpid($this->childPid, $status, WNOHANG);
 				if ($res > 0 && $this->criticalSection !== null) $this->criticalSection->finalize($this->uniqueId);
 				if ($res > 0 && pcntl_wifexited($status)) {
 					$this->exitCode = pcntl_wexitstatus($status);
 					if ($this->criticalSection !== null) $this->criticalSection->finalize($this->uniqueId);
+					$this->amIStarted = false;
 				} else if ($res == -1) {
 					$this->exitCode = false;
 				}
