@@ -681,6 +681,7 @@ abstract class GPhpThread /* {{{ */
 
 		$this->childPid = pcntl_fork();
 		if ($this->childPid == -1) return false;
+		$this->amIStarted = true;
 		if ($this->criticalSection !== null) $this->criticalSection->initialize($this->childPid, $this->uniqueId);
 		if (!$this->amIParent()) { // child
 			// no dispatchers needed in the childs; this means that no threads withing threads creation is possible
@@ -688,14 +689,12 @@ abstract class GPhpThread /* {{{ */
 			$this->run();
 			$this->stop();
 		} else { // parent
-			if ($this->childPid != -1) {
-				$this->amIStarted = true;
+			if ($this->childPid != -1 &&
+				$this->criticalSection !== null &&
+				!GPhpThread::$isCriticalSectionDispatcherRegistered) {
 
-				if ($this->criticalSection !== null &&
-					!GPhpThread::$isCriticalSectionDispatcherRegistered) {
-					if (register_tick_function('GPhpThreadCriticalSection::dispatch'))
-						GPhpThread::$isCriticalSectionDispatcherRegistered = true;
-				}
+				if (register_tick_function('GPhpThreadCriticalSection::dispatch'))
+					GPhpThread::$isCriticalSectionDispatcherRegistered = true;
 			}
 		}
 	} /* }}} */
