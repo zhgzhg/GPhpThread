@@ -29,13 +29,14 @@ require_once 'GPhpThread.php';
 
 class MyThread extends GPhpThread {
 	public function run() {
-		echo "Hello, I am a thread!\n";
+		echo 'Hello, I am a thread with id ' . getmypid() . "!\nTrying to lock\n";
+		//usleep(mt_rand(0, 5000000));
 		if ($this->criticalSection->lock()) {
 			echo "=--- locked " . getmypid() . "\n";
 			$this->criticalSection->addOrUpdateResource('IAM', getmypid());
 			$this->criticalSection->addOrUpdateResource('IAMNOT', '0xdead1');
 			$this->criticalSection->removeResource('IAMNOT');
-			while (!$this->criticalSection->unlock()) usleep(200000);
+			$this->criticalSection->unlock();
 			echo "=--- unlocked " . getmypid() . "\n";
 		}
 	}
@@ -45,27 +46,22 @@ echo "Master main EP " . getmypid() . "\n";
 
 $criticalSection = new GPhpThreadCriticalSection();
 
-echo "\nLaunching Thread1...\n\n";
+$threadPool = array();
+$tpSize = 20;
 
-$thr1 = new MyThread($criticalSection);
-$thr1->start();
-$thr1->join();
+for ($i = 0; $i < $tpSize; ++$i) {
+	$threadPool[$i] = new MyThread($criticalSection);
+}
 
-echo "\n---Thread1 id was: " . $criticalSection->getResourceValueFast('IAM') . "---\n";
-echo "Master after the join of Thread1.\n\n";
+for ($i = 0; $i < $tpSize; ++$i) {
+	$threadPool[$i]->start();
+	echo "{$i} of {$tpSize} started\n";
+}
 
-echo "\nLaunching Thread2...\n\n";
+for ($i = 0; $i < $tpSize; ++$i) {
+	$threadPool[$i]->join();
+}
 
-$thr2 = new MyThread($criticalSection);
-$thr2->start();
-$thr2->join();
-
-echo "---Thread2 id was: " . $criticalSection->getResourceValueFast('IAM') . "---\n";
-echo "Master after the join of Thread2.\n\n";
-
-echo "\n\nThe resources that left in the critical section:\n";
-var_dump($criticalSection->getResourceNames());
-
-$thr1 = null;
-$thr2 = null;
+echo "\n\n---The last writing in the critical section was done by thread---\n";
+echo "---" . $criticalSection->getResourceValueFast('IAM') . "\n\n";
 ?>

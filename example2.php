@@ -29,7 +29,7 @@ require_once 'GPhpThread.php';
 
 class MyThread extends GPhpThread {
 	public function run() {
-		echo 'Hello, I am a thread with id ' . getmypid() . "!\n";
+		echo 'Hello, I am a thread with id ' . getmypid() . "!\nTrying to lock\n";
 		//usleep(mt_rand(0, 5000000));
 		if ($this->criticalSection->lock()) {
 			echo "=--- locked " . getmypid() . "\n";
@@ -48,11 +48,17 @@ $criticalSection = new GPhpThreadCriticalSection();
 
 $thr1 = new MyThread($criticalSection);
 $thr2 = new MyThread($criticalSection);
+$thr3 = new MyThread($criticalSection);
+$thr4 = new MyThread($criticalSection);
 $thr1->start();
 $thr2->start();
+$thr3->start();
+$thr4->start();
 
-echo "Thread returned: " . $thr1->join() . "\n";
+echo "Thread returned: " . $thr4->join() . "\n";
+echo "Thread returned: " . $thr3->join() . "\n";
 echo "Thread returned: " . $thr2->join() . "\n";
+echo "Thread returned: " . $thr1->join() . "\n";
 
 $thr1 = null;
 $thr2 = null;
