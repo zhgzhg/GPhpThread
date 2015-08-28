@@ -29,7 +29,7 @@ require_once 'GPhpThread.php';
 
 class MyThread extends GPhpThread {
 	public function run() {
-		echo 'Hello, I am a thread with id ' . getmypid() . "!\nTrying to lock the critical section\n";
+		echo "Hello, I am a thread!\n";
 		if ($this->criticalSection->lock()) {
 			echo "=--- locked " . getmypid() . "\n";
 			$this->criticalSection->addOrUpdateResource('IAM', getmypid());
@@ -48,24 +48,10 @@ $criticalSection = new GPhpThreadCriticalSection();
 echo "\nLaunching Thread1...\n\n";
 
 $thr1 = new MyThread($criticalSection);
-$thr1->start();
-$thr1->join();
-
-echo "\n---Thread1 id was: " . $criticalSection->getResourceValueFast('IAM') . "---\n";
-echo "Master after the join of Thread1.\n\n";
-
-echo "\nLaunching Thread2...\n\n";
-
 $thr2 = new MyThread($criticalSection);
+$thr1->start();
 $thr2->start();
+
 $thr2->join();
-
-echo "---Thread2 id was: " . $criticalSection->getResourceValueFast('IAM') . "---\n";
-echo "Master after the join of Thread2.\n\n";
-
-echo "\n\nThe resources that left in the critical section:\n";
-var_dump($criticalSection->getResourceNames());
-
-$thr1 = null;
-$thr2 = null;
+$thr1->join();
 ?>
