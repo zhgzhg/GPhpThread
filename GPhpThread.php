@@ -23,123 +23,129 @@
  * SOFTWARE.
  */
 
-declare(ticks=30);
 //define("DEBUG_MODE", true);
 
-class GPhpThreadException extends Exception { /* {{{ */
-	public function __construct($msg, $code = 0, Exception $previous = NULL) {
-		parent::__construct($msg, $code, $previous);
-	}
-} /* }}} */
+declare(ticks=30);
+//declare(ticks=250) {
 
-class GPhpThreadIntercom /* {{{ */
-{
-	private $commFilePath = '';
-	private $commChanFdArr = array();
-	private $success = true;
-	private $autoDeletion = false;
-	private $isReadMode = true;
+	class GPhpThreadException extends Exception // {{{
+	{
+		public function __construct($msg, $code = 0, Exception $previous = NULL) {
+			parent::__construct($msg, $code, $previous);
+		}
+	} // }}}
 
-	public function __construct($filePath, $isReadMode = true, $autoDeletion=false) { /* {{{ */
-		if (!file_exists($filePath)) {
-			if (!posix_mkfifo($filePath, 0644)) {
+	class GPhpThreadIntercom // {{{
+	{
+		private $commFilePath = '';
+		private $commChanFdArr = array();
+		private $success = true;
+		private $autoDeletion = false;
+		private $isReadMode = true;
+
+		public function __construct($filePath, $isReadMode = true, $autoDeletion=false) { // {{{
+			if (!file_exists($filePath)) {
+				if (!posix_mkfifo($filePath, 0644)) {
+					$this->success = false;
+					return;
+				}
+			}
+
+			$commChanFd = fopen($filePath, ($isReadMode ? 'r+' : 'w+')); // + mode make is non blocking too
+			if ($commChanFd === false) {
 				$this->success = false;
 				return;
 			}
-        }
 
-        $commChanFd = fopen($filePath, ($isReadMode ? 'r+' : 'w+')); // + mode make is non blocking too
-        if ($commChanFd === false) {
-			$this->success = false;
-			return;
-		}
-
-		if (!stream_set_blocking($commChanFd, false)) {
-			$this->success = false;
-			fclose($commChanFd);
-			if ($autoDeletion) @unlink($filePath);
-			return;
-		}
-		$this->commChanFdArr[] = $commChanFd;
-
-		$this->commFilePath = $filePath;
-		$this->autoDeletion = $autoDeletion;
-		$this->isReadMode = $isReadMode;
-		$this->success;
-	} /* }}} */
-
-	public function isInitialized() { /* {{{ */
-		return $this->success;
-	} /* }}} */
-
-	public function __destruct() { /* {{{ */
-		if ($this->success) {
-			if (isset($this->commChanFdArr[0]) &&
-				is_resource($this->commChanFdArr[0])) {
-				fclose($this->commChanFdArr[0]);
+			if (!stream_set_blocking($commChanFd, false)) {
+				$this->success = false;
+				fclose($commChanFd);
+				if ($autoDeletion) @unlink($filePath);
+				return;
 			}
-			if ($this->autoDeletion) @unlink($this->commFilePath);
-		}
-	} /* }}} */
+			$this->commChanFdArr[] = $commChanFd;
 
-	public function send($dataString, $dataLength) { /* {{{ */
-		if ($this->success && !$this->isReadMode) {
-			//if (defined('DEBUG_MODE')) echo $dataString . '[' . getmypid() . "] sending\n";
-			$data = (string)$dataString;
-			$read = $except = null;
+			$this->commFilePath = $filePath;
+			$this->autoDeletion = $autoDeletion;
+			$this->isReadMode = $isReadMode;
+			$this->success;
+		} // }}}
 
-			$commChanFdArr = $this->commChanFdArr;
-			if (stream_select($read, $commChanFdArr, $except, 1) == 0) return false;
+		public function isInitialized() { // {{{
+			return $this->success;
+		} // }}}
 
-			while ($dataLength > 0)	{
-				$bytesWritten = fwrite($this->commChanFdArr[0], $data);
-				if ($bytesWritten === false) return false;
-				$dataLength -= $bytesWritten;
-				if ($dataLength > 0) {
-					$commChanFdArr = $this->commChanFdArr;
-					if (stream_select($read, $commChanFdArr, $except, 10) == 0)
-						return false;
-					$data = substr($data, 0, $bytesWritten);
+		public function __destruct() { // {{{
+			if ($this->success) {
+				if (isset($this->commChanFdArr[0]) &&
+					is_resource($this->commChanFdArr[0])) {
+					fclose($this->commChanFdArr[0]);
 				}
-				if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) break;
+				if ($this->autoDeletion) @unlink($this->commFilePath);
 			}
-			if ($dataLength <= 0) return true;
-		}
-		return false;
-	} /* }}} */
+		} // }}}
 
-	public function receive() { /* {{{ */
-		if (!$this->success || !$this->isReadMode) return false;
-		if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) return false;
+		public function send($dataString, $dataLength) { // {{{
+			if ($this->success && !$this->isReadMode) {
+				//if (defined('DEBUG_MODE')) echo $dataString . '[' . getmypid() . "] sending\n";
+				$data = (string)$dataString;
+				$read = $except = null;
 
-		$commChanFdArr = $this->commChanFdArr;
+				$commChanFdArr = $this->commChanFdArr;
+				if (stream_select($read, $commChanFdArr, $except, 1) == 0) return false;
 
-		$write = $except = null;
-		$data = null;
+				while ($dataLength > 0)	{
+					$bytesWritten = fwrite($this->commChanFdArr[0], $data);
+					if ($bytesWritten === false) return false;
+					$dataLength -= $bytesWritten;
+					if ($dataLength > 0) {
+						$commChanFdArr = $this->commChanFdArr;
+						if (stream_select($read, $commChanFdArr, $except, 10) == 0)
+							return false;
+						$data = substr($data, 0, $bytesWritten);
+					}
+					if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) break;
+				}
+				if ($dataLength <= 0) return true;
+			}
+			return false;
+		} // }}}
 
-		if (stream_select($commChanFdArr, $write, $except, 0, 500000) == 0) return $data;
+		public function receive() { // {{{
+			if (!$this->success || !$this->isReadMode) return false;
+			if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) return false;
 
-		do {
-			$d = fread($this->commChanFdArr[0], 1);
-			if ($d !== false) $data .= $d;
-			if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) break;
 			$commChanFdArr = $this->commChanFdArr;
-		} while ($d !== false && stream_select($commChanFdArr, $write, $except, 0, 250000) != 0);
 
-		//if (defined('DEBUG_MODE')) echo $data . '[' . getmypid() . "] received\n"; // 4 DEBUGGING
-		return $data;
-	} /* }}} */
+			$write = $except = null;
+			$data = null;
 
-	public function isReceiveingDataAvailable() { /* {{{ */
-		if (!$this->success || !$this->isReadMode) return false;
-		if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) return false;
+			if (stream_select($commChanFdArr, $write, $except, 0, 500000) == 0) return $data;
 
-		$commChanFdArr = $this->commChanFdArr;
-		return (stream_select($commChanFdArr, $write = null, $except = null, 0, 55000) != 0);
-	} /* }}} */
-} /* }}} */
+			do {
+				$d = fread($this->commChanFdArr[0], 1);
+				if ($d !== false) $data .= $d;
+				if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) break;
+				$commChanFdArr = $this->commChanFdArr;
+			} while ($d !== false && stream_select($commChanFdArr, $write, $except, 0, 250000) != 0);
 
-class GPhpThreadCriticalSection { // {{{
+			//if (defined('DEBUG_MODE')) echo $data . '[' . getmypid() . "] received\n"; // 4 DEBUGGING
+			return $data;
+		} // }}}
+
+		public function isReceiveingDataAvailable() { // {{{
+			if (!$this->success || !$this->isReadMode) return false;
+			if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) return false;
+
+			$commChanFdArr = $this->commChanFdArr;
+			return (stream_select($commChanFdArr, $write = null, $except = null, 0, 55000) != 0);
+		} // }}}
+	} // }}}
+//}
+
+//declare(ticks=500) {
+class GPhpThreadCriticalSection // {{{
+{
 	private $uniqueId = 0;								// the identifier of a concrete instance
 
 	private static $uniqueIdSeed = 0;				    // the uniqueId index seed
@@ -197,8 +203,6 @@ class GPhpThreadCriticalSection { // {{{
 		$retriesLimit = 60;
 
 		if ($this->myPid == $this->creatorPid) { // parent
-			//$this->intercomInterlocutorPid = $afterForkPid;
-
 			$i = 0;
 			do {
 				$intercomWrite = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_{$this->uniqueId}_s{$this->myPid}-d{$afterForkPid}", false, true);
@@ -431,7 +435,7 @@ class GPhpThreadCriticalSection { // {{{
 		return true;
 	} // }}}
 
-	private function updateDataContainer($actionType, $name, $value) { // {{{ TESTME
+	private function updateDataContainer($actionType, $name, $value) { // {{{
 		$result = false;
 
 		$msg = null;
@@ -486,7 +490,7 @@ class GPhpThreadCriticalSection { // {{{
 		return posix_kill($pid, 0);
 	} // }}}
 
-	public static function dispatch($useBlocking = false) { // {{{ TODO TESTME
+	public static function dispatch($useBlocking = false) { // {{{
 		$_mypid = getmypid();
 
 		// prevent any threads to run their own dispatchers
@@ -623,7 +627,7 @@ class GPhpThreadCriticalSection { // {{{
 		// rearrange the active instances of GPhpCriticalSection in the
 		// following priority order (the higher the number the bigger the priority):
 
-		// 2. the instance with the thread that has currently locked the critical section TODO
+		// 2. the instance with the thread that has currently locked the critical section
 		// 1. instances with threads with the highest dispatch priority
 		// 0. instances with the most threads inside
 
@@ -769,8 +773,9 @@ class GPhpThreadCriticalSection { // {{{
 		return array_keys($this->sharedData);
 	} // }}}
 } // }}}
+//}
 
-abstract class GPhpThread /* {{{ */
+abstract class GPhpThread // {{{
 {	protected $criticalSection = null;
 	private $parentPid = null;
 	private $childPid = null;
@@ -784,30 +789,40 @@ abstract class GPhpThread /* {{{ */
 	private static $isCriticalSectionDispatcherRegistered = false;
 	private static $isSignalCHLDHandlerInstalled = false;
 
-	public function __construct(&$criticalSection) {/* {{{ */
+	public function __construct(&$criticalSection) {// {{{
 		$this->uniqueId = GPhpThread::$seed++;
 		$this->criticalSection = &$criticalSection;
 		$this->parentPid = getmypid();
-	} /* }}} */
+	} // }}}
 
-	public function __destruct() { /* {{{ */
-	} /* }}} */
+	public function __destruct() { // {{{
+	} // }}}
 
-	public final function getExitCode() { /* {{{ */
+
+	public final function getExitCode() { // {{{
 		return $this->exitCode;
-	} /* }}} */
+	} // }}}
 
-	private function amIParent() { /* {{{ */
+	public static final function BGN_HIGH_PRIOR_EXEC_BLOCK() {
+		GPhpThread::$isCriticalSectionDispatcherRegistered = true;
+		unregister_tick_function('GPhpThreadCriticalSection::dispatch');
+	}
+
+	public static final function END_HIGH_PRIOR_EXEC_BLOCK() {
+		register_tick_function('GPhpThreadCriticalSection::dispatch');
+	}
+
+	private function amIParent() { // {{{
 		return ($this->childPid > 0 ? true : false);
-	} /* }}} */
+	} // }}}
 
-	private function notifyParentThatChildIsTerminated() { /* {{{ */
+	private function notifyParentThatChildIsTerminated() { // {{{
 		posix_kill($this->parentPid, SIGCHLD);
-	} /* }}} */
+	} // }}}
 
 	abstract public function run();
 
-	public final function start() { /* {{{ */
+	public final function start() { // {{{
 		if ($this->childPid !== null) exit(0);
 
 		$this->childPid = pcntl_fork();
@@ -845,9 +860,9 @@ abstract class GPhpThread /* {{{ */
 			}
 			return true;
 		}
-	} /* }}} */
+	} // }}}
 
-	public final function stop($force = false) { /* {{{ */
+	public final function stop($force = false) { // {{{
 		if (!$this->amIStarted) return false;
 		if ($this->amIParent() && $this->childPid !== null) { // parent
 			$r = posix_kill($this->childPid, ($force == false ? 15 : 9));
@@ -862,15 +877,21 @@ abstract class GPhpThread /* {{{ */
 		// child
 		if ($this->childPid == -1) return false;
 		exit(0);
-	} /* }}} */
+	} // }}}
 
-	public final function join($useBlocking = true) { /* {{{ */
+	public final function join($useBlocking = true) { // {{{
 		if (!$this->amIStarted) return false;
 		if ($this->amIParent()) {
 			$status = null;
 			$res = 0;
 			if ($useBlocking) {
-				while (($res = pcntl_waitpid($this->childPid, $status, WNOHANG)) == 0) usleep(mt_rand(60000, 200000));
+				while (($res = pcntl_waitpid($this->childPid, $status, WNOHANG)) == 0) {
+					for ($i = 0, $j = 0; $i < 2; ++$i) {
+						$j++;
+					}
+					echo "da\n";
+					//usleep(mt_rand(60000, 200000));
+				}
 
 				if ($res > 0 && pcntl_wifexited($status)) {
 					$this->exitCode = pcntl_wexitstatus($status);
@@ -901,6 +922,6 @@ abstract class GPhpThread /* {{{ */
 		}
 		if ($this->childPid == -1) return false;
 		exit(255);
-	} /* }}} */
-} /* }}} */
+	} // }}}
+} // }}}
 ?>
