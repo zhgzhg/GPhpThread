@@ -84,7 +84,7 @@ class GPhpThreadIntercom /* {{{ */
 
 	public function send($dataString, $dataLength) { /* {{{ */
 		if ($this->success && !$this->isReadMode) {
-			if (defined('DEBUG_MODE')) echo $dataString . '[' . getmypid() . "] sending\n";
+			//if (defined('DEBUG_MODE')) echo $dataString . '[' . getmypid() . "] sending\n";
 			$data = (string)$dataString;
 			$read = $except = null;
 
@@ -126,7 +126,7 @@ class GPhpThreadIntercom /* {{{ */
 			$commChanFdArr = $this->commChanFdArr;
 		} while ($d !== false && stream_select($commChanFdArr, $write, $except, 0, 250000) != 0);
 
-		if (defined('DEBUG_MODE')) echo $data . '[' . getmypid() . "] received\n"; // 4 DEBUGGING
+		//if (defined('DEBUG_MODE')) echo $data . '[' . getmypid() . "] received\n"; // 4 DEBUGGING
 		return $data;
 	} /* }}} */
 
@@ -139,36 +139,28 @@ class GPhpThreadIntercom /* {{{ */
 	} /* }}} */
 } /* }}} */
 
-class GPhpThreadCriticalSection /* {{{ */
-{
-	private $myPid; // point of view of the current instance
-	private $creatorPid; // point of view of the current instance
+class GPhpThreadCriticalSection { // {{{
+	private $uniqueId = 0;								// the identifier of a concrete instance
 
-	private $ownerPid = false;
-	private $pipeDir = '';
-	private $dataContainer = array();
+	private static $uniqueIdSeed = 0;				    // the uniqueId index seed
 
-	/* Context of the current instance of the class,
-	 * that's using this instance.
-	 * 'uniqueId' => array(
-	 * 						'intercomWrite' => ...,
-	 * 						'intercomRead => ...'
-	 * 						'intercomInterlocutorPid' => ...
-	 * 				);
-	 */
-	private $threadInstanceContext = array();
-	private $threadInstanceContextListForRemoval = array();
+	private static $instancesCreatedEverAArr = array(); // contain all the instances that were ever created of this class
+	private static $threadsForRemovalAArr = array();    // contain all the instances that were terminated; used to make connection with $mastersThreadSpecificData
+
+	private $creatorPid;
+	private $ownerPid = false;  // the thread PID owning the critical section
+	private $myPid;				// point of view of the current instance
+
+	private $sharedData = array(); // variables shared in one CS instance among all threads
+
+	private $mastersThreadSpecificData = array(); // specific per each thread variables / the host is the master parent
+
+	// ======== thread specific variables ========
 	private $intercomWrite = null;
 	private $intercomRead = null;
 	private $intercomInterlocutorPid = null;
 	private $dispatchPriority = 0;
-	////////////////////////////////////////////////////////////////////
-
-	private $uniqueId = 0;
-	private static $seed = 0;
-
-	private static $instancesListAArr = array(); // list of all available instances of a criticalsection 'uniqueId' => instance
-	private static $instancesListForRemovalAArr = array(); // instances that are no longer running and will be removed when it's safe
+	// ===========================================
 
 	private static $ADDORUPDATESYN = '00', $ADDORUPDATEACK = '01', $ADDORUPDATENACK = '02',
 				   $ERASESYN = '03', $ERASEACK = '04', $ERASENACK = '05',
@@ -183,41 +175,34 @@ class GPhpThreadCriticalSection /* {{{ */
 	private static $ADDORUPDATEACT = 1, $ERASEACT = 2,
 				   $READACT = 3, $READALLACT = 4;
 
-	public function __construct($pipeDirectory='/dev/shm') { /* {{{ */
+	public function __construct($pipeDirectory = '/dev/shm') { // {{{
+		$this->uniqueId = self::$uniqueIdSeed++;
+
+		self::$instancesCreatedEverAArr[$this->uniqueId] = &$this;
+
 		$this->creatorPid = getmypid();
 		$this->pipeDir = rtrim($pipeDirectory, ' /') . '/';
-	} /* }}} */
+	} // }}}
 
-	public function __destruct() { /* {{{ */
+	public function __destruct() { // {{{
 		$this->intercomRead = null;
 		$this->intercomWrite = null;
-		GPhpThreadCriticalSection::$instancesListForRemovalAArr["{$this->uniqueId}"] = true;
-	} /* }}} */
+		if (self::$instancesCreatedEverAArr !== null)
+			unset(self::$instancesCreatedEverAArr[$this->uniqueId]);
+	} // }}}
 
-	public function finalize($contextId) { /* {{{ */
-		GPhpThreadCriticalSection::$instancesListForRemovalAArr["{$this->uniqueId}"] = true;
-		$this->threadInstanceContextListForRemoval[] = $contextId;
-	} /* }}} */
-
-	private function doIOwnIt() { /* {{{ */
-		return ($this->ownerPid !== false && $this->ownerPid == $this->myPid);
-	} /* }}} */
-
-	public function initialize($afterForkPid, $contextId) { /* {{{ */
-		$this->uniqueId = GPhpThreadCriticalSection::$seed++;
-
+	public function initialize($afterForkPid, $threadId) { // {{{
 		$this->myPid = getmypid();
 
 		$retriesLimit = 60;
 
 		if ($this->myPid == $this->creatorPid) { // parent
-			$this->intercomInterlocutorPid = $afterForkPid;
-			GPhpThreadCriticalSection::$instancesListAArr["{$this->uniqueId}"] = $this; // TODO TESTME, FIXME maybe
-			krsort(GPhpThreadCriticalSection::$instancesListAArr);
+			//$this->intercomInterlocutorPid = $afterForkPid;
+
 			$i = 0;
 			do {
-				$this->intercomWrite = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_{$this->uniqueId}_s{$this->myPid}-d{$afterForkPid}", false, true);
-				if ($this->intercomWrite->isInitialized()) {
+				$intercomWrite = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_{$this->uniqueId}_s{$this->myPid}-d{$afterForkPid}", false, true);
+				if ($intercomWrite->isInitialized()) {
 					$i = $retriesLimit;
 				} else {
 					++$i;
@@ -227,15 +212,30 @@ class GPhpThreadCriticalSection /* {{{ */
 
 			$i = 0;
 			do {
-				$this->intercomRead = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_{$this->uniqueId}_s{$afterForkPid}-d{$this->myPid}", true, true);
-				if ($this->intercomRead->isInitialized()) {
+				$intercomRead = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_{$this->uniqueId}_s{$afterForkPid}-d{$this->myPid}", true, true);
+				if ($intercomRead->isInitialized()) {
 					$i = $retriesLimit;
 				} else {
 					++$i;
 					usleep(mt_rand(5000, 80000));
 				}
 			} while ($i < $retriesLimit);
+
+			if ($intercomWrite->isInitialized() && $intercomRead->isInitialized()) {
+				$this->mastersThreadSpecificData[$threadId] = array(
+					'intercomRead' => $intercomRead,
+					'intercomWrite' => $intercomWrite,
+					'intercomInterlocutorPid' => $afterForkPid,
+					'dispatchPriority' => 0
+				);
+				return true;
+			}
+			return false;
 		} else { // child
+			self::$instancesCreatedEverAArr = null;  // the child must not know for its neighbours
+			$this->mastersThreadSpecificData = null; // and any defails for the threads inside cs instance simulation
+			self::$threadsForRemovalAArr = null;
+
 			$this->intercomInterlocutorPid = $this->creatorPid;
 			$i = 0;
 			do {
@@ -258,33 +258,33 @@ class GPhpThreadCriticalSection /* {{{ */
 					usleep(mt_rand(5000, 80000));
 				}
 			} while ($i < $retriesLimit);
+
+			if (!$this->intercomWrite->isInitialized())	$this->intercomWrite = null;
+			if (!$this->intercomRead->isInitialized())	$this->intercomRead = null;
+			if ($this->intercomWrite == null || $this->intercomRead == null) {
+				$this->intercomInterlocutorPid = null;
+				return false;
+			}
+			return true;
 		}
+		return false;
+	} // }}}
 
-		if (!$this->intercomWrite->isInitialized())	$this->intercomWrite = null;
-		if (!$this->intercomRead->isInitialized())	$this->intercomRead = null;
-		if ($this->intercomWrite == null || $this->intercomRead == null) $this->intercomInterlocutorPid = null;
+	public function finalize($threadId) { // {{{
+		unset($this->mastersThreadSpecificData[$threadId]);
+	} // }}}
 
-		if ($this->intercomInterlocutorPid === null)
-			unset(GPhpThreadCriticalSection::$instancesListAArr["{$this->uniqueId}"]);
+	private function doIOwnIt() { // {{{
+		return ($this->ownerPid !== false && $this->ownerPid == $this->myPid);
+	} // }}}
 
-		if ($this->intercomInterlocutorPid !== null) {
-			$this->threadInstanceContext[$contextId] = array(
-				'intercomWrite' => $this->intercomWrite,
-				'intercomRead' => $this->intercomRead,
-				'intercomInterlocutorPid' => $this->intercomInterlocutorPid,
-				'dispatchPriority' => $this->dispatchPriority
-			);
-		}
-
-	} /* }}} */
-
-	private function encodeMessage($msg, $name, $value) { /* {{{ */
+	private function encodeMessage($msg, $name, $value) { // {{{
 		// 2 decimal digits message code, 10 decimal digits PID,
 		// 4 decimal digits name length, name, data
 		return $msg . sprintf('%010d%04d', $this->myPid, strlen($name)) . $name . serialize($value);
-	} /* }}} */
+	} // }}}
 
-	private function decodeMessage($encodedMsg, &$msg, &$pid, &$name, &$value) { /* {{{ */
+	private function decodeMessage($encodedMsg, &$msg, &$pid, &$name, &$value) { // {{{
 		// 2 decimal digits message code, 10 decimal digits PID,
 		// 4 decimal digits name length, name, data
 		$msg = substr($encodedMsg, 0, 2);
@@ -300,22 +300,47 @@ class GPhpThreadCriticalSection /* {{{ */
 
 		if (strlen($encodedMsg) > 16) $value = unserialize(substr($encodedMsg, 16 + $nlength));
 		else $value = null;
-	} /* }}} */
+	} // }}}
 
-	private function isIntercomBroken() { /* {{{ */
+	private function isIntercomBroken() { // {{{
 		return (empty($this->intercomWrite) ||
 				empty($this->intercomRead) ||
 				empty($this->intercomInterlocutorPid) ||
 				!$this->isPidAlive($this->intercomInterlocutorPid));
-	} /* }}} */
+	} // }}}
 
-	private function send($operation, $resourceName, $resourceValue) { /* {{{ */
+	private function send($operation, $resourceName, $resourceValue) { // {{{
 		if ($this->isIntercomBroken()) return false;
 
 		$isSent = false;
 		$isAlive = true;
 
 		$msg = $this->encodeMessage($operation, $resourceName, $resourceValue);
+
+		if (defined('DEBUG_MODE')) {
+			$dbgStr = '[' . getmypid() . "] is sending ";
+			switch ($operation) {
+				case self::$ADDORUPDATESYN: $dbgStr .= 'ADDORUPDATESYN'; break;
+				case self::$ADDORUPDATEACK: $dbgStr .= 'ADDORUPDATEACK'; break;
+				case self::$ADDORUPDATENACK: $dbgStr .= 'ADDORUPDATE_N_ACK'; break;
+				case self::$ERASESYN: $dbgStr .= 'ERASESYN'; break;
+				case self::$ERASEACK: $dbgStr .= 'ERASEACK'; break;
+				case self::$ERASENACK: $dbgStr .= 'ERASE_N_ACK'; break;
+				case self::$READSYN: $dbgStr .= 'READSYN'; break;
+				case self::$READACK: $dbgStr .= 'READACK'; break;
+				case self::$READNACK: $dbgStr .= 'READ_N_ACK'; break;
+				case self::$READALLSYN: $dbgStr .= 'READALLSYN'; break;
+				case self::$READALLACK: $dbgStr .= 'READALLACK'; break;
+				case self::$READALLNACK: $dbgStr .= 'READALL_N_ACK'; break;
+				case self::$LOCKSYN: $dbgStr .= 'LOCKSYN'; break;
+				case self::$LOCKACK: $dbgStr .= 'LOCKACK'; break;
+				case self::$LOCKNACK: $dbgStr .= 'LOCK_N_ACK'; break;
+				case self::$UNLOCKSYN: $dbgStr .= 'UNLOCKSYN'; break;
+				case self::$UNLOCKACK: $dbgStr .= 'UNLOCKACK'; break;
+				case self::$UNLOCKNACK: $dbgStr .= 'UNLOCK_N_ACK'; break;
+			}
+			echo "{$dbgStr}, {$resourceName}, " . serialize($resourceValue) . " to {$this->intercomInterlocutorPid} /// {$msg}\n";
+		}
 
 		do {
 			$isSent = $this->intercomWrite->send($msg, strlen($msg));
@@ -327,9 +352,9 @@ class GPhpThreadCriticalSection /* {{{ */
 		} while ((!$isSent) && $isAlive);
 
 		return $isSent;
-	} /* }}} */
+	} // }}}
 
-	private function receive(&$message, &$pid, &$resourceName, &$resourceValue) { /* {{{ */
+	private function receive(&$message, &$pid, &$resourceName, &$resourceValue) { // {{{
 		if ($this->isIntercomBroken()) return false;
 
 		$data = null;
@@ -348,169 +373,162 @@ class GPhpThreadCriticalSection /* {{{ */
 		if (!$isDataEmpty)
 			$this->decodeMessage($data, $message, $pid, $resourceName, $resourceValue);
 
-		return !$isDataEmpty;
-	} /* }}} */
+		if (defined('DEBUG_MODE')) {
+			$dbgStr = '[' . getmypid() . "] received   ";
+			switch ($message) {
+				case self::$ADDORUPDATESYN: $dbgStr .= 'ADDORUPDATESYN'; break;
+				case self::$ADDORUPDATEACK: $dbgStr .= 'ADDORUPDATEACK'; break;
+				case self::$ADDORUPDATENACK: $dbgStr .= 'ADDORUPDATE_N_ACK'; break;
+				case self::$ERASESYN: $dbgStr .= 'ERASESYN'; break;
+				case self::$ERASEACK: $dbgStr .= 'ERASEACK'; break;
+				case self::$ERASENACK: $dbgStr .= 'ERASE_N_ACK'; break;
+				case self::$READSYN: $dbgStr .= 'READSYN'; break;
+				case self::$READACK: $dbgStr .= 'READACK'; break;
+				case self::$READNACK: $dbgStr .= 'READ_N_ACK'; break;
+				case self::$READALLSYN: $dbgStr .= 'READALLSYN'; break;
+				case self::$READALLACK: $dbgStr .= 'READALLACK'; break;
+				case self::$READALLNACK: $dbgStr .= 'READALL_N_ACK'; break;
+				case self::$LOCKSYN: $dbgStr .= 'LOCKSYN'; break;
+				case self::$LOCKACK: $dbgStr .= 'LOCKACK'; break;
+				case self::$LOCKNACK: $dbgStr .= 'LOCK_N_ACK'; break;
+				case self::$UNLOCKSYN: $dbgStr .= 'UNLOCKSYN'; break;
+				case self::$UNLOCKACK: $dbgStr .= 'UNLOCKACK'; break;
+				case self::$UNLOCKNACK: $dbgStr .= 'UNLOCK_N_ACK'; break;
+			}
+			echo "{$dbgStr}, {$resourceName}, " . serialize($resourceValue) . " from {$pid} /// {$data}\n";
+		}
 
-	private function requestLock() { /* {{{ */
+		return !$isDataEmpty;
+	} // }}}
+
+	private function requestLock() { // {{{
 		$msg = $pid = $name = $value = null;
 
-		if (!$this->send(GPhpThreadCriticalSection::$LOCKSYN, $name, $value)) return false;
+		if (!$this->send(self::$LOCKSYN, $name, $value)) return false;
 
 		if (!$this->receive($msg, $pid, $name, $value)) return false;
 
-		if ($msg != GPhpThreadCriticalSection::$LOCKACK)
+		if ($msg != self::$LOCKACK)
 			return false;
 
 		$this->ownerPid = $this->myPid;
 		return true;
-	} /* }}} */
+	} // }}}
 
-	private function requestUnlock() { /* {{{ */
+	private function requestUnlock() { // {{{
 		$msg = $pid = $name = $value = null;
 
-		if (!$this->send(GPhpThreadCriticalSection::$UNLOCKSYN, $name, $value))
+		if (!$this->send(self::$UNLOCKSYN, $name, $value))
 			return false;
 
 		if (!$this->receive($msg, $pid, $name, $value))
 			return false;
 
-		if ($msg != GPhpThreadCriticalSection::$UNLOCKACK)
+		if ($msg != self::$UNLOCKACK)
 			return false;
 
 		$this->ownerPid = $this->myPid;
 		return true;
-	} /* }}} */
+	} // }}}
 
-	private function updateDataContainer($actionType, $name, $value) { /* TESTME {{{ */
+	private function updateDataContainer($actionType, $name, $value) { // {{{ TESTME
 		$result = false;
 
 		$msg = null;
 		$pid = null;
 
 		switch ($actionType) {
-			case GPhpThreadCriticalSection::$ADDORUPDATEACT:
+			case self::$ADDORUPDATEACT:
 				if ($name === null || $name === '') break;
-				if (!$this->send(GPhpThreadCriticalSection::$ADDORUPDATESYN, $name, $value)) break;
+				if (!$this->send(self::$ADDORUPDATESYN, $name, $value)) break;
 				if (!$this->receive($msg, $pid, $name, $value)) break;
-				if ($msg == GPhpThreadCriticalSection::$ADDORUPDATEACK) {
+				if ($msg == self::$ADDORUPDATEACK) {
 					$result = true;
-					$this->dataContainer[$name] = $value;
+					$this->sharedData[$name] = $value;
 				}
 			break;
 
-			case GPhpThreadCriticalSection::$ERASEACT:
+			case self::$ERASEACT:
 				if ($name === null || $name === '') break;
-				if (!$this->send(GPhpThreadCriticalSection::$ERASESYN, $name, $value)) break;
+				if (!$this->send(self::$ERASESYN, $name, $value)) break;
 				if (!$this->receive($msg, $pid, $name, $value)) break;
-				if ($msg == GPhpThreadCriticalSection::$ERASEACK) {
+				if ($msg == self::$ERASEACK) {
 					$result = true;
-					unset($this->dataContainer[$name]);
+					unset($this->sharedData[$name]);
 				}
 			break;
 
-			case GPhpThreadCriticalSection::$READACT:
+			case self::$READACT:
 				if ($name === null || $name === '') break;
-				if (!$this->send(GPhpThreadCriticalSection::$READSYN, $name, $value)) break;
+				if (!$this->send(self::$READSYN, $name, $value)) break;
 				if (!$this->receive($msg, $pid, $name, $value)) break;
-				if ($msg == GPhpThreadCriticalSection::$READACK) {
+				if ($msg == self::$READACK) {
 					$result = true;
-					$this->dataContainer[$name] = $value;
+					$this->sharedData[$name] = $value;
 				}
 			break;
 
-			case GPhpThreadCriticalSection::$READALLACT:
-				if (!$this->send(GPhpThreadCriticalSection::$READALLSYN, $name, $value)) break;
+			case self::$READALLACT:
+				if (!$this->send(self::$READALLSYN, $name, $value)) break;
 				if (!$this->receive($msg, $pid, $name, $value)) break;
-				if ($msg == GPhpThreadCriticalSection::$READALLACK) {
+				if ($msg == self::$READALLACK) {
 					$result = true;
-					$this->dataContainer = $value;
+					$this->sharedData = $value;
 				}
 			break;
 		}
 
 		return $result;
-	} /* }}} */
+	} // }}}
 
-	private function isPidAlive($pid) { /* {{{ */
+	private function isPidAlive($pid) { // {{{
 		if ($pid === false) return false;
 		return posix_kill($pid, 0);
-	} /* }}} */
+	} // }}}
 
-	public static function dispatch($useBlocking = false) { /* TODO TESTME {{{ */
+	public static function dispatch($useBlocking = false) { // {{{ TODO TESTME
 		$_mypid = getmypid();
-		foreach (GPhpThreadCriticalSection::$instancesListAArr as &$instance) {
-			if ($instance->creatorPid != $_mypid) return; // prevent any threads to run their own dispatchers
-		}
 
-		// for checking child signals informing that a particular TODO MOVEME MODEME
-		// "thread" using a particular critical secion exited
+		// prevent any threads to run their own dispatchers
+		if ((self::$instancesCreatedEverAArr === null) || (count(self::$instancesCreatedEverAArr) == 0))
+			return;
+
+		// for checking child signals informing that a particular "thread" exited
 		$sigSet = array(SIGCHLD);
 		$sigInfo = array();
-		$instancesPidsForRemoval = array();
 
-		foreach (GPhpThreadCriticalSection::$instancesListForRemovalAArr as $inst) {
-			unset(GPhpThreadCriticalSection::$instancesListAArr[$inst]);
-		}
-		GPhpThreadCriticalSection::$instancesListForRemovalAArr = array();
+		// begin the dispatching process
+		foreach (self::$instancesCreatedEverAArr as $instId => &$inst) { // loop through ALL active instances of GPhpCriticalSection
 
-		$NULL = null;
+			foreach ($inst->mastersThreadSpecificData as $threadId => &$specificDataAArr) { // loop though the threads per each instance in GPhpCriticalSection
 
-		echo "CNT@@@@@@@@@@@@@@@@@@@@@@ " . count(GPhpThreadCriticalSection::$instancesListAArr) . "\n";
-		if (count(GPhpThreadCriticalSection::$instancesListAArr) == 4){
-			print_r(GPhpThreadCriticalSection::$instancesListAArr);exit;
-		}
-
-		foreach (GPhpThreadCriticalSection::$instancesListAArr as &$instance) {
-
-			if (!empty($instance->threadInstanceContextListForRemoval)) {
-				foreach ($instance->threadInstanceContextListForRemoval as $cid)
-					unset($instance->threadInstanceContextList[$cid]);
-				$instance->threadInstanceContextListForRemoval = array();
-			}
-
-			$intercomReadBak = $instance->intercomRead;
-			$intercomWriteBak = $instance->intercomWrite;
-			$intercomInterlocutorPidBak = $instance->intercomInterlocutorPid;
-			$dispatchPriorityBak = $instance->dispatchPriority;
-
-			// var_dump($instance->threadInstanceContext);
-
-			$intercomOperationPerformed = false;
-
-			echo "CNT??????????????????? " . count($instance->threadInstanceContext) . "\n";
-
-			foreach ($instance->threadInstanceContext as $contextId => $_data) {
-				while (pcntl_sigtimedwait($sigSet, $sigInfo) == SIGCHLD) { // checking for child signals no matter the context
-					$instancesPidsForRemoval[] = $sigInfo['pid'];
+				while (pcntl_sigtimedwait($sigSet, $sigInfo) == SIGCHLD) { // checking for child signals informing that a thread has exited
+					self::$threadsForRemovalAArr[$sigInfo['pid']] = $sigInfo['pid'];
 				}
 
-				if ($intercomOperationPerformed) {
-					break;
+				$inst->intercomInterlocutorPid = &$specificDataAArr['intercomInterlocutorPid'];
+
+				if (isset(self::$threadsForRemovalAArr[$inst->intercomInterlocutorPid])) {
+					unset($inst->mastersThreadSpecificData[$threadId]);
+					unset(self::$threadsForRemovalAArr[$inst->intercomInterlocutorPid]);
+					continue;
 				}
 
-				if (empty($instance->threadInstanceContext[$contextId])) continue;
-				$instance->intercomWrite = $instance->threadInstanceContext[$contextId]['intercomWrite'];
-				$instance->intercomRead = $instance->threadInstanceContext[$contextId]['intercomRead'];
-				$instance->intercomInterlocutorPid = $instance->threadInstanceContext[$contextId]['intercomInterlocutorPid'];
-				$instance->dispatchPriority = &$instance->threadInstanceContext[$contextId]['dispatchPriority'];
+				$inst->intercomRead = &$specificDataAArr['intercomRead'];
+				$inst->intercomWrite = &$specificDataAArr['intercomWrite'];
+				$inst->dispatchPriority = &$specificDataAArr['dispatchPriority'];
 
-				echo "Dispatching {$instance->intercomInterlocutorPid}\n";
-
-				//echo "Dispatch " . getmypid() . " {$instance->intercomInterlocutorPid} {" . mt_rand(0, 4000000) . "\n";
-
-				if (!$useBlocking) {
-					if (!$instance->intercomRead->isReceiveingDataAvailable()) {
-						$instance->dispatchPriority = 0;
-						if ($instance->isIntercomBroken()) unset($instance->threadInstanceContext[$contextId]); // remove the thread from the dispatching list as sonn as we cam
-						continue;
-					}
+				if (!$useBlocking && !$inst->intercomRead->isReceiveingDataAvailable()) {
+					$inst->dispatchPriority = 0;
+					if ($inst->isIntercomBroken()) unset($inst->mastersThreadSpecificData[$threadId]); // remove the thread from the dispatching list as soon as we can
+					continue;
 				}
 
 				$msg = $pid = $name = $value = null;
 
-				if (!$instance->receive($msg, $pid, $name, $value))	{
-					$instance->dispatchPriority = 0;
-					if ($instance->isIntercomBroken()) unset($instance->threadInstanceContext[$contextId]); // remove the thread from the dispatching list as sonn as we cam
+				if (!$inst->receive($msg, $pid, $name, $value))	{
+					$inst->dispatchPriority = 0;
+					if ($inst->isIntercomBroken()) unset($inst->threadInstanceContext[$threadId]); // remove the thread from the dispatching list as sonn as we cam
 					continue;
 				}
 
@@ -518,108 +536,146 @@ class GPhpThreadCriticalSection /* {{{ */
 
 				switch ($msg) {
 					case GPhpThreadCriticalSection::$LOCKSYN:
-						$instance->dispatchPriority = 1;
-						if ($instance->ownerPid !== false && $instance->ownerPid != $pid && $instance->isPidAlive($instance->ownerPid)) {
-							$instance->send(GPhpThreadCriticalSection::$LOCKNACK, null, $pid);
+						$inst->dispatchPriority = 1;
+						if ($inst->ownerPid !== false && $inst->ownerPid != $pid && $inst->isPidAlive($inst->ownerPid)) {
+							$inst->send(GPhpThreadCriticalSection::$LOCKNACK, null, $pid);
 							continue;
 						}
-						if (!$instance->send(GPhpThreadCriticalSection::$LOCKACK, null, $pid)) continue;
-						$instance->ownerPid = $pid;
-						$instance->dispatchPriority = 2;
+						if (!$inst->send(GPhpThreadCriticalSection::$LOCKACK, null, $pid)) continue;
+						$inst->ownerPid = $pid;
+						$inst->dispatchPriority = 2;
 					break;
 
 					case GPhpThreadCriticalSection::$UNLOCKSYN:
-						$instance->dispatchPriority = 1;
-						if ($instance->ownerPid === false) {
-							if (!$instance->send(GPhpThreadCriticalSection::$UNLOCKACK, null, $pid)) continue;
+						$inst->dispatchPriority = 1;
+						if ($inst->ownerPid === false) {
+							if (!$inst->send(GPhpThreadCriticalSection::$UNLOCKACK, null, $pid)) continue;
 						}
-						$isOwnerAlive = $instance->isPidAlive($instance->ownerPid);
-						if (!$isOwnerAlive || $instance->ownerPid == $pid) {
-							if (!$isOwnerAlive) $instance->ownerPid = false;
-							if (!$instance->send(GPhpThreadCriticalSection::$UNLOCKACK, null, $pid)) continue;
-							$instance->dispatchPriority = 0;
-							$instance->ownerPid = false;
+						$isOwnerAlive = $inst->isPidAlive($inst->ownerPid);
+						if (!$isOwnerAlive || $inst->ownerPid == $pid) {
+							if (!$isOwnerAlive) $inst->ownerPid = false;
+							if (!$inst->send(GPhpThreadCriticalSection::$UNLOCKACK, null, $pid)) continue;
+							$inst->dispatchPriority = 0;
+							$inst->ownerPid = false;
 						} else {
-							$instance->send(GPhpThreadCriticalSection::$UNLOCKNACK, null, null);
+							$inst->send(GPhpThreadCriticalSection::$UNLOCKNACK, null, null);
 						}
 					break;
 
 					case GPhpThreadCriticalSection::$ADDORUPDATESYN:
-						$instance->dispatchPriority = 1;
-						if ($instance->ownerPid !== $pid) {
-							$instance->send(GPhpThreadCriticalSection::$ADDORUPDATENACK, null, null);
+						$inst->dispatchPriority = 1;
+						if ($inst->ownerPid !== $pid) {
+							$inst->send(GPhpThreadCriticalSection::$ADDORUPDATENACK, null, null);
 							continue;
 						}
-						if (!$instance->send(GPhpThreadCriticalSection::$ADDORUPDATEACK, $name, null)) continue;
-						$instance->dispatchPriority = 2;
-						$instance->dataContainer[$name] = $value;
+						if (!$inst->send(GPhpThreadCriticalSection::$ADDORUPDATEACK, $name, null)) continue;
+						$inst->dispatchPriority = 2;
+						$inst->sharedData[$name] = $value;
 					break;
 
 					case GPhpThreadCriticalSection::$ERASESYN:
-						$instance->dispatchPriority = 1;
-						if ($instance->ownerPid !== $pid) {
-							$instance->send(GPhpThreadCriticalSection::$ERASENACK, null, null);
+						$inst->dispatchPriority = 1;
+						if ($inst->ownerPid !== $pid) {
+							$inst->send(GPhpThreadCriticalSection::$ERASENACK, null, null);
 							continue;
 						}
-						if (!$instance->send(GPhpThreadCriticalSection::$ERASEACK, $name, null)) continue;
-						$instance->dispatchPriority = 2;
-						unset($instance->dataContainer[$name]);
+						if (!$inst->send(GPhpThreadCriticalSection::$ERASEACK, $name, null)) continue;
+						$inst->dispatchPriority = 2;
+						unset($inst->sharedData[$name]);
 					break;
 
 					case GPhpThreadCriticalSection::$READSYN:
-						$instance->dispatchPriority = 1;
-						if ($instance->ownerPid !== $pid) {
-							$instance->send(GPhpThreadCriticalSection::$READNACK, null, null);
+						$inst->dispatchPriority = 1;
+						if ($inst->ownerPid !== $pid) {
+							$inst->send(GPhpThreadCriticalSection::$READNACK, null, null);
 							continue;
 						}
-						$instance->send(GPhpThreadCriticalSection::$READACK, $name, $instance->dataContainer[$name]);
-						$instance->dispatchPriority = 2;
+						$inst->send(GPhpThreadCriticalSection::$READACK, $name, $inst->sharedData[$name]);
+						$inst->dispatchPriority = 2;
 					break;
 
 					case GPhpThreadCriticalSection::$READALLSYN:
-						$instance->dispatchPriority = 1;
-						if ($instance->ownerPid !== $pid) {
-							$instance->send(GPhpThreadCriticalSection::$READALLNACK, null, null);
+						$inst->dispatchPriority = 1;
+						if ($inst->ownerPid !== $pid) {
+							$inst->send(GPhpThreadCriticalSection::$READALLNACK, null, null);
 							continue;
 						}
-						$instance->send(GPhpThreadCriticalSection::$READALLACK, null, $instance->dataContainer);
-						$instance->dispatchPriority = 2;
+						$inst->send(GPhpThreadCriticalSection::$READALLACK, null, $inst->sharedData);
+						$inst->dispatchPriority = 2;
 					break;
 				}
 			}
 
-			// remove the critical sections' intercoms according
-			// that will not be used anymore because their child processes are done
+			// rearrange the threads in the current critical section
+			// instance using their new dispatch priority number
+			// if a lock has already occurred that thread will have the
+			// highest priority
 
-			foreach ($instance->threadInstanceContext as $contextId => $_data) {
-				if (in_array($instance->threadInstanceContext[$contextId]['intercomInterlocutorPid'], $instancesPidsForRemoval)) {
-					echo "REmoved c: $contextId - " . $instance->threadInstanceContext[$contextId]['intercomInterlocutorPid'] . "\n";
-					unset($instance->threadInstanceContextList[$contextId]);
-				}
-			}
-
-			// rearrange the critical sections' intercoms according
-			// to their priority starting with the highest one
-
-			uksort($instance->threadInstanceContext,
-				function ($a, $b) use ($instance) {
-					return $instance->threadInstanceContext[$a]['dispatchPriority'] < $instance->threadInstanceContext[$b]['dispatchPriority'];
+			uksort($inst->mastersThreadSpecificData,
+				function ($a, $b) use ($inst) {
+					if ($inst->mastersThreadSpecificData[$a]['intercomInterlocutorPid'] == $inst->ownerPid) return -1;
+					if ($inst->mastersThreadSpecificData[$b]['intercomInterlocutorPid'] == $inst->ownerPid) return 1;
+					return $inst->mastersThreadSpecificData[$a]['dispatchPriority'] < $inst->mastersThreadSpecificData[$b]['dispatchPriority'];
 				}
 			);
-
-			$instance->intercomRead = $intercomReadBak;
-			$instance->intercomWrite = $intercomWriteBak;
-			$instance->intercomInterlocutorPid = $intercomInterlocutorPidBak;
-			$instance->dispatchPriority = &$NULL;
-			$instance->dispatchPriority = $dispatchPriorityBak;
 		}
 
+		// rearrange the active instances of GPhpCriticalSection in the
+		// following priority order (the higher the number the bigger the priority):
 
+		// 2. the instance with the thread that has currently locked the critical section TODO
+		// 1. instances with threads with the highest dispatch priority
+		// 0. instances with the most threads inside
 
+		$instCrtdEver = &self::$instancesCreatedEverAArr;
+		uksort($instCrtdEver,
+			function ($a, $b) use ($instCrtdEver) {
+				// the locker thread is with highest priority
+				if ($instCrtdEver[$a]->mastersThreadSpecificData['intercomInterlocutorPid'] == $instCrtdEver[$a]->ownerPid) return -1;
+				if ($instCrtdEver[$b]->mastersThreadSpecificData['intercomInterlocutorPid'] == $instCrtdEver[$b]->ownerPid) return 1;
 
-	} /* }}} */
+				// deal with the case of critical sections with no threads
+				if (!empty($instCrtdEver[$a]->mastersThreadSpecificData) && empty($instCrtdEver[$b]->mastersThreadSpecificData)) { return -1; }     // a
+				else if (empty($instCrtdEver[$a]->mastersThreadSpecificData) && !empty($instCrtdEver[$b]->mastersThreadSpecificData)) { return 1; } // b
+				else if (empty($instCrtdEver[$b]->mastersThreadSpecificData) && empty($instCrtdEver[$b]->mastersThreadSpecificData)) { return 0; }  // a
 
-	public function lock($useBlocking = true) { /* {{{ */
+				// gather the thread dispatch priorities for the compared critical sections
+
+				$dispPriorTableA = array(); // priority value => occurences count
+				$dispPriorTableB = array(); // priority value => occurences count
+
+				foreach ($instCrtdEver[$a]->mastersThreadSpecificData as $thrdSpecificData)
+					@$dispPriorTableA[$thrdSpecificData['dispatchPriority']] += 1;
+
+				foreach ($instCrtdEver[$b]->mastersThreadSpecificData as $thrdSpecificData)
+					@$dispPriorTableB[$thrdSpecificData['dispatchPriority']] += 1;
+
+				// both critical sections have threads
+
+				// make the tables to have the same ammount of keys (rows)
+				foreach ($dispPriorTableA as $key => $value)
+					@$dispPriorTableB[$key] = $dispPriorTableB[$key];
+				foreach ($dispPriorTableB as $key => $value)
+					@$dispPriorTableA[$key] = $dispPriorTableA[$key];
+
+				ksort($dispPriorTableA);
+				ksort($dispPriorTableB);
+
+				// compare the tables while taking into account the priority
+				// and the thread count that have it per critical section
+
+				foreach ($dispPriorTableA as $key => $value) {
+					if ($value < $dispPriorTableB[$key]) { return 1; } // b
+					else if ($value > $dispPriorTableB[$key]) { return -1; } // a
+				}
+
+				return 0; // a
+			}
+		);
+
+	} // }}}
+
+	public function lock($useBlocking = true) { // {{{
 		if ($this->doIOwnIt()) return true;
 
 		do {
@@ -648,12 +704,11 @@ class GPhpThreadCriticalSection /* {{{ */
 			}
 
 			if ($useBlocking) usleep(mt_rand(10000, 200000));
-		}
-		while ($useBlocking && !$this->doIOwnIt());
 
-	} /* }}} */
+		} while ($useBlocking && !$this->doIOwnIt());
+	} // }}}
 
-	public function unlock() { /* {{{ */
+	public function unlock() { // {{{
 		if ($this->doIOwnIt() || $this->ownerPid === false) {
 			if ($this->myPid == $this->creatorPid) { // local unlock request
 				$this->ownerPid = false;
@@ -662,27 +717,27 @@ class GPhpThreadCriticalSection /* {{{ */
 			return $this->requestUnlock();
 		}
 		return false;
-	} /* }}} */
+	} // }}}
 
-	public function addOrUpdateResource($name, $value) { /* {{{ */
+	public function addOrUpdateResource($name, $value) { // {{{
 		if ($this->doIOwnIt()) {
 			if ($this->myPid == $this->creatorPid) { // local resource add/update request
-				$this->dataContainer[$name] = $value;
+				$this->sharedData[$name] = $value;
 				return true;
 			}
 			if (!$this->updateDataContainer(self::$ADDORUPDATEACT, $name, $value)) return false;
 			return true;
 		}
 		return false;
-	} /* }}} */
+	} // }}}
 
-	public function removeResource($name) { /* {{{ */
+	public function removeResource($name) { // {{{
 		if ($this->doIOwnIt() &&
-			isset($this->dataContainer[$name]) ||
-			array_key_exists($name, $this->dataContainer)) {
+			isset($this->sharedData[$name]) ||
+			array_key_exists($name, $this->sharedData)) {
 
 			if ($this->myPid == $this->creatorPid) { // local resource remove request
-				unset($this->dataContainer[$name]);
+				unset($this->sharedData[$name]);
 				return true;
 			}
 
@@ -690,34 +745,30 @@ class GPhpThreadCriticalSection /* {{{ */
 			return true;
 		}
 		return false;
-	} /* }}} */
+	} // }}}
 
-	public function getResourceValueFast($name) { /* {{{ */
-		if (isset($this->dataContainer[$name]) ||
-			array_key_exists($name, $this->dataContainer)) {
+	public function getResourceValueFast($name) { // {{{
+		return (isset($this->sharedData[$name]) || array_key_exists($name, $this->sharedData) ? $this->sharedData[$name] : null);
+	} // }}}
 
-			return $this->dataContainer[$name];
-		}
-		return null;
-	} /* }}} */
-
-	public function getResourceValue($name) { /* {{{ */
+	public function getResourceValue($name) { // {{{
 		if (!$this->doIOwnIt())
-			throw new GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Not owned critical section!');
+			throw new GPhpThreadException('[' . getmypid() . '][' . $this->uniqueIdSeed . '] Not owned critical section!');
 
 		if ($this->myPid == $this->creatorPid) { // local resource read request ; added to keep a consistency with getResourceValueFast
 			return $this->getResourceValueFast($name);
 		}
 
 		if (!$this->updateDataContainer(self::$READACT, $name, null))
-			throw new GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Error while retrieving the value!');
-		return $this->dataContainer[$name];
-	} /* }}} */
+			throw new GPhpThreadException('[' . getmypid() . '][' . $this->uniqueIdSeed . '] Error while retrieving the value!');
 
-	public function getResourceNames() { /* {{{ */
-		return array_keys($this->dataContainer);
-	} /* }}} */
-} /* }}} */
+		return $this->sharedData[$name];
+	} // }}}
+
+	public function getResourceNames() { // {{{
+		return array_keys($this->sharedData);
+	} // }}}
+} // }}}
 
 abstract class GPhpThread /* {{{ */
 {	protected $criticalSection = null;
@@ -735,7 +786,7 @@ abstract class GPhpThread /* {{{ */
 
 	public function __construct(&$criticalSection) {/* {{{ */
 		$this->uniqueId = GPhpThread::$seed++;
-		$this->criticalSection = $criticalSection;
+		$this->criticalSection = &$criticalSection;
 		$this->parentPid = getmypid();
 	} /* }}} */
 
@@ -751,7 +802,6 @@ abstract class GPhpThread /* {{{ */
 	} /* }}} */
 
 	private function notifyParentThatChildIsTerminated() { /* {{{ */
-		echo getmypid() . " notify " . $this->parentPid . "\n";
 		posix_kill($this->parentPid, SIGCHLD);
 	} /* }}} */
 
@@ -763,21 +813,37 @@ abstract class GPhpThread /* {{{ */
 		$this->childPid = pcntl_fork();
 		if ($this->childPid == -1) return false;
 		$this->amIStarted = true;
-		if ($this->criticalSection !== null) $this->criticalSection->initialize($this->childPid, $this->uniqueId);
+
+		$csInitializationResult = null;
+		if ($this->criticalSection !== null)
+			$csInitializationResult = $this->criticalSection->initialize($this->childPid, $this->uniqueId);
+
+
 		if (!$this->amIParent()) { // child
 			// no dispatchers needed in the childs; this means that no threads withing threads creation is possible
 			unregister_tick_function('GPhpThreadCriticalSection::dispatch');
+
+			if ($csInitializationResult === false) $this->stop(); // don't execute the thread body if critical section is required, but missing
+
 			pcntl_sigprocmask(SIG_UNBLOCK, array(SIGCHLD));
 			$this->run();
 			if ($this->criticalSection !== null) $this->notifyParentThatChildIsTerminated();
 			$this->stop();
 		} else { // parent
 			if ($this->childPid != -1 && $this->criticalSection !== null) {
+
+				if ($csInitializationResult === false) { // don't add the thread to the dispatch queue if missing but required critical section is the case
+					$this->childPid = -1;
+					$this->amIStarted = false;
+					return false;
+				}
+
 				if (!GPhpThread::$isCriticalSectionDispatcherRegistered)
 					GPhpThread::$isCriticalSectionDispatcherRegistered = register_tick_function('GPhpThreadCriticalSection::dispatch');
 
 				pcntl_sigprocmask(SIG_BLOCK, array(SIGCHLD)); // SIGCHLD will wait in the queue untill it's processed
 			}
+			return true;
 		}
 	} /* }}} */
 
