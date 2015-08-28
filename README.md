@@ -18,5 +18,5 @@ Compatability:
 * OS: Linux family (maybe more... to be checked...)
 * PHP: 5.3+
 
-Status: In development (currently tweaking the execution speed), to be released...
-----------------------------------------------------------------------------------
+|Status|In development (currently tweaking the execution speed), to be released...|
+|:-----|:------------------------------------------------------------------------:|
