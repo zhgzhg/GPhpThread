@@ -29,7 +29,7 @@ require_once 'GPhpThread.php';
 
 class MyThread extends GPhpThread {
 	public function run() {
-		echo "Hello, I am a thread!\n";
+		echo 'Hello, I am a thread with id ' . getmypid() . "!\nTrying to lock the critical section\n";
 		if ($this->criticalSection->lock()) {
 			echo "=--- locked " . getmypid() . "\n";
 			$this->criticalSection->addOrUpdateResource('IAM', getmypid());
@@ -37,6 +37,7 @@ class MyThread extends GPhpThread {
 			$this->criticalSection->removeResource('IAMNOT');
 			while (!$this->criticalSection->unlock()) usleep(200000);
 			echo "=--- unlocked " . getmypid() . "\n";
+			sleep(15);
 		}
 	}
 }
