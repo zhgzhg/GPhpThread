@@ -48,20 +48,20 @@ $criticalSection = new GPhpThreadCriticalSection();
 $threadPool = array();
 $tpSize = 20;
 
-for ($i = 0; $i < $tpSize; ++$i) {
+for ($i = 1; $i <= $tpSize; ++$i) {
 	$threadPool[$i] = new MyThread($criticalSection);
 }
 
-MyThread::BGN_HIGH_PRIOR_EXEC_BLOCK();
+GPhpThread::BGN_HIGH_PRIOR_EXEC_BLOCK();
 
-for ($i = 0; $i < $tpSize; ++$i) {
+for ($i = 1; $i <= $tpSize; ++$i) {
 	$threadPool[$i]->start();
 	echo "{$i} of {$tpSize} started\n";
 }
 
-MyThread::END_HIGH_PRIOR_EXEC_BLOCK();
+GPhpThread::END_HIGH_PRIOR_EXEC_BLOCK();
 
-for ($i = 0; $i < $tpSize; ++$i) {
+for ($i = 1; $i <= $tpSize; ++$i) {
 	$threadPool[$i]->join();
 }
 
