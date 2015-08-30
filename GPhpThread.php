@@ -68,14 +68,22 @@ declare(ticks=30);
 			$this->commFilePath = $filePath;
 			$this->autoDeletion = $autoDeletion;
 			$this->isReadMode = $isReadMode;
-			$this->success;
 		} // }}}
 
 		public function isInitialized() { // {{{
 			return $this->success;
 		} // }}}
 
+		public function getAutoDeletionFlag() { // {{{
+			return $this->$autoDeletion;
+		} // }}}
+
+		public function setAutoDeletionFlag($booleanValue) { // {{{
+			$this->$autoDeletion = $booleanValue;
+		} // }}}
+
 		public function __destruct() { // {{{
+			echo "__destruct(INTERCOM);\n"; // FIXME NUM OF CALLS
 			if ($this->success) {
 				if (isset($this->commChanFdArr[0]) &&
 					is_resource($this->commChanFdArr[0])) {
@@ -155,7 +163,7 @@ class GPhpThreadCriticalSection // {{{
 
 	private $creatorPid;
 	private $ownerPid = false;  // the thread PID owning the critical section
-	private $myPid;				// point of view of the current instance
+	private $myPid; 			// point of view of the current instance
 
 	private $sharedData = array(); // variables shared in one CS instance among all threads
 
@@ -191,6 +199,7 @@ class GPhpThreadCriticalSection // {{{
 	} // }}}
 
 	public function __destruct() { // {{{
+		echo "__destruct(" . getmypid() . ")\n";
 		$this->intercomRead = null;
 		$this->intercomWrite = null;
 		if (self::$instancesCreatedEverAArr !== null)
@@ -240,10 +249,31 @@ class GPhpThreadCriticalSection // {{{
 			$this->mastersThreadSpecificData = null; // and any defails for the threads inside cs instance simulation
 			self::$threadsForRemovalAArr = null;
 
+			// these point to the same memory location and also become
+			// aliases of each other which is strange?!?
+			// so we need to recreate them
+			unset($this->intercomWrite);
+			unset($this->intercomRead);
+			unset($this->intercomInterlocutorPid);
+
+			$this->intercomWrite = null;
+			$this->intercomRead = null;
+			$this->intercomInterlocutorPid = null;
+
 			$this->intercomInterlocutorPid = $this->creatorPid;
+
 			$i = 0;
 			do {
+				//echo getmypid() . " :::\n ";
+				//var_dump($this->intercomWrite);
+				//var_dump($this->intercomRead);
+				//var_dump($this->intercomInterlocutorPid);
+
 				$this->intercomWrite = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_{$this->uniqueId}_s{$this->myPid}-d{$this->creatorPid}", false, true);
+				if ($this->intercomInterlocutorPid instanceof GPhpThreadIntercom) {
+					echo "glitch in " . getmypid() . "\n"; // FIXME the glitch 2 threads 1 after another
+				}
+
 				if ($this->intercomWrite->isInitialized()) {
 					$i = $retriesLimit;
 				} else {
@@ -255,6 +285,7 @@ class GPhpThreadCriticalSection // {{{
 			$i = 0;
 			do {
 				$this->intercomRead = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_{$this->uniqueId}_s{$this->creatorPid}-d{$this->myPid}", true, false);
+
 				if ($this->intercomRead->isInitialized()) {
 					$i = $retriesLimit;
 				} else {
@@ -266,9 +297,15 @@ class GPhpThreadCriticalSection // {{{
 			if (!$this->intercomWrite->isInitialized())	$this->intercomWrite = null;
 			if (!$this->intercomRead->isInitialized())	$this->intercomRead = null;
 			if ($this->intercomWrite == null || $this->intercomRead == null) {
-				$this->intercomInterlocutorPid = null;
+				$this->intercomInterlocutorPid == null;
 				return false;
 			}
+
+			//echo getmypid() . " :::\n";
+			//var_dump($this->intercomWrite);
+			//var_dump($this->intercomRead);
+			//var_dump($this->intercomInterlocutorPid);
+
 			return true;
 		}
 		return false;
@@ -491,6 +528,8 @@ class GPhpThreadCriticalSection // {{{
 	} // }}}
 
 	public static function dispatch($useBlocking = false) { // {{{
+		$NULL = null;
+
 		$_mypid = getmypid();
 
 		// prevent any threads to run their own dispatchers
@@ -501,12 +540,15 @@ class GPhpThreadCriticalSection // {{{
 		$sigSet = array(SIGCHLD);
 		$sigInfo = array();
 
+		//echo "dispatch >>>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
+
 		// begin the dispatching process
 		foreach (self::$instancesCreatedEverAArr as $instId => &$inst) { // loop through ALL active instances of GPhpCriticalSection
 
 			foreach ($inst->mastersThreadSpecificData as $threadId => &$specificDataAArr) { // loop though the threads per each instance in GPhpCriticalSection
 
-				while (pcntl_sigtimedwait($sigSet, $sigInfo) == SIGCHLD) { // checking for child signals informing that a thread has exited
+				// checking for child signals informing that a thread has exited
+				while (pcntl_sigtimedwait($sigSet, $sigInfo) == SIGCHLD) {
 					self::$threadsForRemovalAArr[$sigInfo['pid']] = $sigInfo['pid'];
 				}
 
@@ -514,7 +556,6 @@ class GPhpThreadCriticalSection // {{{
 
 				if (isset(self::$threadsForRemovalAArr[$inst->intercomInterlocutorPid])) {
 					unset($inst->mastersThreadSpecificData[$threadId]);
-					unset(self::$threadsForRemovalAArr[$inst->intercomInterlocutorPid]);
 					continue;
 				}
 
@@ -622,7 +663,24 @@ class GPhpThreadCriticalSection // {{{
 					return $inst->mastersThreadSpecificData[$a]['dispatchPriority'] < $inst->mastersThreadSpecificData[$b]['dispatchPriority'];
 				}
 			);
+
+			$inst->intercomInterlocutorPid = &$NULL;
+			$inst->intercomRead = &$NULL;
+			$inst->intercomWrite = &$NULL;
+			$inst->dispatchPriority = &$NULL;
 		}
+
+		// make sure that no terminated threads left in the internal thread
+		// dispatching list that all instances of GPhpCriticalSection have
+		foreach (self::$instancesCreatedEverAArr as $instId => &$inst) {
+			foreach ($inst->mastersThreadSpecificData as $threadId => &$specificDataAArr) {
+				$inst->intercomInterlocutorPid = &$specificDataAArr['intercomInterlocutorPid'];
+				if (isset(self::$threadsForRemovalAArr[$inst->intercomInterlocutorPid]))
+					unset($inst->mastersThreadSpecificData[$threadId]);
+			}
+			$inst->intercomInterlocutorPid = &$NULL;
+		}
+		self::$threadsForRemovalAArr = array();
 
 		// rearrange the active instances of GPhpCriticalSection in the
 		// following priority order (the higher the number the bigger the priority):
@@ -830,8 +888,9 @@ abstract class GPhpThread // {{{
 		$this->amIStarted = true;
 
 		$csInitializationResult = null;
-		if ($this->criticalSection !== null)
+		if ($this->criticalSection !== null) {
 			$csInitializationResult = $this->criticalSection->initialize($this->childPid, $this->uniqueId);
+		}
 
 
 		if (!$this->amIParent()) { // child
@@ -886,11 +945,8 @@ abstract class GPhpThread // {{{
 			$res = 0;
 			if ($useBlocking) {
 				while (($res = pcntl_waitpid($this->childPid, $status, WNOHANG)) == 0) {
-					for ($i = 0, $j = 0; $i < 2; ++$i) {
-						$j++;
-					}
-					echo "da\n";
-					//usleep(mt_rand(60000, 200000));
+					for ($i = 0; $i < 120; ++$i) {}
+					usleep(mt_rand(60000, 200000));
 				}
 
 				if ($res > 0 && pcntl_wifexited($status)) {
