@@ -37,7 +37,6 @@ class MyThread extends GPhpThread {
 			$this->criticalSection->removeResource('IAMNOT');
 			while (!$this->criticalSection->unlock()) usleep(200000);
 			echo "=--- unlocked " . getmypid() . "\n";
-			sleep(15);
 		}
 	}
 }

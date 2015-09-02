@@ -20,4 +20,4 @@ Compatability:
 
 |Status|Details|
 |:-----|:------------------------------------------------------------------------:|
-|Unstable, iffy, experimental|TODO: execution speed tweaking)|
+|Experimental|TODO: execution speed tweaking)|

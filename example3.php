@@ -52,7 +52,8 @@ for ($i = 1; $i <= $tpSize; ++$i) {
 	$threadPool[$i] = new MyThread($criticalSection);
 }
 
-GPhpThread::BGN_HIGH_PRIOR_EXEC_BLOCK();
+GPhpThread::BGN_HIGH_PRIOR_EXEC_BLOCK(); // this will result fast thread creation but, because of that all threads will try
+// to reach the critical section at once so it will take twice the time for each one in order to lock the critical section
 
 for ($i = 1; $i <= $tpSize; ++$i) {
 	$threadPool[$i]->start();

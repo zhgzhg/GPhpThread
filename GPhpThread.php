@@ -26,134 +26,130 @@
 //define("DEBUG_MODE", true);
 
 declare(ticks=30);
-//declare(ticks=250) {
 
-	class GPhpThreadException extends Exception // {{{
-	{
-		public function __construct($msg, $code = 0, Exception $previous = NULL) {
-			parent::__construct($msg, $code, $previous);
+class GPhpThreadException extends Exception // {{{
+{
+	public function __construct($msg, $code = 0, Exception $previous = NULL) {
+		parent::__construct($msg, $code, $previous);
+	}
+} // }}}
+
+class GPhpThreadIntercom // {{{
+{
+	private $commFilePath = '';
+	private $commChanFdArr = array();
+	private $success = true;
+	private $autoDeletion = false;
+	private $isReadMode = true;
+	private $ownerPid = null;
+
+	public function __construct($filePath, $isReadMode = true, $autoDeletion=false) { // {{{
+		$this->ownerPid = getmypid();
+		if (!file_exists($filePath)) {
+			if (!posix_mkfifo($filePath, 0644)) {
+				$this->success = false;
+				return;
+			}
+		}
+
+		$commChanFd = fopen($filePath, ($isReadMode ? 'r+' : 'w+')); // + mode make is non blocking too
+		if ($commChanFd === false) {
+			$this->success = false;
+			return;
+		}
+
+		if (!stream_set_blocking($commChanFd, false)) {
+			$this->success = false;
+			fclose($commChanFd);
+			if ($autoDeletion) @unlink($filePath);
+			return;
+		}
+		$this->commChanFdArr[] = $commChanFd;
+
+		$this->commFilePath = $filePath;
+		$this->autoDeletion = $autoDeletion;
+		$this->isReadMode = $isReadMode;
+	} // }}}
+
+	public function isInitialized() { // {{{
+		return $this->success;
+	} // }}}
+
+	public function getAutoDeletionFlag() { // {{{
+		return $this->$autoDeletion;
+	} // }}}
+
+	public function setAutoDeletionFlag($booleanValue) { // {{{
+		$this->$autoDeletion = $booleanValue;
+	} // }}}
+
+	public function __destruct() { // {{{
+		if ($this->success && $this->ownerPid === getmypid()) {
+			if (isset($this->commChanFdArr[0]) &&
+				is_resource($this->commChanFdArr[0])) {
+				fclose($this->commChanFdArr[0]);
+			}
+			if ($this->autoDeletion) @unlink($this->commFilePath);
 		}
 	} // }}}
 
-	class GPhpThreadIntercom // {{{
-	{
-		private $commFilePath = '';
-		private $commChanFdArr = array();
-		private $success = true;
-		private $autoDeletion = false;
-		private $isReadMode = true;
-		private $ownerPid = null;
-
-		public function __construct($filePath, $isReadMode = true, $autoDeletion=false) { // {{{
-			$this->ownerPid = getmypid();
-			if (!file_exists($filePath)) {
-				if (!posix_mkfifo($filePath, 0644)) {
-					$this->success = false;
-					return;
-				}
-			}
-
-			$commChanFd = fopen($filePath, ($isReadMode ? 'r+' : 'w+')); // + mode make is non blocking too
-			if ($commChanFd === false) {
-				$this->success = false;
-				return;
-			}
-
-			if (!stream_set_blocking($commChanFd, false)) {
-				$this->success = false;
-				fclose($commChanFd);
-				if ($autoDeletion) @unlink($filePath);
-				return;
-			}
-			$this->commChanFdArr[] = $commChanFd;
-
-			$this->commFilePath = $filePath;
-			$this->autoDeletion = $autoDeletion;
-			$this->isReadMode = $isReadMode;
-		} // }}}
-
-		public function isInitialized() { // {{{
-			return $this->success;
-		} // }}}
-
-		public function getAutoDeletionFlag() { // {{{
-			return $this->$autoDeletion;
-		} // }}}
-
-		public function setAutoDeletionFlag($booleanValue) { // {{{
-			$this->$autoDeletion = $booleanValue;
-		} // }}}
-
-		public function __destruct() { // {{{
-			echo "__destruct(INTERCOM);\n"; // FIXME NUM OF CALLS
-			if ($this->success && $this->ownerPid === getmypid()) {
-				if (isset($this->commChanFdArr[0]) &&
-					is_resource($this->commChanFdArr[0])) {
-					fclose($this->commChanFdArr[0]);
-				}
-				if ($this->autoDeletion) @unlink($this->commFilePath);
-			}
-		} // }}}
-
-		public function send($dataString, $dataLength) { // {{{
-			if ($this->success && !$this->isReadMode) {
-				//if (defined('DEBUG_MODE')) echo $dataString . '[' . getmypid() . "] sending\n";
-				$data = (string)$dataString;
-				$read = $except = null;
-
-				$commChanFdArr = $this->commChanFdArr;
-				if (stream_select($read, $commChanFdArr, $except, 1) == 0) return false;
-
-				while ($dataLength > 0)	{
-					$bytesWritten = fwrite($this->commChanFdArr[0], $data);
-					if ($bytesWritten === false) return false;
-					$dataLength -= $bytesWritten;
-					if ($dataLength > 0) {
-						$commChanFdArr = $this->commChanFdArr;
-						if (stream_select($read, $commChanFdArr, $except, 10) == 0)
-							return false;
-						$data = substr($data, 0, $bytesWritten);
-					}
-					if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) break;
-				}
-				if ($dataLength <= 0) return true;
-			}
-			return false;
-		} // }}}
-
-		public function receive() { // {{{
-			if (!$this->success || !$this->isReadMode) return false;
-			if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) return false;
+	public function send($dataString, $dataLength) { // {{{
+		if ($this->success && !$this->isReadMode) {
+			//if (defined('DEBUG_MODE')) echo $dataString . '[' . getmypid() . "] sending\n";
+			$data = (string)$dataString;
+			$read = $except = null;
 
 			$commChanFdArr = $this->commChanFdArr;
+			if (stream_select($read, $commChanFdArr, $except, 1) == 0) return false;
 
-			$write = $except = null;
-			$data = null;
-
-			if (stream_select($commChanFdArr, $write, $except, 0, 500000) == 0) return $data;
-
-			do {
-				$d = fread($this->commChanFdArr[0], 1);
-				if ($d !== false) $data .= $d;
+			while ($dataLength > 0)	{
+				$bytesWritten = fwrite($this->commChanFdArr[0], $data);
+				if ($bytesWritten === false) return false;
+				$dataLength -= $bytesWritten;
+				if ($dataLength > 0) {
+					$commChanFdArr = $this->commChanFdArr;
+					if (stream_select($read, $commChanFdArr, $except, 10) == 0)
+						return false;
+					$data = substr($data, 0, $bytesWritten);
+				}
 				if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) break;
-				$commChanFdArr = $this->commChanFdArr;
-			} while ($d !== false && stream_select($commChanFdArr, $write, $except, 0, 250000) != 0);
-
-			//if (defined('DEBUG_MODE')) echo $data . '[' . getmypid() . "] received\n"; // 4 DEBUGGING
-			return $data;
-		} // }}}
-
-		public function isReceiveingDataAvailable() { // {{{
-			if (!$this->success || !$this->isReadMode) return false;
-			if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) return false;
-
-			$commChanFdArr = $this->commChanFdArr;
-			return (stream_select($commChanFdArr, $write = null, $except = null, 0, 55000) != 0);
-		} // }}}
+			}
+			if ($dataLength <= 0) return true;
+		}
+		return false;
 	} // }}}
-//}
 
-//declare(ticks=500) {
+	public function receive() { // {{{
+		if (!$this->success || !$this->isReadMode) return false;
+		if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) return false;
+
+		$commChanFdArr = $this->commChanFdArr;
+
+		$write = $except = null;
+		$data = null;
+
+		if (stream_select($commChanFdArr, $write, $except, 0, 700000) == 0) return $data;
+
+		do {
+			$d = fread($this->commChanFdArr[0], 1);
+			if ($d !== false) $data .= $d;
+			if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) break;
+			$commChanFdArr = $this->commChanFdArr;
+		} while ($d !== false && stream_select($commChanFdArr, $write, $except, 0, 22000) != 0);
+
+		//if (defined('DEBUG_MODE')) echo $data . '[' . getmypid() . "] received\n"; // 4 DEBUGGING
+		return $data;
+	} // }}}
+
+	public function isReceiveingDataAvailable() { // {{{
+		if (!$this->success || !$this->isReadMode) return false;
+		if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) return false;
+
+		$commChanFdArr = $this->commChanFdArr;
+		return (stream_select($commChanFdArr, $write = null, $except = null, 0, 15000) != 0);
+	} // }}}
+} // }}}
+
 class GPhpThreadCriticalSection // {{{
 {
 	private $uniqueId = 0;								// the identifier of a concrete instance
@@ -201,7 +197,6 @@ class GPhpThreadCriticalSection // {{{
 	} // }}}
 
 	public function __destruct() { // {{{
-		echo "__destruct(" . getmypid() . ")\n";
 		$this->intercomRead = null;
 		$this->intercomWrite = null;
 		if (self::$instancesCreatedEverAArr !== null)
@@ -266,15 +261,7 @@ class GPhpThreadCriticalSection // {{{
 
 			$i = 0;
 			do {
-				//echo getmypid() . " :::\n ";
-				//var_dump($this->intercomWrite);
-				//var_dump($this->intercomRead);
-				//var_dump($this->intercomInterlocutorPid);
-
 				$this->intercomWrite = new GPhpThreadIntercom("{$this->pipeDir}gphpthread_{$this->uniqueId}_s{$this->myPid}-d{$this->creatorPid}", false, true);
-				if ($this->intercomInterlocutorPid instanceof GPhpThreadIntercom) {
-					echo "glitch in " . getmypid() . "\n"; // FIXME the glitch 2 threads 1 after another
-				}
 
 				if ($this->intercomWrite->isInitialized()) {
 					$i = $retriesLimit;
@@ -302,11 +289,6 @@ class GPhpThreadCriticalSection // {{{
 				$this->intercomInterlocutorPid == null;
 				return false;
 			}
-
-			//echo getmypid() . " :::\n";
-			//var_dump($this->intercomWrite);
-			//var_dump($this->intercomRead);
-			//var_dump($this->intercomInterlocutorPid);
 
 			return true;
 		}
@@ -541,8 +523,6 @@ class GPhpThreadCriticalSection // {{{
 		// for checking child signals informing that a particular "thread" exited
 		$sigSet = array(SIGCHLD);
 		$sigInfo = array();
-
-		//echo "dispatch >>>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
 
 		// begin the dispatching process
 		foreach (self::$instancesCreatedEverAArr as $instId => &$inst) { // loop through ALL active instances of GPhpCriticalSection
@@ -833,7 +813,6 @@ class GPhpThreadCriticalSection // {{{
 		return array_keys($this->sharedData);
 	} // }}}
 } // }}}
-//}
 
 abstract class GPhpThread // {{{
 {	protected $criticalSection = null;
