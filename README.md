@@ -20,4 +20,4 @@ Compatability:
 
 |Status|Details|
 |:-----|:------------------------------------------------------------------------:|
-|Unstable, iffy, experimental|TODO: critical section intercoms management bugfixing, execution speed tweaking)|
+|Unstable, iffy, experimental|TODO: execution speed tweaking)|
