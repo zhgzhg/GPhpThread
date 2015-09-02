@@ -1,23 +1,26 @@
 GPhpThread - Generic PHP Threads
 ================================
 
-A heavy threads implementation written only in pure PHP. This can come
-in handy when the host system does not have PHP threads module installed
-and for some reason it cannot be installed (lack of privilleges, legacy
-system, ect.).
+A heavy threads implementation written using only pure PHP. This can
+come in handy when the host system does not have PHP threads module
+installed and for some reason it cannot be installed (lack of
+privileges, legacy system, ect.).
 
-Features:
+Features
+--------
 
 * OO thread creation and management ideology
-* Basic thread execution control - start, stop, join -> non/blocking
+* Thread execution control - methods like start, stop, join supporting blocking or nonblocking mode
 * Support for thread exit codes
-* Critical section
+* Critical section for sharing data among the threads or for locking purposes
+* Extensible and customizable
 
-Compatability:
+Requirements
+------------
 
-* OS: Linux family (maybe more... to be checked...)
-* PHP: 5.3+
+* PHP version 5.3+
+* OS Linux family (maybe more... to be checked...)
 
 |Status|Details|
 |:-----|:------------------------------------------------------------------------:|
-|Experimental|TODO: execution speed tweaking)|
+|Experimental|TODO: execution speed tweaking, addition of some more extra features, improved examples|
