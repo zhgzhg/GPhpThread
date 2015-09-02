@@ -86,7 +86,7 @@ declare(ticks=30);
 
 		public function __destruct() { // {{{
 			echo "__destruct(INTERCOM);\n"; // FIXME NUM OF CALLS
-			if ($this->success && $this->ownedPid === getmypid()) {
+			if ($this->success && $this->ownerPid === getmypid()) {
 				if (isset($this->commChanFdArr[0]) &&
 					is_resource($this->commChanFdArr[0])) {
 					fclose($this->commChanFdArr[0]);
