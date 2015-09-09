@@ -933,7 +933,7 @@ abstract class GPhpThread // {{{
 {	protected $criticalSection = null;
 	private $parentPid = null;
 	private $childPid = null;
-	private $_childPid = null;
+	private $_childPid = null; // TODO fix naming and destruction
 	private $exitCode = null;
 
 	private $amIStarted = false;
@@ -968,7 +968,7 @@ abstract class GPhpThread // {{{
 	}
 
 	private function amIParent() { // {{{
-		return ($this->childPid > 0 ? true : false);
+		return ($this->childPid === null || $this->childPid > 0 ? true : false);
 	} // }}}
 
 	private function notifyParentThatChildIsTerminated() { // {{{
@@ -981,6 +981,41 @@ abstract class GPhpThread // {{{
 			else return false;
 		}
 		return $this->_childPid; // I am child
+	} // }}}
+
+	public function setPriority($priority) { // {{{ super user privileges required
+		$res = false;
+		if (!is_numeric($priority)) return $res;
+		if ($this->amIParent()) { // I am parent
+			if ($this->amIStarted)
+				@$res = pcntl_setpriority($priority, $this->childPid, PRIO_PROCESS);
+			else return $res;
+		}
+
+		@$res = pcntl_setpriority($priority, $this->_childPid, PRIO_PROCESS); // I am child
+		return $res;
+	} // }}}
+
+	public function getPriority() { // {{{
+		$res = false;
+
+		if ($this->amIParent()) { // I am parent
+			if ($this->amIStarted) @$res = pcntl_getpriority($this->childPid, PRIO_PROCESS);
+			else return $res;
+		}
+
+		@$res = pcntl_getpriority($this->_childPid, PRIO_PROCESS); // I am child
+		return $res;
+	} // }}}
+
+	public function isAlive() { // {{{
+		return ($this->getPriority() !== false);
+	} // }}}
+
+	protected function isParentAlive() { // {{{
+		if (!$this->amIParent()) // I am child
+			return $this->getPriority() !== false;
+		return true;
 	} // }}}
 
 	abstract public function run();

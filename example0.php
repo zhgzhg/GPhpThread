@@ -50,7 +50,7 @@ echo "\nLaunching Thread1...\n\n";
 $thr1 = new MyThread($criticalSection);
 $thr2 = new MyThread($criticalSection);
 $thr1->start();
-echo "Thread1 pid really is: " . $thr1->getPid() . "\n";
+echo "Thread1 pid is: " . $thr1->getPid() . "\n";
 $thr2->start();
 
 $thr2->join();
