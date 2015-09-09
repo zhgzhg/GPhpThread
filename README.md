@@ -23,4 +23,4 @@ Requirements
 
 |Status|Details|
 |:-----|:------------------------------------------------------------------------:|
-|Experimental|TODO: execution speed tweaking, improved examples|
+|Experimental|TODO: deal with nice indicator, execution speed tweaking, improved examples|
