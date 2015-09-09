@@ -19,8 +19,8 @@ Requirements
 ------------
 
 * PHP version 5.3+
-* OS Linux family (maybe more... to be checked...)
+* OS Linux family
 
 |Status|Details|
 |:-----|:------------------------------------------------------------------------:|
-|Experimental|TODO: execution speed tweaking, addition of some more extra features, improved examples|
+|Experimental|TODO: execution speed tweaking, improved examples|
