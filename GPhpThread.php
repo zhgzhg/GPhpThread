@@ -492,7 +492,7 @@ class GPhpThreadCriticalSection // {{{
 				if (!$this->receive($msg, $pid, $name, $value)) break;
 				if ($msg == self::$ADDORUPDATEACK) {
 					$result = true;
-					$this->sharedData['rel'][$name] = $value; // TODO
+					$this->sharedData['rel'][$name] = $value;
 				}
 			break;
 
@@ -502,7 +502,7 @@ class GPhpThreadCriticalSection // {{{
 				if (!$this->receive($msg, $pid, $name, $value)) break;
 				if ($msg == self::$UNRELADDORUPDATEACK) {
 					$result = true;
-					$this->sharedData['unrel'][$name] = $value; // TODO
+					$this->sharedData['unrel'][$name] = $value;
 				}
 
 			case self::$ERASEACT:
@@ -511,7 +511,7 @@ class GPhpThreadCriticalSection // {{{
 				if (!$this->receive($msg, $pid, $name, $value)) break;
 				if ($msg == self::$ERASEACK) {
 					$result = true;
-					unset($this->sharedData['rel'][$name]); // TODO
+					unset($this->sharedData['rel'][$name]);
 				}
 			break;
 
@@ -521,7 +521,7 @@ class GPhpThreadCriticalSection // {{{
 				if (!$this->receive($msg, $pid, $name, $value)) break;
 				if ($msg == self::$UNRELERASEACK) {
 					$result = true;
-					unset($this->sharedData['unrel'][$name]); // TODO
+					unset($this->sharedData['unrel'][$name]);
 				}
 			break;
 
@@ -531,17 +531,17 @@ class GPhpThreadCriticalSection // {{{
 				if (!$this->receive($msg, $pid, $name, $value)) break;
 				if ($msg == self::$READACK) {
 					$result = true;
-					$this->sharedData['rel'][$name] = $value; // TODO
+					$this->sharedData['rel'][$name] = $value;
 				}
 			break;
 
 			case self::$UNRELREADACT:
 				if ($name === null || $name === '') break;
-				if (!$this->send(self::$UNRELREADSYN, $name, $value)) break;
-				if (!$this->receive($msg, $pid, $name, $value)) break;
+				if (!$this->send(self::$UNRELREADSYN, $name, $value)) break;				
+				if (!$this->receive($msg, $pid, $name, $value)) break;				
 				if ($msg == self::$UNRELREADACK) {
 					$result = true;
-					$this->sharedData['unrel'][$name] = $value; // TODO
+					$this->sharedData['unrel'][$name] = $value;
 				}
 			break;
 
@@ -607,7 +607,7 @@ class GPhpThreadCriticalSection // {{{
 
 				if (!$inst->receive($msg, $pid, $name, $value))	{
 					$inst->dispatchPriority = 0;
-					if ($inst->isIntercomBroken()) unset($inst->threadInstanceContext[$threadId]); // remove the thread from the dispatching list as sonn as we cam
+					if ($inst->isIntercomBroken()) unset($inst->threadInstanceContext[$threadId]); // remove the thread from the dispatching list as soon as we can
 					continue;
 				}
 
@@ -641,7 +641,7 @@ class GPhpThreadCriticalSection // {{{
 						}
 					break;
 
-					case GPhpThreadCriticalSection::$ADDORUPDATESYN: // TODO
+					case GPhpThreadCriticalSection::$ADDORUPDATESYN:
 						$inst->dispatchPriority = 1;
 						if ($inst->ownerPid !== $pid) {
 							$inst->send(GPhpThreadCriticalSection::$ADDORUPDATENACK, null, null);
@@ -652,14 +652,14 @@ class GPhpThreadCriticalSection // {{{
 						$inst->sharedData['rel'][$name] = $value;
 					break;
 
-					case GPhpThreadCriticalSection::$UNRELADDORUPDATESYN: // TODO
+					case GPhpThreadCriticalSection::$UNRELADDORUPDATESYN:
 						$inst->dispatchPriority = 1;
 						if (!$inst->send(GPhpThreadCriticalSection::$UNRELADDORUPDATEACK, $name, null)) continue;
 						$inst->dispatchPriority = 2;
 						$inst->sharedData['unrel'][$name] = $value;
 					break;
 
-					case GPhpThreadCriticalSection::$ERASESYN: // TODO
+					case GPhpThreadCriticalSection::$ERASESYN:
 						$inst->dispatchPriority = 1;
 						if ($inst->ownerPid !== $pid) {
 							$inst->send(GPhpThreadCriticalSection::$ERASENACK, null, null);
@@ -670,26 +670,26 @@ class GPhpThreadCriticalSection // {{{
 						unset($inst->sharedData['rel'][$name]);
 					break;
 
-					case GPhpThreadCriticalSection::$UNRELERASESYN: // TODO
+					case GPhpThreadCriticalSection::$UNRELERASESYN: 
 						$inst->dispatchPriority = 1;
 						if (!$inst->send(GPhpThreadCriticalSection::$ERASEACK, $name, null)) continue;
 						$inst->dispatchPriority = 2;
 						unset($inst->sharedData['unrel'][$name]);
 					break;
 
-					case GPhpThreadCriticalSection::$READSYN: // TODO
+					case GPhpThreadCriticalSection::$READSYN:
 						$inst->dispatchPriority = 1;
 						if ($inst->ownerPid !== $pid) {
 							$inst->send(GPhpThreadCriticalSection::$READNACK, null, null);
 							continue;
 						}
-						$inst->send(GPhpThreadCriticalSection::$READACK, $name, $inst->sharedData['rel'][$name]);
+						$inst->send(GPhpThreadCriticalSection::$READACK, $name, (isset($inst->sharedData['rel'][$name]) || array_key_exists($name, $inst->sharedData['rel']) ? $inst->sharedData['rel'][$name] : null));
 						$inst->dispatchPriority = 2;
 					break;
 
-					case GPhpThreadCriticalSection::$UNRELREADSYN: // TODO
+					case GPhpThreadCriticalSection::$UNRELREADSYN:
 						$inst->dispatchPriority = 1;
-						$inst->send(GPhpThreadCriticalSection::$READACK, $name, $inst->sharedData['unrel'][$name]);
+						$inst->send(GPhpThreadCriticalSection::$UNRELREADACK, $name, (isset($inst->sharedData['unrel'][$name]) || array_key_exists($name, $inst->sharedData['unrel']) ? $inst->sharedData['unrel'][$name] : null));
 						$inst->dispatchPriority = 2;
 					break;
 
@@ -835,7 +835,7 @@ class GPhpThreadCriticalSection // {{{
 		return false;
 	} // }}}
 
-	public function addOrUpdateResource($name, $value, $unsafeMode = false) { // {{{ TODO
+	public function addOrUpdateResource($name, $value) { // {{{
 		if ($this->doIOwnIt()) {
 			if ($this->myPid == $this->creatorPid) { // local resource add/update request
 				$this->sharedData['rel'][$name] = $value;
@@ -847,7 +847,7 @@ class GPhpThreadCriticalSection // {{{
 		return false;
 	} // }}}
 
-	public function addOrUpdateUnrelResource($name, $value) { // {{{ TODO
+	public function addOrUpdateUnrelResource($name, $value) { // {{{
 		if ($this->myPid == $this->creatorPid) { // local resource add/update request
 			$this->sharedData['unrel'][$name] = $value;
 			return true;
@@ -856,7 +856,7 @@ class GPhpThreadCriticalSection // {{{
 		return true;
 	} // }}}
 
-	public function removeResource($name) { // {{{ TODO
+	public function removeResource($name) { // {{{
 		if ($this->doIOwnIt() &&
 			isset($this->sharedData['rel'][$name]) ||
 			array_key_exists($name, $this->sharedData['rel'])) {
@@ -872,7 +872,7 @@ class GPhpThreadCriticalSection // {{{
 		return false;
 	} // }}}
 
-	public function removeUnrelResource($name) { // {{{ TODO
+	public function removeUnrelResource($name) { // {{{
 		if (isset($this->sharedData['unrel'][$name]) ||
 			array_key_exists($name, $this->sharedData['unrel'])) {
 
@@ -887,44 +887,44 @@ class GPhpThreadCriticalSection // {{{
 		return false;
 	} // }}}
 
-	public function getResourceValueFast($name) { // {{{ TODO
+	public function getResourceValueFast($name) { // {{{
 		return (isset($this->sharedData['rel'][$name]) || array_key_exists($name, $this->sharedData['rel']) ? $this->sharedData['rel'][$name] : null);
 	} // }}}
 
-	public function getUnrelResourceValueFast($name) { // {{{ TODO
+	public function getUnrelResourceValueFast($name) { // {{{
 		return (isset($this->sharedData['unrel'][$name]) || array_key_exists($name, $this->sharedData['unrel']) ? $this->sharedData['unrel'][$name] : null);
 	} // }}}
 
-	public function getResourceValue($name) { // {{{ TODO
+	public function getResourceValue($name) { // {{{
 		if (!$this->doIOwnIt())
-			throw new GPhpThreadException('[' . getmypid() . '][' . $this->uniqueIdSeed . '] Not owned critical section!');
+			throw new GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Not owned critical section!');
 
 		if ($this->myPid == $this->creatorPid) { // local resource read request ; added to keep a consistency with getResourceValueFast
 			return $this->getResourceValueFast($name);
 		}
 
 		if (!$this->updateDataContainer(self::$READACT, $name, null))
-			throw new GPhpThreadException('[' . getmypid() . '][' . $this->uniqueIdSeed . '] Error while retrieving the value!');
+			throw new GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Error while retrieving the value!');
 
 		return $this->sharedData['rel'][$name];
 	} // }}}
 
-	public function getUnrelResourceValue($name) { // {{{ TODO
+	public function getUnrelResourceValue($name) { // {{{
 		if ($this->myPid == $this->creatorPid) { // local resource read request ; added to keep a consistency with getResourceValueFast
-			return $this->getResourceValueFast($name);
+			return $this->getUnrelResourceValueFast($name);
 		}
 
 		if (!$this->updateDataContainer(self::$UNRELREADACT, $name, null))
-			throw new GPhpThreadException('[' . getmypid() . '][' . $this->uniqueIdSeed . '] Error while retrieving the value!');
+			throw new GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Error while retrieving the value!');
 
 		return $this->sharedData['unrel'][$name];
 	} // }}}
 
-	public function getResourceNames() { // {{{ TODO
+	public function getResourceNames() { // {{{
 		return array_keys($this->sharedData['rel']);
 	} // }}}
 
-	public function getUnrelResourceNames() { // {{{ TODO
+	public function getUnrelResourceNames() { // {{{
 		return array_keys($this->sharedData['unrel']);
 	} // }}}
 } // }}}
