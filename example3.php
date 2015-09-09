@@ -29,14 +29,14 @@ require_once 'GPhpThread.php';
 
 class MyThread extends GPhpThread {
 	public function run() {
-		echo 'Hello, I am a thread with id ' . getmypid() . "!\nTrying to lock the critical section\n";
+		echo 'Hello, I am a thread with id ' . $this->getPid() . "!\nTrying to lock the critical section\n";
 		if ($this->criticalSection->lock()) {
-			echo "=--- locked " . getmypid() . "\n";
-			$this->criticalSection->addOrUpdateResource('IAM', getmypid());
+			echo "=--- locked " . $this->getPid() . "\n";
+			$this->criticalSection->addOrUpdateResource('IAM', $this->getPid());
 			$this->criticalSection->addOrUpdateResource('IAMNOT', '0xdead1');
 			$this->criticalSection->removeResource('IAMNOT');
 			$this->criticalSection->unlock();
-			echo "=--- unlocked " . getmypid() . "\n";
+			echo "=--- unlocked " . $this->getPid() . "\n";
 		}
 	}
 }

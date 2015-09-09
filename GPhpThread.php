@@ -537,8 +537,8 @@ class GPhpThreadCriticalSection // {{{
 
 			case self::$UNRELREADACT:
 				if ($name === null || $name === '') break;
-				if (!$this->send(self::$UNRELREADSYN, $name, $value)) break;				
-				if (!$this->receive($msg, $pid, $name, $value)) break;				
+				if (!$this->send(self::$UNRELREADSYN, $name, $value)) break;
+				if (!$this->receive($msg, $pid, $name, $value)) break;
 				if ($msg == self::$UNRELREADACK) {
 					$result = true;
 					$this->sharedData['unrel'][$name] = $value;
@@ -670,7 +670,7 @@ class GPhpThreadCriticalSection // {{{
 						unset($inst->sharedData['rel'][$name]);
 					break;
 
-					case GPhpThreadCriticalSection::$UNRELERASESYN: 
+					case GPhpThreadCriticalSection::$UNRELERASESYN:
 						$inst->dispatchPriority = 1;
 						if (!$inst->send(GPhpThreadCriticalSection::$ERASEACK, $name, null)) continue;
 						$inst->dispatchPriority = 2;
@@ -933,6 +933,7 @@ abstract class GPhpThread // {{{
 {	protected $criticalSection = null;
 	private $parentPid = null;
 	private $childPid = null;
+	private $_childPid = null;
 	private $exitCode = null;
 
 	private $amIStarted = false;
@@ -974,13 +975,22 @@ abstract class GPhpThread // {{{
 		posix_kill($this->parentPid, SIGCHLD);
 	} // }}}
 
+	public function getPid() { // {{{
+		if ($this->amIParent()) { // I am parent
+			if ($this->amIStarted) return $this->childPid;
+			else return false;
+		}
+		return $this->_childPid; // I am child
+	} // }}}
+
 	abstract public function run();
 
 	public final function start() { // {{{
-		if ($this->childPid !== null) exit(0);
+		if ($this->childPid !== null) exit(0); // CHECKME exit(0) ??
 
 		$this->childPid = pcntl_fork();
 		if ($this->childPid == -1) return false;
+		$this->_childPid = getmypid();
 		$this->amIStarted = true;
 
 		$csInitializationResult = null;
