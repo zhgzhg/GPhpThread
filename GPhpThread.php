@@ -1021,6 +1021,14 @@ abstract class GPhpThread // {{{
 		usleep($microseconds + ($seconds * 1000000));
 	} // }}}
 
+	public function makeNicer() { // {{{
+		return proc_nice(-1);
+	} // }}}
+
+	public function makeUnfrendlier() { // {{{
+		return proc_nice(1);
+	} // }}}
+
 	abstract public function run();
 
 	public final function start() { // {{{
