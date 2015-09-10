@@ -10,8 +10,14 @@ Features
 --------
 
 * OO thread creation and management ideology
-* Thread execution control - methods like start, stop, join supporting blocking or nonblocking mode
-* Thread priority control
+* Thread execution control:
+ * start
+ * stop
+ * join - blocking or nonblocking mode
+ * pause
+ * resume
+ * sleep with interruption detection
+* Thread priority and niceness control
 * Support for thread exit codes
 * Critical section for sharing data among the threads or for locking purposes
  * reliable containers
