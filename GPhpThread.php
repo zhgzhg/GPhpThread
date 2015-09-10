@@ -572,7 +572,7 @@ class GPhpThreadCriticalSection // {{{
 		if ((self::$instancesCreatedEverAArr === null) || (count(self::$instancesCreatedEverAArr) == 0))
 			return;
 
-		// for checking child signals informing that a particular "thread" exited
+		// for checking SIGCHLD child signals informing that a particular "thread" was paused
 		$sigSet = array(SIGCHLD);
 		$sigInfo = array();
 
@@ -580,10 +580,15 @@ class GPhpThreadCriticalSection // {{{
 		foreach (self::$instancesCreatedEverAArr as $instId => &$inst) { // loop through ALL active instances of GPhpCriticalSection
 
 			foreach ($inst->mastersThreadSpecificData as $threadId => &$specificDataAArr) { // loop though the threads per each instance in GPhpCriticalSection
-
-				// checking for child signals informing that a thread has exited
+				// checking for child signals informing that a thread has exited or was paused
 				while (pcntl_sigtimedwait($sigSet, $sigInfo) == SIGCHLD) {
-					self::$threadsForRemovalAArr[$sigInfo['pid']] = $sigInfo['pid'];
+					if ($sigInfo['code'] >= 0 && $sigInfo['code'] <= 3) { // child has exited
+						self::$threadsForRemovalAArr[$sigInfo['pid']] = $sigInfo['pid'];
+					} else if ($sigInfo['code'] == 5) { // stopped (paused) child
+						$specificDataAArr['dispatchPriority'] = 0; // make the dispatch prioroty lowest
+					} else if ($sigInfo['code'] == 6) { // resume stopped (paused) child
+						$specificDataAArr['dispatchPriority'] = 1; // increase little bit the priosity since we expect interraction with the critical section
+					}
 				}
 
 				$inst->intercomInterlocutorPid = &$specificDataAArr['intercomInterlocutorPid'];
@@ -724,7 +729,7 @@ class GPhpThreadCriticalSection // {{{
 			$inst->dispatchPriority = &$NULL;
 		}
 
-		// make sure that no terminated threads left in the internal thread
+		// make sure that no terminated threads are left in the internal thread
 		// dispatching list that all instances of GPhpCriticalSection have
 		foreach (self::$instancesCreatedEverAArr as $instId => &$inst) {
 			foreach ($inst->mastersThreadSpecificData as $threadId => &$specificDataAArr) {
@@ -1019,15 +1024,22 @@ abstract class GPhpThread // {{{
 
 	protected function sleep($microseconds, $seconds = 0) { // {{{
 		if ($this->amIParent()) return false;
+		$microtime = microtime(true);
 		usleep($microseconds + ($seconds * 1000000));
-		return true;
+		$elapsedMicrotime = microtime(true);
+
+		if (($elapsedMicrotime - ($microseconds + ($seconds * 1000000))) >= $microtime) // the sleep was not interrupted
+			return true;
+		return false;
 	} // }}}
 
-	protected function makeNicer() { // {{{
+	protected function makeNicer() { // {{{ increases the priority
+		if ($this->amIParent()) return false;
 		return proc_nice(-1);
 	} // }}}
 
-	protected function makeUnfrendlier() { // {{{
+	protected function makeUnfrendlier() { // {{{ decreases the priority
+		if ($this->amIParent()) return false;
 		return proc_nice(1);
 	} // }}}
 
@@ -1132,6 +1144,16 @@ abstract class GPhpThread // {{{
 		}
 		if ($this->childPid == -1) return false;
 		exit(255);
+	} // }}}
+
+	public final function pause() { // {{{
+		if (!$this->amIParent() || !$this->amIStarted) return false;
+		return posix_kill($this->childPid, SIGSTOP);
+	} // }}}
+
+	public final function resume() { // {{{
+		if (!$this->amIParent() || !$this->amIStarted) return false;
+		return posix_kill($this->childPid, SIGCONT);
 	} // }}}
 } // }}}
 ?>
