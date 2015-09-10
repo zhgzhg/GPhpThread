@@ -35,7 +35,7 @@ class MyThread extends GPhpThread {
 			$this->criticalSection->addOrUpdateResource('IAM', getmypid());
 			$this->criticalSection->addOrUpdateResource('IAMNOT', '0xdead1');
 			$this->criticalSection->removeResource('IAMNOT');
-			while (!$this->criticalSection->unlock()) usleep(200000);
+			while (!$this->criticalSection->unlock()) $this->sleep(200000);
 			echo "=--- unlocked " . $this->getPid() . "\n";
 		}
 	}

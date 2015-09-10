@@ -1018,21 +1018,23 @@ abstract class GPhpThread // {{{
 	} // }}}
 
 	protected function sleep($microseconds, $seconds = 0) { // {{{
+		if ($this->amIParent()) return false;
 		usleep($microseconds + ($seconds * 1000000));
+		return true;
 	} // }}}
 
-	public function makeNicer() { // {{{
+	protected function makeNicer() { // {{{
 		return proc_nice(-1);
 	} // }}}
 
-	public function makeUnfrendlier() { // {{{
+	protected function makeUnfrendlier() { // {{{
 		return proc_nice(1);
 	} // }}}
 
 	abstract public function run();
 
 	public final function start() { // {{{
-		if ($this->childPid !== null && $this->childPid != -1) return false;
+		if (!$this->amIParent()) return false;
 
 		$this->childPid = pcntl_fork();
 		if ($this->childPid == -1) return false;
@@ -1122,7 +1124,7 @@ abstract class GPhpThread // {{{
 
 				if ($res != 0) {
 					if ($this->criticalSection !== null) $this->criticalSection->finalize($this->uniqueId);
-					$this->childPid = null;					
+					$this->childPid = null;
 					$this->_childPid = null;
 				}
 			}

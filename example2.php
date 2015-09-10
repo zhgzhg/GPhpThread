@@ -30,7 +30,6 @@ require_once 'GPhpThread.php';
 class MyThread extends GPhpThread {
 	public function run() {
 		echo 'Hello, I am a thread with id ' . $this->getPid() . "!\nTrying to lock the critical section\n";
-		//usleep(mt_rand(0, 5000000));
 		if ($this->criticalSection->lock()) {
 			echo "=--- locked " . $this->getPid() . "\n";
 			$this->criticalSection->addOrUpdateResource('IAM', $this->getPid());
