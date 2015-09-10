@@ -14,8 +14,8 @@ Features
 * Thread priority control
 * Support for thread exit codes
 * Critical section for sharing data among the threads or for locking purposes
-** reliable containers
-** faster, unreliable containers
+ * reliable containers
+ * faster, unreliable containers
 * Extensible and customizable
 
 Requirements
