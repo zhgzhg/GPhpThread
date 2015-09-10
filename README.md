@@ -22,6 +22,7 @@ Requirements
 ------------
 
 * PHP version 5.3+
+* PHP shell execution context
 * OS Linux family
 
 |Status|Details|
