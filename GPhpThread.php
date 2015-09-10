@@ -933,7 +933,7 @@ abstract class GPhpThread // {{{
 {	protected $criticalSection = null;
 	private $parentPid = null;
 	private $childPid = null;
-	private $_childPid = null; // TODO fix naming and destruction
+	private $_childPid = null;
 	private $exitCode = null;
 
 	private $amIStarted = false;
@@ -952,7 +952,6 @@ abstract class GPhpThread // {{{
 
 	public function __destruct() { // {{{
 	} // }}}
-
 
 	public final function getExitCode() { // {{{
 		return $this->exitCode;
@@ -1018,10 +1017,14 @@ abstract class GPhpThread // {{{
 		return true;
 	} // }}}
 
+	protected function sleep($microseconds, $seconds = 0) { // {{{
+		usleep($microseconds + ($seconds * 1000000));
+	} // }}}
+
 	abstract public function run();
 
 	public final function start() { // {{{
-		if ($this->childPid !== null) exit(0); // CHECKME exit(0) ??
+		if ($this->childPid !== null && $this->childPid != -1) return false;
 
 		$this->childPid = pcntl_fork();
 		if ($this->childPid == -1) return false;
@@ -1047,8 +1050,9 @@ abstract class GPhpThread // {{{
 		} else { // parent
 			if ($this->childPid != -1 && $this->criticalSection !== null) {
 
-				if ($csInitializationResult === false) { // don't add the thread to the dispatch queue if missing but required critical section is the case
+				if ($csInitializationResult === false) { // don't add the thread to the dispatch queue if missing but required critical section is the case (actuallu this is done in the initialize method above)
 					$this->childPid = -1;
+					$this->_childPid = null;
 					$this->amIStarted = false;
 					return false;
 				}
@@ -1090,14 +1094,12 @@ abstract class GPhpThread // {{{
 					usleep(mt_rand(60000, 200000));
 				}
 
-				if ($res > 0 && pcntl_wifexited($status)) {
-					$this->exitCode = pcntl_wexitstatus($status);
-				} else {
-					$this->exitCode = false;
-				}
+				if ($res > 0 && pcntl_wifexited($status)) $this->exitCode = pcntl_wexitstatus($status);
+				else $this->exitCode = false;
 
 				if ($this->criticalSection !== null) $this->criticalSection->finalize($this->uniqueId);
 				$this->childPid = null;
+				$this->_childPid = null;
 				$this->amIStarted = false;
 			} else {
 				$res = pcntl_waitpid($this->childPid, $status, WNOHANG);
@@ -1112,7 +1114,8 @@ abstract class GPhpThread // {{{
 
 				if ($res != 0) {
 					if ($this->criticalSection !== null) $this->criticalSection->finalize($this->uniqueId);
-					$this->childPid = null;
+					$this->childPid = null;					
+					$this->_childPid = null;
 				}
 			}
 			return $res;
