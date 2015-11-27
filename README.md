@@ -33,4 +33,4 @@ Requirements
 
 |Status|Details|
 |:-----|:------------------------------------------------------------------------:|
-|Experimental|TODO: execution speed tweaking, improved examples|
+|Experimental|TODO: improved examples|
