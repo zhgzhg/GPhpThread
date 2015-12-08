@@ -27,7 +27,7 @@
 // sharing the same critical section. Because of the code in the threads
 // they will load the critical section and thus causing locking delay
 
-require_once 'GPhpThread.php';
+require_once __DIR__ . '/../GPhpThread.php';
 
 class MyThread extends GPhpThread {
 	public function run() {

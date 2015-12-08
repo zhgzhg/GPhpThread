@@ -26,7 +26,7 @@
 // Simple Demonstration how use GPhpThread with a basic utilization of a
 // shared memory region - a critical section
 
-require_once 'GPhpThread.php';
+require_once __DIR__ . '/../GPhpThread.php';
 
 class MyThread extends GPhpThread {
 	public function run() {

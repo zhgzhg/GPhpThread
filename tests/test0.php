@@ -25,7 +25,7 @@
 
 // Simple Demonstration how use GPhpThread
 
-require_once 'GPhpThread.php';
+require_once __DIR__ . '/../GPhpThread.php';
 
 class MyThread extends GPhpThread {
 	public function run() {
