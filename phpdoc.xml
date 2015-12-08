@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <title>GPhpThread - a heavy threads implementation in pure PHP</title>
+    <parser>
+        <target>GPhpThread Documentation</target>
+        <encoding>utf8</encoding>
+        <markers>
+            <item>TODO</item>
+            <item>FIXME</item>
+            <item>CHECKME</item>
+            <item>REMOVEME</item>
+            <item>CHANGEME</item>
+        </markers>
+        <extensions>
+            <extension>php</extension>            
+        </extensions>
+        <visibility></visibility>
+    </parser>
+    <transformer>
+        <target>Documentation</target>
+    </transformer>
+    <logging>
+        <level>warn</level>
+        <paths>
+            <default>{APP_ROOT}/data/log/{DATE}.log</default>
+            <errors>{APP_ROOT}/data/log/{DATE}.errors.log</errors>
+        </paths>
+    </logging>
+    <transformations>
+        <template name="clean" />
+    </transformations>
+    <files>        
+        <directory>.</directory>
+        <ignore>tests/*</ignore>
+        <ignore>examples/*</ignore>
+    </files>
+</phpdoc>
