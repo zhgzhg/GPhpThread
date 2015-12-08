@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdoc>
-    <title>GPhpThread - a heavy threads implementation in pure PHP</title>
+    <title>GPhpThread - a heavy threads implementation in pure PHP - Documentation</title>
     <parser>
-        <target>GPhpThread Documentation</target>
+        <target>Documentation</target>
         <encoding>utf8</encoding>
         <markers>
             <item>TODO</item>
@@ -12,7 +12,7 @@
             <item>CHANGEME</item>
         </markers>
         <extensions>
-            <extension>php</extension>            
+            <extension>php</extension>
         </extensions>
         <visibility></visibility>
     </parser>
@@ -29,7 +29,7 @@
     <transformations>
         <template name="clean" />
     </transformations>
-    <files>        
+    <files>
         <directory>.</directory>
         <ignore>tests/*</ignore>
         <ignore>examples/*</ignore>
