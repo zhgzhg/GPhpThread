@@ -27,22 +27,49 @@
 
 declare(ticks=30);
 
-class GPhpThreadException extends Exception // {{{
+/**
+ * Exception thrown by GPhpThreads components
+ * @api
+ */
+class GPhpThreadException extends \Exception // {{{
 {
-	public function __construct($msg, $code = 0, Exception $previous = NULL) {
+	/**
+	 * Constructor.
+	 * @param string $msg Exception message
+	 * @param int $code Exception code number
+	 * @param Exception $previous
+	 */
+	public function __construct($msg, $code = 0, \Exception $previous = NULL) {
 		parent::__construct($msg, $code, $previous);
 	}
 } // }}}
 
+/**
+ * Process intercommunication class.
+ * A pipe interprocess communication method is used, based on asynchronous or synchronous comminucation.
+ * @api
+ */
 class GPhpThreadIntercom // {{{
 {
+	/** @internal */
 	private $commFilePath = '';
+	/** @internal */
 	private $commChanFdArr = array();
+	/** @internal */
 	private $success = true;
+	/** @internal */
 	private $autoDeletion = false;
+	/** @internal */
 	private $isReadMode = true;
+	/** @internal */
 	private $ownerPid = null;
 
+	/**
+	 * Constructor.
+	 * @param string $filePath The file that is going to store the pipe.
+	 * @param bool $isReadMode Indicates if the param is goind to be read only
+	 * @param bool $autoDeletion If it is set during the destriction of the GPhpThreadIntercom instance the pipe file will be also removed.
+	 */
 	public function __construct($filePath, $isReadMode = true, $autoDeletion=false) { // {{{
 		$this->ownerPid = getmypid();
 		if (!file_exists($filePath)) {
@@ -71,18 +98,34 @@ class GPhpThreadIntercom // {{{
 		$this->isReadMode = $isReadMode;
 	} // }}}
 
+	/**
+	 * Checks if the intercom is initialized and ready for use.
+	 * @return bool
+	 */
 	public function isInitialized() { // {{{
 		return $this->success;
 	} // }}}
 
+	/**
+	 * Returns the state of the option automatic deletion of the pipe file.
+	 * @return bool
+	 */
 	public function getAutoDeletionFlag() { // {{{
 		return $this->$autoDeletion;
 	} // }}}
 
+	/**
+	 * Sets the automatic deletion option for the pipe file during the destruction of current instance.
+	 * @param bool $booleanValue
+	 * @return void
+	 */
 	public function setAutoDeletionFlag($booleanValue) { // {{{
 		$this->$autoDeletion = $booleanValue;
 	} // }}}
 
+	/**
+	 * Destructor. May try automatically to delete the pipe file.
+	 */
 	public function __destruct() { // {{{
 		if ($this->success && $this->ownerPid === getmypid()) {
 			if (isset($this->commChanFdArr[0]) &&
@@ -93,6 +136,12 @@ class GPhpThreadIntercom // {{{
 		}
 	} // }}}
 
+	/**
+	 * Sends data through the intercom.
+	 * @param string $dataString The data to be sent
+	 * @param int $dataLength The length of the data
+	 * @return bool On success returns true otherwise false is returned.
+	 */
 	public function send($dataString, $dataLength) { // {{{
 		if ($this->success && !$this->isReadMode) {
 			//if (defined('DEBUG_MODE')) echo $dataString . '[' . getmypid() . "] sending\n";
@@ -119,6 +168,10 @@ class GPhpThreadIntercom // {{{
 		return false;
 	} // }}}
 
+	/**
+	 * Receives data from the intercom.
+	 * @return string|null If there is no data up to 700 ms after the method is called it returns NULL otherwise returns the data string itself.
+	 */
 	public function receive() { // {{{
 		if (!$this->success || !$this->isReadMode) return false;
 		if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) return false;
@@ -141,6 +194,10 @@ class GPhpThreadIntercom // {{{
 		return $data;
 	} // }}}
 
+	/**
+	 * Checks if there is pending data for receiving.
+	 * @param return mixed Returns 0 or false if there is no data up to 15 ms after the method is called. Otherwise returns the number of contained stream resources (usually 1).
+	 */
 	public function isReceiveingDataAvailable() { // {{{
 		if (!$this->success || !$this->isReadMode) return false;
 		if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) return false;
@@ -150,30 +207,50 @@ class GPhpThreadIntercom // {{{
 	} // }}}
 } // }}}
 
+/**
+ * Critical section for sharing data between multiple processes.
+ * It provides a slower data-safe manipulating methods and unsafe faster methods.
+ * @see \GPhpThreadIntercom is used for synchronization between the different processes.
+ * @api
+ */
 class GPhpThreadCriticalSection // {{{
 {
+	/** @internal */
 	private $uniqueId = 0;								// the identifier of a concrete instance
 
+	/** @internal */
 	private static $uniqueIdSeed = 0;				    // the uniqueId index seed
 
+	/** @internal */
 	private static $instancesCreatedEverAArr = array(); // contain all the instances that were ever created of this class
+	/** @internal */
 	private static $threadsForRemovalAArr = array();    // contain all the instances that were terminated; used to make connection with $mastersThreadSpecificData
 
+	/** @internal */
 	private $creatorPid;
+	/** @internal */
 	private $ownerPid = false;  // the thread PID owning the critical section
+	/** @internal */
 	private $myPid; 			// point of view of the current instance
 
+	/** @internal */
 	private $sharedData = array('rel' => array(), 'unrel' => array()); // variables shared in one CS instance among all threads ; two sections are provided reliable one that requires locking of the critical section and unreliable one that does not require locking
 
+	/** @internal */
 	private $mastersThreadSpecificData = array(); // specific per each thread variables / the host is the master parent
 
 	// ======== thread specific variables ========
+	/** @internal */
 	private $intercomWrite = null;
+	/** @internal */
 	private $intercomRead = null;
+	/** @internal */
 	private $intercomInterlocutorPid = null;
+	/** @internal */
 	private $dispatchPriority = 0;
 	// ===========================================
 
+	/** @internal */
 	private static $ADDORUPDATESYN = '00', $ADDORUPDATEACK = '01', $ADDORUPDATENACK = '02',
 				   $UNRELADDORUPDATESYN = '03', $UNRELADDORUPDATEACK = '04', $UNRELADDORUPDATENACK = '05',
 
@@ -188,10 +265,15 @@ class GPhpThreadCriticalSection // {{{
 				   $LOCKSYN = '21', $LOCKACK = '22', $LOCKNACK = '23',
 				   $UNLOCKSYN = '24', $UNLOCKACK = '25', $UNLOCKNACK = '26';
 
+	/** @internal */
 	private static $ADDORUPDATEACT = 1, $UNRELADDORUPDATEACT = 2,
 				   $ERASEACT = 3, $UNRELERASEACT = 4,
 				   $READACT = 5, $UNRELREADACT = 6, $READALLACT = 7;
 
+	/**
+	 * Constructor.
+	 * @param string $pipeDirectory The directory where the pipe files for the interprocess communication will be stored.
+	 */
 	public function __construct($pipeDirectory = '/dev/shm') { // {{{
 		$this->uniqueId = self::$uniqueIdSeed++;
 
@@ -201,6 +283,9 @@ class GPhpThreadCriticalSection // {{{
 		$this->pipeDir = rtrim($pipeDirectory, ' /') . '/';
 	} // }}}
 
+	/**
+	 * Destructor.
+	 */
 	public function __destruct() { // {{{
 		$this->intercomRead = null;
 		$this->intercomWrite = null;
@@ -208,6 +293,12 @@ class GPhpThreadCriticalSection // {{{
 			unset(self::$instancesCreatedEverAArr[$this->uniqueId]);
 	} // }}}
 
+	/**
+	 * Initializes the critical section.
+	 * @param int $afterForkPid The process identifier obtained after the execution of a fork() used to differentiate between different processes - pseudo threads.
+	 * @param int $threadId The internal to the GPhpThread identifier of the current thread instance which is unique indentifier in the context of the current process.
+	 * @return bool On success returns true otherwise false.
+	 */
 	public function initialize($afterForkPid, $threadId) { // {{{
 		$this->myPid = getmypid();
 
@@ -300,20 +391,45 @@ class GPhpThreadCriticalSection // {{{
 		return false;
 	} // }}}
 
+	/**
+	 * Finalization of a thread instance that ended and soon will be destroyed.
+	 * @param int $threadId The internal thread identifier.
+	 * @return void
+	 */
 	public function finalize($threadId) { // {{{
 		unset($this->mastersThreadSpecificData[$threadId]);
 	} // }}}
 
+	/**
+	 * Confirms if the current thread has the ownership of the critical section associated with it.
+	 * @return bool
+	 */
 	private function doIOwnIt() { // {{{
 		return ($this->ownerPid !== false && $this->ownerPid == $this->myPid);
 	} // }}}
 
+	/**
+	 * Encodes data in a message that will be sent to the thread process dispatcher.
+	 * @param string $msg The message type identifier.
+	 * @param string $name The variable name whose data is going to be sent.
+	 * @param mixed $value The current value of the desired for sending variable.
+	 * @return string The composed message string
+	 */
 	private function encodeMessage($msg, $name, $value) { // {{{
 		// 2 decimal digits message code, 10 decimal digits PID,
 		// 4 decimal digits name length, name, data
 		return $msg . sprintf('%010d%04d', $this->myPid, strlen($name)) . $name . serialize($value);
 	} // }}}
 
+	/**
+	 * Decodes encoded from GPhpThread's instance message.
+	 * @param string $encodedMsg The encoded message
+	 * @param string &$msg The encoded message type identifier.
+	 * @param int &$pid The process id of the sender.
+	 * @param string &$name The variable name whose data was sent.
+	 * @param mixed &$value The variable data contained in the encoded message.
+	 * @return void
+	 */
 	private function decodeMessage($encodedMsg, &$msg, &$pid, &$name, &$value) { // {{{
 		// 2 decimal digits message code, 10 decimal digits PID,
 		// 4 decimal digits name length, name, data
@@ -332,6 +448,10 @@ class GPhpThreadCriticalSection // {{{
 		else $value = null;
 	} // }}}
 
+	/**
+	 * Checks if the internal intercom is broken.
+	 * @return bool Returns true if the intercom is broken otherwise returns false.
+	 */
 	private function isIntercomBroken() { // {{{
 		return (empty($this->intercomWrite) ||
 				empty($this->intercomRead) ||
@@ -339,6 +459,13 @@ class GPhpThreadCriticalSection // {{{
 				!$this->isPidAlive($this->intercomInterlocutorPid));
 	} // }}}
 
+	/**
+	 * Sends data operation to the main process dispatcher.
+	 * @param string $operation The operation type code
+	 * @param string $resourceName The name of resource that is holding a particular data that will be "shared".
+	 * @param mixed $resourceValue The value of the resource.
+	 * @return bool Returns true on success otherwise false.
+	 */
 	private function send($operation, $resourceName, $resourceValue) { // {{{
 		if ($this->isIntercomBroken()) return false;
 
@@ -393,6 +520,14 @@ class GPhpThreadCriticalSection // {{{
 		return $isSent;
 	} // }}}
 
+	/**
+	 * Receives data operation from the main process dispatcher.
+	 * @param string &$message The operation type code
+	 * @param int &$pid The process id of the sender "thread".
+	 * @param string &$resourceName The name of resource that is holding a particular data that will be "shared".
+	 * @param mixed &$resourceValue The value of the resource.
+	 * @return bool Returns true on success otherwise false.
+	 */
 	private function receive(&$message, &$pid, &$resourceName, &$resourceValue) { // {{{
 		if ($this->isIntercomBroken()) return false;
 
@@ -449,6 +584,10 @@ class GPhpThreadCriticalSection // {{{
 		return !$isDataEmpty;
 	} // }}}
 
+	/**
+	 * Tries to lock the critical section.
+	 * @return bool Returns true on success otherwise false.
+	 */
 	private function requestLock() { // {{{
 		$msg = $pid = $name = $value = null;
 
@@ -463,6 +602,10 @@ class GPhpThreadCriticalSection // {{{
 		return true;
 	} // }}}
 
+	/**
+	 * Tries to unlock the critical section.
+	 * @return bool Returns true on success otherwise false.
+	 */
 	private function requestUnlock() { // {{{
 		$msg = $pid = $name = $value = null;
 
@@ -479,6 +622,13 @@ class GPhpThreadCriticalSection // {{{
 		return true;
 	} // }}}
 
+	/**
+	 * Executes data operation on the internal shared data container.
+	 * @param string $actionType The performed operation code.
+	 * @param string $name The name of the resource.
+	 * @param mixed $value The value of the resource.
+	 * @return bool Returns true on success otherwise false.
+	 */
 	private function updateDataContainer($actionType, $name, $value) { // {{{
 		$result = false;
 
@@ -558,11 +708,21 @@ class GPhpThreadCriticalSection // {{{
 		return $result;
 	} // }}}
 
+	/**
+	 * Checks if specific process id is still alive.
+	 * @param int $pid The process identifier.
+	 * @return bool Returns true if the pid is alive otherwise returns false.
+	 */
 	private function isPidAlive($pid) { // {{{
 		if ($pid === false) return false;
 		return posix_kill($pid, 0);
 	} // }}}
 
+	/**
+	 * Dispatcher responsible for the thread intercommunication and communication with their parent process.
+	 * @param bool $useBlocking On true blocks the internal execution until communication data is available for the current dispatched thread otherwise it skips it.
+	 * @return void
+	 */
 	public static function dispatch($useBlocking = false) { // {{{
 		$NULL = null;
 
@@ -796,6 +956,11 @@ class GPhpThreadCriticalSection // {{{
 
 	} // }}}
 
+	/**
+	 * Tries to lock the associated with the instance critical section.
+	 * @param bool $useBlocking If it's set to true the method will block until a lock is successfully established.
+	 * @return bool Returns true on success otherwise returns false.
+	 */
 	public function lock($useBlocking = true) { // {{{
 		if ($this->doIOwnIt()) return true;
 
@@ -829,17 +994,33 @@ class GPhpThreadCriticalSection // {{{
 		} while ($useBlocking && !$this->doIOwnIt());
 	} // }}}
 
-	public function unlock() { // {{{
+	/**
+	 * Tries to unlock the associated with the instance critical section.
+	 * @param bool $useBlocking If it's set to true the method will block until an unlock is successfully established.
+	 * @return bool Returns true on success otherwise returns false.
+	 */
+	public function unlock($useBlocking = false) { // {{{
 		if ($this->doIOwnIt() || $this->ownerPid === false) {
 			if ($this->myPid == $this->creatorPid) { // local unlock request
 				$this->ownerPid = false;
 				return true;
 			}
-			return $this->requestUnlock();
+
+			$res = null;
+			while (($res = $this->requestUnlock() === false) && $useBlocking) {
+				if ($useBlocking) usleep(mt_rand(10000, 200000));
+			}
+			return $res;
 		}
-		return false;
+		return true;
 	} // }}}
 
+	/**
+	 * Adds or updates shared resource in a reliable, slower way. A lock of the critical section is required.
+	 * @param string $name The name of the resource.
+	 * @param mixed $value The value of the resource.
+	 * @return bool Returns true on success otherwise returns false.
+	 */
 	public function addOrUpdateResource($name, $value) { // {{{
 		if ($this->doIOwnIt()) {
 			if ($this->myPid == $this->creatorPid) { // local resource add/update request
@@ -852,6 +1033,12 @@ class GPhpThreadCriticalSection // {{{
 		return false;
 	} // }}}
 
+	/**
+	 * Adds or updates shared resource in an unreliable, faster way. A lock of the critical section is NOT required.
+	 * @param string $name The name of the resource.
+	 * @param mixed $value The value of the resource.
+	 * @return bool Returns true on success otherwise returns false.
+	 */
 	public function addOrUpdateUnrelResource($name, $value) { // {{{
 		if ($this->myPid == $this->creatorPid) { // local resource add/update request
 			$this->sharedData['unrel'][$name] = $value;
@@ -861,6 +1048,11 @@ class GPhpThreadCriticalSection // {{{
 		return true;
 	} // }}}
 
+	/**
+	 * Removes shared resource in a reliable, slower way. A lock of the critical section is required.
+	 * @param string $name The name of the resource.
+	 * @return bool Returns true on success otherwise returns false.
+	 */
 	public function removeResource($name) { // {{{
 		if ($this->doIOwnIt() &&
 			isset($this->sharedData['rel'][$name]) ||
@@ -877,6 +1069,11 @@ class GPhpThreadCriticalSection // {{{
 		return false;
 	} // }}}
 
+	/**
+	 * Removes shared resource in an unreliable, faster way. A lock of the critical section is NOT required.
+	 * @param string $name The name of the resource.	 
+	 * @return bool Returns true on success otherwise returns false.
+	 */
 	public function removeUnrelResource($name) { // {{{
 		if (isset($this->sharedData['unrel'][$name]) ||
 			array_key_exists($name, $this->sharedData['unrel'])) {
@@ -892,93 +1089,170 @@ class GPhpThreadCriticalSection // {{{
 		return false;
 	} // }}}
 
+	/**
+	 * Returns an reliable resource without trying to ask for it the dispatcher.
+	 * @param string $name The name of the resource.	 
+	 * @return mixed Returns the resource value or null on failure or if the resource name was not found.
+	 */
 	public function getResourceValueFast($name) { // {{{
 		return (isset($this->sharedData['rel'][$name]) || array_key_exists($name, $this->sharedData['rel']) ? $this->sharedData['rel'][$name] : null);
 	} // }}}
 
+	/**
+	 * Returns an unreliable resource without trying to ask for it the dispatcher.
+	 * @param string $name The name of the resource.	 
+	 * @return mixed Returns the resource value or null on failure or if the resource name was not found.
+	 */
 	public function getUnrelResourceValueFast($name) { // {{{
 		return (isset($this->sharedData['unrel'][$name]) || array_key_exists($name, $this->sharedData['unrel']) ? $this->sharedData['unrel'][$name] : null);
 	} // }}}
 
+	/**
+	 * Returns an reliable resource value by asking the dispatcher for it. An ownership of the critical section is required.
+	 * @throws \GPhpThreadException
+	 * @param string $name The name of the desired resource.
+	 * @return mixed The resource value or null if the resource was not found.
+	 */
 	public function getResourceValue($name) { // {{{
 		if (!$this->doIOwnIt())
-			throw new GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Not owned critical section!');
+			throw new \GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Not owned critical section!');
 
 		if ($this->myPid == $this->creatorPid) { // local resource read request ; added to keep a consistency with getResourceValueFast
 			return $this->getResourceValueFast($name);
 		}
 
 		if (!$this->updateDataContainer(self::$READACT, $name, null))
-			throw new GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Error while retrieving the value!');
+			throw new \GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Error while retrieving the value!');
 
 		return $this->sharedData['rel'][$name];
 	} // }}}
 
+	/**
+	 * Returns an unreliable resource value by asking the dispatcher for it. An ownership of the critical section is required.
+	 * @throws \GPhpThreadException
+	 * @param string $name The name of the desired resource.
+	 * @return mixed The resource value or null if the resource was not found.
+	 */
 	public function getUnrelResourceValue($name) { // {{{
 		if ($this->myPid == $this->creatorPid) { // local resource read request ; added to keep a consistency with getResourceValueFast
 			return $this->getUnrelResourceValueFast($name);
 		}
 
 		if (!$this->updateDataContainer(self::$UNRELREADACT, $name, null))
-			throw new GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Error while retrieving the value!');
+			throw new \GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Error while retrieving the value!');
 
 		return $this->sharedData['unrel'][$name];
 	} // }}}
 
+	/**
+	 * Returns the names of all reliable shared resources.
+	 * @return array Associative array of ('resource name' => value, ...)
+	 */
 	public function getResourceNames() { // {{{
 		return array_keys($this->sharedData['rel']);
 	} // }}}
 
+	/**
+	 * Returns the names of all unreliable shared resources.
+	 * @return array Associative array of ('resource name' => value, ...)
+	 */
 	public function getUnrelResourceNames() { // {{{
 		return array_keys($this->sharedData['unrel']);
 	} // }}}
 } // }}}
 
+/**
+ * A heavy thread creation and manipulation class.
+ * Provides purely implemented in php instruments for "thread" creation and maniulation. An shell access, linux OS and PHP 5.3+ are required.
+ * @api
+ */
 abstract class GPhpThread // {{{
-{	protected $criticalSection = null;
+{
+	/** @internal */
+	protected $criticalSection = null;
+	/** @internal */
 	private $parentPid = null;
+	/** @internal */
 	private $childPid = null;
+	/** @internal */
 	private $_childPid = null;
+	/** @internal */
 	private $exitCode = null;
 
+	/** @internal */
 	private $amIStarted = false;
 
+	/** @internal */
 	private $uniqueId = 0;
+	/** @internal */
 	private static $seed = 0;
 
+	/** @internal */
 	private static $isCriticalSectionDispatcherRegistered = false;
+	/** @internal */
 	private static $isSignalCHLDHandlerInstalled = false;
 
+	/**
+	 * Constructor.
+	 * @param \GPhpCriticalSection|null &$criticalSection Instance of the critical section that is going to be associated with the created thread.
+	 */
 	public function __construct(&$criticalSection) {// {{{
 		$this->uniqueId = GPhpThread::$seed++;
 		$this->criticalSection = &$criticalSection;
 		$this->parentPid = getmypid();
 	} // }}}
 
+	/**
+	 * Destructor (default one).
+	 */
 	public function __destruct() { // {{{
 	} // }}}
 
+	/**
+	 * Returns the thread exit code.
+	 * @return int
+	 */
 	public final function getExitCode() { // {{{
 		return $this->exitCode;
 	} // }}}
 
+	/**
+	 * Marks the start of a code block with high execution priority.
+	 * @return void
+	 */
 	public static final function BGN_HIGH_PRIOR_EXEC_BLOCK() {
 		GPhpThread::$isCriticalSectionDispatcherRegistered = true;
 		unregister_tick_function('GPhpThreadCriticalSection::dispatch');
 	}
 
+	/**
+	 * Marks the end of a code block with high execution priority.
+	 * @return void
+	 */
 	public static final function END_HIGH_PRIOR_EXEC_BLOCK() {
 		register_tick_function('GPhpThreadCriticalSection::dispatch');
 	}
 
+	/**
+	 * Returns if the current process is a parent (has created thread).
+	 * @return bool If it is a parent returns true otherwise returns false.
+	 */
 	private function amIParent() { // {{{
 		return ($this->childPid === null || $this->childPid > 0 ? true : false);
 	} // }}}
 
+	/**
+	 * Notifies the parent of the current thread that the thread has exited.
+	 * @return void
+	 */
 	private function notifyParentThatChildIsTerminated() { // {{{
 		posix_kill($this->parentPid, SIGCHLD);
 	} // }}}
 
+	/**
+	 * Returns the current thread (process) id.
+	 * @return int
+	 */
 	public function getPid() { // {{{
 		if ($this->amIParent()) { // I am parent
 			if ($this->amIStarted) return $this->childPid;
@@ -987,6 +1261,11 @@ abstract class GPhpThread // {{{
 		return $this->_childPid; // I am child
 	} // }}}
 
+	/**
+	 * Sets the execution priority of the thread. A super user privileges are required.
+	 * @param int $priority The priority number in the interval [-20; 20] where the lower value means higher priority.
+	 * @return bool Returns true on success otherwise returns false.
+	 */
 	public function setPriority($priority) { // {{{ super user privileges required
 		$res = false;
 		if (!is_numeric($priority)) return $res;
@@ -1000,6 +1279,10 @@ abstract class GPhpThread // {{{
 		return $res;
 	} // }}}
 
+	/**
+	 * Returns the current execution priority.
+	 * @return int The priority number in the interval [-20; 20] where the lower value means higher priority.
+	 */
 	public function getPriority() { // {{{
 		$res = false;
 
@@ -1012,16 +1295,30 @@ abstract class GPhpThread // {{{
 		return $res;
 	} // }}}
 
+	/**
+	 * Checks if the thread is alive.
+	 * @return bool Returns true if the thread is alive otherwise returns false.
+	 */
 	public function isAlive() { // {{{
 		return ($this->getPriority() !== false);
 	} // }}}
 
+	/**
+	 * Checks if the creator of the thread is alive.
+	 * @return bool Returns true if the parent is alive otherwise returns false.
+	 */
 	protected function isParentAlive() { // {{{
 		if (!$this->amIParent()) // I am child
 			return $this->getPriority() !== false;
 		return true;
 	} // }}}
 
+	/**
+	 * Suspends the thread execution for a specific amount of time, redirecting the CPU resources to somewhere else. The total delay is the sum of all passed parameters.
+	 * @param int $microseconds The delay in microseconds.
+	 * @param int $seconds The delay in seconds.
+	 * @return bool Returns true after all of the specified delay time elapsed. If the sleep was interrupted returns false.
+	 */
 	protected function sleep($microseconds, $seconds = 0) { // {{{
 		if ($this->amIParent()) return false;
 		$microtime = microtime(true);
@@ -1033,18 +1330,34 @@ abstract class GPhpThread // {{{
 		return false;
 	} // }}}
 
+	/**
+	 * At process level increases the niceness of a heavy "thread" making its priority higher.
+	 * @return bool Returns true on success or false in case of error or lack of privileges.
+	 */
 	protected function makeNicer() { // {{{ increases the priority
 		if ($this->amIParent()) return false;
 		return proc_nice(-1);
 	} // }}}
 
+	/**
+	 * At process level decreases the niceness of a heavy "thread" making its priority lower.
+	 * @return bool Returns true on success or false in case of error or lack of privileges.
+	 */
 	protected function makeUnfrendlier() { // {{{ decreases the priority
 		if ($this->amIParent()) return false;
 		return proc_nice(1);
 	} // }}}
 
+	/**
+	 * Abstract method, the entry point of a particular GPhpThread inheritor implementation.
+	 * @return void
+	 */
 	abstract public function run();
 
+	/**
+	 * Starts the thread.
+	 * @return bool On successful execution returns true otherwise returns false.
+	 */
 	public final function start() { // {{{
 		if (!$this->amIParent()) return false;
 
@@ -1088,6 +1401,11 @@ abstract class GPhpThread // {{{
 		}
 	} // }}}
 
+	/**
+	 * Stops executing thread.
+	 * @param bool $force If it is set to true if performs forced stop (termination).
+	 * @return bool True if the stop request was sent successfully otherwise false.
+	 */
 	public final function stop($force = false) { // {{{
 		if (!$this->amIStarted) return false;
 		if ($this->amIParent() && $this->childPid !== null) { // parent
@@ -1105,6 +1423,11 @@ abstract class GPhpThread // {{{
 		exit(0);
 	} // }}}
 
+	/**
+	 * Waits for executing thread to return.
+	 * @param bool $useBlocking If is set to true will block the until the thread returns.
+	 * @return bool True if the thread has joined otherwise false.
+	 */
 	public final function join($useBlocking = true) { // {{{
 		if (!$this->amIStarted) return false;
 		if ($this->amIParent()) {
@@ -1146,11 +1469,19 @@ abstract class GPhpThread // {{{
 		exit(255);
 	} // }}}
 
+	/**
+	 * Pauses the execution of the thread.
+	 * @return bool True if the pause request was successfully sent otherwise false.
+	 */
 	public final function pause() { // {{{
 		if (!$this->amIParent() || !$this->amIStarted) return false;
 		return posix_kill($this->childPid, SIGSTOP);
 	} // }}}
 
+	/**
+	 * Resumes the execution of a paused thread.
+	 * @return bool True if the execution resume request was successfully sent otherwise false.
+	 */
 	public final function resume() { // {{{
 		if (!$this->amIParent() || !$this->amIStarted) return false;
 		return posix_kill($this->childPid, SIGCONT);
