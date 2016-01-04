@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-664546529"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1426512182"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-664546529" class="accordion-body collapse in">
+            <div id="namespace-1426512182" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -985,7 +985,7 @@
             <article class="method">
                 <h3 class="private ">decodeMessage()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">decodeMessage(string  <span class="argument">$encodedMsg</span>,   <span class="argument">$msg</span>,   <span class="argument">$pid</span>,   <span class="argument">$name</span>,   <span class="argument">$value</span>) : void</pre>
+                <pre class="signature" style="margin-right: 54px;">decodeMessage(string  <span class="argument">$encodedMsg</span>, string  <span class="argument">$msg</span>, integer  <span class="argument">$pid</span>, string  <span class="argument">$name</span>, mixed  <span class="argument">$value</span>) : void</pre>
                 <p><em>Decodes encoded from GPhpThread&#039;s instance message.</em></p>
                 
 
@@ -997,24 +997,24 @@
                                 <td><p>The encoded message</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>string</td>
                                 <td>$msg </td>
-                                <td></td>
+                                <td><p>The encoded message type identifier. REFERENCE type.</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>integer</td>
                                 <td>$pid </td>
-                                <td></td>
+                                <td><p>The process id of the sender. REFERENCE type.</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>string</td>
                                 <td>$name </td>
-                                <td></td>
+                                <td><p>The variable name whose data was sent. REFERENCE type.</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>mixed</td>
                                 <td>$value </td>
-                                <td></td>
+                                <td><p>The variable data contained in the encoded message. REFERENCE type.</p></td>
                             </tr>
                                             </table>
                 
@@ -1077,7 +1077,7 @@
                                                     <tr>
                                 <td>string</td>
                                 <td>$operation </td>
-                                <td><p>The operation type code</p></td>
+                                <td><p>The operation type code.</p></td>
                             </tr>
                                                     <tr>
                                 <td>string</td>
@@ -1115,31 +1115,31 @@
             <article class="method">
                 <h3 class="private ">receive()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">receive(  <span class="argument">$message</span>,   <span class="argument">$pid</span>,   <span class="argument">$resourceName</span>,   <span class="argument">$resourceValue</span>) : boolean</pre>
+                <pre class="signature" style="margin-right: 54px;">receive(string  <span class="argument">$message</span>, integer  <span class="argument">$pid</span>, string  <span class="argument">$resourceName</span>, mixed  <span class="argument">$resourceValue</span>) : boolean</pre>
                 <p><em>Receives data operation from the main process dispatcher.</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td></td>
+                                <td>string</td>
                                 <td>$message </td>
-                                <td></td>
+                                <td><p>The operation type code. REFERENCE type.</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>integer</td>
                                 <td>$pid </td>
-                                <td></td>
+                                <td><p>The process id of the sender &quot;thread&quot;. REFERENCE type.</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>string</td>
                                 <td>$resourceName </td>
-                                <td></td>
+                                <td><p>The name of resource that is holding a particular data that will be &quot;shared&quot;. REFERENCE type.</p></td>
                             </tr>
                                                     <tr>
-                                <td></td>
+                                <td>mixed</td>
                                 <td>$resourceValue </td>
-                                <td></td>
+                                <td><p>The value of the resource. REFERENCE type.</p></td>
                             </tr>
                                             </table>
                 
@@ -1352,7 +1352,7 @@
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on December 8th, 2015 at 21:21.
+                    on January 4th, 2016 at 13:03.
                 </section>
             </section>
         </section>

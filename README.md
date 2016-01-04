@@ -33,4 +33,4 @@ Requirements
 
 |Status|Details|
 |:-----|:------------------------------------------------------------------------:|
-|Experimental|TODO: improved examples|
+|Close to stable|TODO: improved examples|

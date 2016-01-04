@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 zhgzhg
+ * Copyright (c) 2016 zhgzhg
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -424,10 +424,10 @@ class GPhpThreadCriticalSection // {{{
 	/**
 	 * Decodes encoded from GPhpThread's instance message.
 	 * @param string $encodedMsg The encoded message
-	 * @param string &$msg The encoded message type identifier.
-	 * @param int &$pid The process id of the sender.
-	 * @param string &$name The variable name whose data was sent.
-	 * @param mixed &$value The variable data contained in the encoded message.
+	 * @param string $msg The encoded message type identifier. REFERENCE type.
+	 * @param int $pid The process id of the sender. REFERENCE type.
+	 * @param string $name The variable name whose data was sent. REFERENCE type.
+	 * @param mixed $value The variable data contained in the encoded message. REFERENCE type.
 	 * @return void
 	 */
 	private function decodeMessage($encodedMsg, &$msg, &$pid, &$name, &$value) { // {{{
@@ -461,7 +461,7 @@ class GPhpThreadCriticalSection // {{{
 
 	/**
 	 * Sends data operation to the main process dispatcher.
-	 * @param string $operation The operation type code
+	 * @param string $operation The operation type code.
 	 * @param string $resourceName The name of resource that is holding a particular data that will be "shared".
 	 * @param mixed $resourceValue The value of the resource.
 	 * @return bool Returns true on success otherwise false.
@@ -522,10 +522,10 @@ class GPhpThreadCriticalSection // {{{
 
 	/**
 	 * Receives data operation from the main process dispatcher.
-	 * @param string &$message The operation type code
-	 * @param int &$pid The process id of the sender "thread".
-	 * @param string &$resourceName The name of resource that is holding a particular data that will be "shared".
-	 * @param mixed &$resourceValue The value of the resource.
+	 * @param string $message The operation type code. REFERENCE type.
+	 * @param int $pid The process id of the sender "thread". REFERENCE type.
+	 * @param string $resourceName The name of resource that is holding a particular data that will be "shared". REFERENCE type.
+	 * @param mixed $resourceValue The value of the resource. REFERENCE type.
 	 * @return bool Returns true on success otherwise false.
 	 */
 	private function receive(&$message, &$pid, &$resourceName, &$resourceValue) { // {{{
@@ -1194,7 +1194,7 @@ abstract class GPhpThread // {{{
 
 	/**
 	 * Constructor.
-	 * @param GPhpThreadCriticalSection|null $criticalSection Instance of the critical section that is going to be associated with the created thread. Variable with null value is also valid.
+	 * @param GPhpThreadCriticalSection|null $criticalSection Instance of the critical section that is going to be associated with the created thread. Variable with null value is also valid. REFERENCE type.
 	 */
 	public function __construct(&$criticalSection) {// {{{
 		$this->uniqueId = GPhpThread::$seed++;
