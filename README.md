@@ -23,6 +23,7 @@ Features
  * reliable containers
  * faster, unreliable containers
 * Extensible and customizable
+* Distributed under MIT license
 
 Requirements
 ------------
