@@ -1163,7 +1163,7 @@ class GPhpThreadCriticalSection // {{{
 
 /**
  * A heavy thread creation and manipulation class.
- * Provides purely implemented in php instruments for "thread" creation and maniulation. An shell access, linux OS and PHP 5.3+ are required.
+ * Provides purely implemented in php instruments for "thread" creation and maniulation. A shell access, linux OS and PHP 5.3+ are required.
  * @api
  */
 abstract class GPhpThread // {{{
