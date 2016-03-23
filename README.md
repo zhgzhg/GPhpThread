@@ -25,11 +25,12 @@ Features
 * Extensible and customizable
 * Distributed under MIT license
 
-Requirements
-------------
+Requirements/Dependencies
+-------------------------
 
 * PHP version 5.3+
 * PHP shell execution context
+* PHP pcntl
 * OS Linux family
 
 |Status|Details|
