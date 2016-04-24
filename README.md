@@ -1,10 +1,10 @@
-GPhpThread - Generic PHP Threads fully functional library
-=========================================================
+GPhpThread - Generic PHP Threads library
+========================================
 
-A heavy threads implementation written using only pure PHP. This can
-come in handy when the host system does not have PHP threads module
-installed and for some reason it cannot be installed (lack of
-privileges, legacy system, ect.).
+A heavy threads library implementation written using only pure PHP. 
+A fully component that might come in handy when the host system does
+not have PHP threads module installed and for some reason it cannot
+be installed (lack of privileges, legacy system, etcetera).
 
 Features
 --------
