@@ -922,8 +922,8 @@ class GPhpThreadCriticalSection // {{{
 
 				// gather the thread dispatch priorities for the compared critical sections
 
-				$dispPriorTableA = array(); // priority value => occurences count
-				$dispPriorTableB = array(); // priority value => occurences count
+				$dispPriorTableA = array(); // priority value => occurrences count
+				$dispPriorTableB = array(); // priority value => occurrences count
 
 				foreach ($instCrtdEver[$a]->mastersThreadSpecificData as $thrdSpecificData)
 					@$dispPriorTableA[$thrdSpecificData['dispatchPriority']] += 1;
@@ -933,7 +933,7 @@ class GPhpThreadCriticalSection // {{{
 
 				// both critical sections have threads
 
-				// make the tables to have the same ammount of keys (rows)
+				// make the tables to have the same amount of keys (rows)
 				foreach ($dispPriorTableA as $key => $value)
 					@$dispPriorTableB[$key] = $dispPriorTableB[$key];
 				foreach ($dispPriorTableB as $key => $value)
