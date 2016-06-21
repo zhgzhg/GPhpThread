@@ -14,5 +14,10 @@
         "php": ">=5.3",
         "ext-pcntl": "*",
         "ext-posix": "*"
+    },
+    "autoload": {
+        "files": [
+            "GPhpThread.php"
+        ]
     }
 }
