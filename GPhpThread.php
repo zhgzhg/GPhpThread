@@ -1161,6 +1161,123 @@ class GPhpThreadCriticalSection // {{{
 	} // }}}
 } // }}}
 
+
+/**
+ * A data container not allowed to be cloned. Once created, only REFERENCEs to it are allowed.
+ * @throws \GPhpThreadException
+ */
+final class GPhpThreadUncloneableContainer implements \Serializable // {{{
+{
+	/** @var mixed $variable The container holding the user's value */
+	private $variable;
+
+	/**
+	 * Sets the value desired to be held.
+	 * @param mixed $value The value to be held inside this container.
+	 * @return void
+	 * @throws \GPhpThreadException
+	 */
+	public function import($value) {
+		if ($value instanceof self) {
+			throw new \GPhpThreadException("Not allowed cloning of GPhpThreadUncloneableContainer!");
+		}
+		$this->variable = $value;
+	}
+
+	/**
+	 * Returns the contained value.
+	 * @return mixed The contained value.
+	 */
+	public function export() {
+		return $this->variable;
+	}
+
+	/** @internal */
+	private final function __clone() {
+		throw new GPhpThreadException("Not allowed cloning of GPhpThreadUncloneableContainer!");
+	}
+
+	/** @internal */
+	public final function serialize() {
+		throw new GPhpThreadException("Not allowed cloning of GPhpThreadUncloneableContainer!");
+	}
+
+	/** @internal */
+	public final function unserialize($data) {
+		throw new GPhpThreadException("Not allowed cloning of GPhpThreadUncloneableContainer!");
+	}
+} // }}}
+
+/**
+ * A wrapper providing RAII mechanism for locking and unlocking
+ * purposes of a critical section objects and a similar ones.
+ * @see \GPhpThreadCriticalSection
+ * @throws \GPhpThreadException
+ * @api
+ */
+class GPhpThreadLockGuard implements \Serializable // {{{
+{
+	/** @var object $criticalSectionObject The critical section that will be un/locked. REFERENCE type. */
+	private $criticalSectionObject = NULL;
+	/** @var string $unlockMethod The unlock method name of the critical section that will be called during an unlock. */
+	private $unlockMethod = 'unlock';
+	/** @var string $unlockMethodsParams The parameters passed to the critical section's unlock method during an unlock. */
+	private $unlockMethodsParams = array();
+
+	/**
+	* Constructor. Immediately locks the passed critical section.
+	* @throws \GPhpThreadException
+	* @param object $criticalSectionObj An initialized critical section object or similar. A REFERENCE type.
+	* @param string $lockMethod The name of the $criticalSectionObj's lock method that will be called.
+	* @param array $lockMethodParams Parameter that will be passed to the lock method of $criticalSectionObj.
+	* @param string $unlockMethod The name of the $criticalSectionObj's unlock method that will be called.
+	* @param array $unlockMethodsParams Parameter that will be passed to the unlock method of $criticalSectionObj.
+	*/
+	public final function __construct(&$criticalSectionObj, $lockMethod = 'lock', array $lockMethodParams = array(),
+			$unlockMethod = 'unlock', array $unlockMethodsParams = array()) {
+
+		$this->criticalSectionObj = &$criticalSectionObj;
+
+		if (!is_object($this->criticalSectionObj)) {
+			throw new \GPhpThreadException('Uninitialized critical section passed to GPhpThreadLockGuard!');
+		}
+		if (empty($lockMethod) || empty($unlockMethod) ||
+			!method_exists($this->criticalSectionObj, $lockMethod) ||
+			!method_exists($this->criticalSectionObj, $unlockMethod)) {
+			throw new \GPhpThreadException('Not existing lock/unlock methods in &$criticalSectionObj!');
+		}
+
+		$this->unlockMethod = $unlockMethod;
+		$this->unlockMethodsParams = $unlockMethodsParams;
+
+		call_user_func_array(array($this->criticalSectionObj, $lockMethod), $lockMethodParams);
+	}
+
+	/**
+	* Destructor. Immediately unlocks the passed critical section.
+	*/
+	public final function __destruct() {
+		if (!is_object($this->criticalSectionObj)) {
+			throw new \GPhpThreadException('Uninitialized &$criticalSectionObj attempted to be unlocked via GPhpThreadLockGuard!');
+		}
+		call_user_func_array(array($this->criticalSectionObj, $this->unlockMethod), $this->unlockMethodsParams);
+	}
+
+	/** @internal */
+	private final function __clone() {
+		throw new \GPhpThreadException('Attempted to clone GPhpThreadLockGuard!');
+	}
+
+	/** @internal */
+	public final function serialize() {
+		return '';
+	}
+
+	/** @internal */
+	public final function unserialize($data) {
+	}
+} // }}}
+
 /**
  * A heavy thread creation and manipulation class.
  * Provides purely implemented in php instruments for "thread" creation and maniulation. A shell access, linux OS and PHP 5.3+ are required.
@@ -1331,7 +1448,7 @@ abstract class GPhpThread // {{{
 	} // }}}
 
 	/**
-	 * At process level increases the niceness of a heavy "thread" making its priority higher.
+	 * At process level decreases the niceness of a heavy "thread" making its priority higher. Multiple calls of the method will accumulate and increase the effect.
 	 * @return bool Returns true on success or false in case of error or lack of privileges.
 	 */
 	protected function makeNicer() { // {{{ increases the priority
@@ -1340,7 +1457,7 @@ abstract class GPhpThread // {{{
 	} // }}}
 
 	/**
-	 * At process level decreases the niceness of a heavy "thread" making its priority lower.
+	 * At process level increases the niceness of a heavy "thread" making its priority lower. Multiple calls of the method will accumulate and increase the effect.
 	 * @return bool Returns true on success or false in case of error or lack of privileges.
 	 */
 	protected function makeUnfrendlier() { // {{{ decreases the priority

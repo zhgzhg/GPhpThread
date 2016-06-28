@@ -23,9 +23,7 @@
  * SOFTWARE.
  */
 
-// Quick initialization of a thread pool with threads all of which are
-// sharing the same critical section. Because of the code in the threads
-// they will load the critical section and thus causing locking delay
+// Simple Demonstration how use GPhpThread
 
 require_once __DIR__ . '/../GPhpThread.php';
 
@@ -33,13 +31,13 @@ class MyThread extends GPhpThread {
 	public function run() {
 		echo 'Hello, I am a thread with id ' . $this->getPid() . "!\nTrying to lock the critical section\n";
 
-			$lock = new GPhpThreadLockGuard($this->criticalSection); // assigning the guard to a variable is a must! otherwise it will be immediately destroyed!
+		$lock = new GPhpThreadLockGuard($this->criticalSection);
 
-			echo "=--- locked " . $this->getPid() . "\n";
-			$this->criticalSection->addOrUpdateResource('IAM', $this->getPid());
-			$this->criticalSection->addOrUpdateResource('IAMNOT', '0xdead1');
-			$this->criticalSection->removeResource('IAMNOT');
-			echo "=--- unlocked " . $this->getPid() . "\n";
+		echo "=--- locked " . $this->getPid() . "\n";
+		$this->criticalSection->addOrUpdateResource('IAM', getmypid());
+		$this->criticalSection->addOrUpdateResource('IAMNOT', '0xdead1');
+		$this->criticalSection->removeResource('IAMNOT');
+		echo "=--- unlocked " . $this->getPid() . "\n";
 	}
 }
 
@@ -47,27 +45,14 @@ echo "Master main EP " . getmypid() . "\n";
 
 $criticalSection = new GPhpThreadCriticalSection();
 
-$threadPool = array();
-$tpSize = 20;
+echo "\nLaunching Thread1...\n\n";
 
-for ($i = 1; $i <= $tpSize; ++$i) {
-	$threadPool[$i] = new MyThread($criticalSection);
-}
+$thr1 = new MyThread($criticalSection);
+$thr2 = new MyThread($criticalSection);
+$thr1->start();
+echo "Thread1 pid is: " . $thr1->getPid() . "\n";
+$thr2->start();
 
-GPhpThread::BGN_HIGH_PRIOR_EXEC_BLOCK(); // this will result fast thread creation but, because of that all threads will try
-// to reach the critical section at once so it will take twice the time for each one in order to lock the critical section
-
-for ($i = 1; $i <= $tpSize; ++$i) {
-	$threadPool[$i]->start();
-	echo "{$i} of {$tpSize} started\n";
-}
-
-GPhpThread::END_HIGH_PRIOR_EXEC_BLOCK();
-
-for ($i = 1; $i <= $tpSize; ++$i) {
-	$threadPool[$i]->join();
-}
-
-echo "\n\n---The last writing in the critical section was done by thread---\n";
-echo "---" . $criticalSection->getResourceValueFast('IAM') . "\n\n";
+$thr2->join();
+$thr1->join();
 ?>

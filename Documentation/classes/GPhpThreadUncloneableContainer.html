@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1669156737"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-858023080"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1669156737" class="accordion-body collapse in">
+            <div id="namespace-858023080" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -167,8 +167,8 @@
                                             </nav>
                     <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
 
-                    <h1><small>\</small>GPhpThreadException</h1>
-                    <p><em>Exception thrown by GPhpThreads components</em></p>
+                    <h1><small>\</small>GPhpThreadUncloneableContainer</h1>
+                    <p><em>A data container not allowed to be cloned. Once created, only REFERENCEs to it are allowed.</em></p>
                     
                     
                                         
@@ -187,7 +187,8 @@
                         </section>
                         <section class="row-fluid public">
                             <section class="span4">
-                                                                    <a href="../classes/GPhpThreadException.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/GPhpThreadUncloneableContainer.html#method_import" class="">import()</a><br />
+                                                                    <a href="../classes/GPhpThreadUncloneableContainer.html#method_export" class="">export()</a><br />
                                                             </section>
                             <section class="span4">
                                                                     <em>No public properties found</em>
@@ -212,7 +213,7 @@
                                                                     <em>No private methods found</em>
                                                             </section>
                             <section class="span4">
-                                                                    <em>No private properties found</em>
+                                                                    <a href="../classes/GPhpThreadUncloneableContainer.html#property_variable" class="">$variable</a><br />
                                                             </section>
                             <section class="span4">
                                 <em>N/A</em>
@@ -221,7 +222,8 @@
                     </section>
                 </div>
                 <aside class="span4 detailsbar">
-                                        
+                                                                <span class="label label-info">final</span>
+                    
                     
                     <dl>
                         <dt>File</dt>
@@ -230,11 +232,11 @@
                             <dd><div class="namespace-wrapper">Default</div></dd>
                                                 <dt>Class hierarchy</dt>
                             <dd class="hierarchy">
-                                                                                                                                                                                                                                                                                                
-                                        <div class="namespace-wrapper">\Exception</div>
-                                                                                                    <div class="namespace-wrapper">\GPhpThreadException</div>
+                                                                                                                                                                    <div class="namespace-wrapper">\GPhpThreadUncloneableContainer</div>
                             </dd>
 
+                                                                            <dt>Implements</dt>
+                                                        <dd><a href=""><div class="namespace-wrapper"></div></a></dd>
                         
                         
                         
@@ -244,7 +246,7 @@
                     <table class="table table-condensed">
                                             <tr>
                             <th>
-                                api
+                                throws
                             </th>
                             <td>
                                                                     
@@ -255,7 +257,39 @@
             </div>
 
                         
-                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_variable" name="property_variable" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$variable</h3>
+                <pre class="signature">$variable : mixed</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                mixed
+                &mdash; The container holding the user&#039;s value                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
                                     <a id="methods" name="methods"></a>
             <div class="row-fluid">
                 <div class="span8 content class"><h2>Methods</h2></div>
@@ -264,35 +298,59 @@
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <a id="method_import" name="method_import" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">__construct()</h3>
+                <h3 class="public ">import()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">__construct(string  <span class="argument">$msg</span>, integer  <span class="argument">$code</span>, \Exception  <span class="argument">$previous = NULL</span>) </pre>
-                <p><em>Constructor.</em></p>
+                <pre class="signature" style="margin-right: 54px;">import(mixed  <span class="argument">$value</span>) : void</pre>
+                <p><em>Sets the value desired to be held.</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>string</td>
-                                <td>$msg </td>
-                                <td><p>Exception message</p></td>
-                            </tr>
-                                                    <tr>
-                                <td>integer</td>
-                                <td>$code </td>
-                                <td><p>Exception code number</p></td>
-                            </tr>
-                                                    <tr>
-                                <td>\Exception</td>
-                                <td>$previous </td>
-                                <td></td>
+                                <td>mixed</td>
+                                <td>$value </td>
+                                <td><p>The value to be held inside this container.</p></td>
                             </tr>
                                             </table>
                 
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\GPhpThreadException</dt>
+                            <dd></dd>
+                                                                    </dl>
                 
                 				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_export" name="method_export" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">export()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">export() : mixed</pre>
+                <p><em>Returns the contained value.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                            &mdash; <p>The contained value.</p>
+                                    				
                             </article>
         </div>
         <aside class="span4 detailsbar">

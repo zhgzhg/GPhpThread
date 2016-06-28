@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1669156737"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-561474699"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1669156737" class="accordion-body collapse in">
+            <div id="namespace-561474699" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -167,8 +167,9 @@
                                             </nav>
                     <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
 
-                    <h1><small>\</small>GPhpThreadException</h1>
-                    <p><em>Exception thrown by GPhpThreads components</em></p>
+                    <h1><small>\</small>GPhpThreadLockGuard</h1>
+                    <p><em>A wrapper providing RAII mechanism for locking and unlocking
+purposes of a critical section objects and a similar ones.</em></p>
                     
                     
                                         
@@ -187,7 +188,8 @@
                         </section>
                         <section class="row-fluid public">
                             <section class="span4">
-                                                                    <a href="../classes/GPhpThreadException.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/GPhpThreadLockGuard.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/GPhpThreadLockGuard.html#method___destruct" class="">__destruct()</a><br />
                                                             </section>
                             <section class="span4">
                                                                     <em>No public properties found</em>
@@ -212,7 +214,9 @@
                                                                     <em>No private methods found</em>
                                                             </section>
                             <section class="span4">
-                                                                    <em>No private properties found</em>
+                                                                    <a href="../classes/GPhpThreadLockGuard.html#property_criticalSectionObject" class="">$criticalSectionObject</a><br />
+                                                                    <a href="../classes/GPhpThreadLockGuard.html#property_unlockMethod" class="">$unlockMethod</a><br />
+                                                                    <a href="../classes/GPhpThreadLockGuard.html#property_unlockMethodsParams" class="">$unlockMethodsParams</a><br />
                                                             </section>
                             <section class="span4">
                                 <em>N/A</em>
@@ -230,18 +234,28 @@
                             <dd><div class="namespace-wrapper">Default</div></dd>
                                                 <dt>Class hierarchy</dt>
                             <dd class="hierarchy">
-                                                                                                                                                                                                                                                                                                
-                                        <div class="namespace-wrapper">\Exception</div>
-                                                                                                    <div class="namespace-wrapper">\GPhpThreadException</div>
+                                                                                                                                                                    <div class="namespace-wrapper">\GPhpThreadLockGuard</div>
                             </dd>
 
+                                                                            <dt>Implements</dt>
+                                                        <dd><a href=""><div class="namespace-wrapper"></div></a></dd>
                         
                         
                         
-                        
+                                                                            <dt>See also</dt>
+                                                                                        <dd><a href="../classes/GPhpThreadCriticalSection.html"><span class="namespace-wrapper">\GPhpThreadCriticalSection</span></a></dd>
+                                                    
                                                                         </dl>
                     <h2>Tags</h2>
                     <table class="table table-condensed">
+                                            <tr>
+                            <th>
+                                throws
+                            </th>
+                            <td>
+                                                                    
+                                                            </td>
+                        </tr>
                                             <tr>
                             <th>
                                 api
@@ -255,7 +269,87 @@
             </div>
 
                         
-                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_criticalSectionObject" name="property_criticalSectionObject" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$criticalSectionObject</h3>
+                <pre class="signature">$criticalSectionObject : object</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                object
+                &mdash; The critical section that will be un/locked. REFERENCE type.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_unlockMethod" name="property_unlockMethod" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$unlockMethod</h3>
+                <pre class="signature">$unlockMethod : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                &mdash; The unlock method name of the critical section that will be called during an unlock.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_unlockMethodsParams" name="property_unlockMethodsParams" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$unlockMethodsParams</h3>
+                <pre class="signature">$unlockMethodsParams : string</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                &mdash; The parameters passed to the critical section&#039;s unlock method during an unlock.                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
                                     <a id="methods" name="methods"></a>
             <div class="row-fluid">
                 <div class="span8 content class"><h2>Methods</h2></div>
@@ -268,28 +362,70 @@
             <article class="method">
                 <h3 class="public ">__construct()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">__construct(string  <span class="argument">$msg</span>, integer  <span class="argument">$code</span>, \Exception  <span class="argument">$previous = NULL</span>) </pre>
-                <p><em>Constructor.</em></p>
+                <pre class="signature" style="margin-right: 54px;">__construct(object  <span class="argument">$criticalSectionObj</span>, string  <span class="argument">$lockMethod = &#039;lock&#039;</span>, array  <span class="argument">$lockMethodParams = array()</span>, string  <span class="argument">$unlockMethod = &#039;unlock&#039;</span>, array  <span class="argument">$unlockMethodsParams = array()</span>) </pre>
+                <p><em>Constructor. Immediately locks the passed critical section.</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
+                                <td>object</td>
+                                <td>$criticalSectionObj </td>
+                                <td><p>An initialized critical section object or similar. A REFERENCE type.</p></td>
+                            </tr>
+                                                    <tr>
                                 <td>string</td>
-                                <td>$msg </td>
-                                <td><p>Exception message</p></td>
+                                <td>$lockMethod </td>
+                                <td><p>The name of the $criticalSectionObj's lock method that will be called.</p></td>
                             </tr>
                                                     <tr>
-                                <td>integer</td>
-                                <td>$code </td>
-                                <td><p>Exception code number</p></td>
+                                <td>array</td>
+                                <td>$lockMethodParams </td>
+                                <td><p>Parameter that will be passed to the lock method of $criticalSectionObj.</p></td>
                             </tr>
                                                     <tr>
-                                <td>\Exception</td>
-                                <td>$previous </td>
-                                <td></td>
+                                <td>string</td>
+                                <td>$unlockMethod </td>
+                                <td><p>The name of the $criticalSectionObj's unlock method that will be called.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$unlockMethodsParams </td>
+                                <td><p>Parameter that will be passed to the unlock method of $criticalSectionObj.</p></td>
                             </tr>
                                             </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\GPhpThreadException</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                    <span class="label label-info">final</span>
+                                    <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___destruct" name="method___destruct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__destruct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__destruct() </pre>
+                <p><em>Destructor. Immediately unlocks the passed critical section.</em></p>
+                
+
                 
                 
                 				
@@ -297,7 +433,8 @@
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
+                                                    <span class="label label-info">final</span>
+                                    <dl>
                                                                             </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
