@@ -533,10 +533,10 @@ class GPhpThreadCriticalSection // {{{ TODO support for use from another gphpthr
 	 * @param int $pid The process id of the sender "thread". REFERENCE type.
 	 * @param string $resourceName The name of resource that is holding a particular data that will be "shared". REFERENCE type.
 	 * @param mixed $resourceValue The value of the resource. REFERENCE type.
-	 * @param int $timeout The time in milliseconds to wait for the data to arrive.
+	 * @param int $timeInterval Internal wait time in milliseconds between each data check interval.
 	 * @return bool Returns true on success otherwise false.
 	 */
-	private function receive(&$message, &$pid, &$resourceName, &$resourceValue, $timeout = 700) { // {{{
+	private function receive(&$message, &$pid, &$resourceName, &$resourceValue, $timeInterval = 700) { // {{{
 		if ($this->isIntercomBroken()) return false;
 
 		$data = null;
@@ -544,7 +544,7 @@ class GPhpThreadCriticalSection // {{{ TODO support for use from another gphpthr
 		$isAlive = true;
 
 		do {
-			$data = $this->intercomRead->receive($timeout);
+			$data = $this->intercomRead->receive($timeInterval);
 			$isDataEmpty = empty($data);
 			if ($isDataEmpty) {
 				$isAlive = $this->isPidAlive($this->intercomInterlocutorPid);
