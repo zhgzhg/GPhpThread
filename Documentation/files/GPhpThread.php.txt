@@ -629,7 +629,7 @@ class GPhpThreadCriticalSection // {{{ TODO support for use from another gphpthr
 		if ($msg != self::$UNLOCKACK)
 			return false;
 
-		$this->ownerPid = false; // $this->myPid;
+		$this->ownerPid = false;
 		return true;
 	} // }}}
 
@@ -1415,6 +1415,8 @@ abstract class GPhpThread // {{{
 
 	/**
 	 * Resets the internal thread id generator. This can be used to allow creation of threads from another thread.
+	 *
+	 * Not recommended to be used especially in a more complex cases.
 	 * @return void
 	 */
 	public static function resetThreadIdGenerator() {
@@ -1422,12 +1424,29 @@ abstract class GPhpThread // {{{
 	}
 
 	/**
-	 * Execution protector. Recommended to be used everywhere where execution is not desired. For e.g. destructors which should be executed only in the master process.
+	 * Execution protector. Recommended to be used everywhere where execution is not desired.
+	 * For e.g. destructors which should be executed only in the master process.
+	 *
+	 * Can be used in 2 different ways. A direct way where the supplied parameter points to NULL.
+	 * In this case the result is immediately returned, but the user will not be able to ignore
+	 * the effect in any "inner" threads without using resetThreadIdGenerator() method which on the
+	 * other гьха will affect any previously created object instances (before the thread was launched (forked)).
+	 *
+	 * The other way is by subscribing a variable (most useful when is done in the constructor of your
+	 * affected class). When subscribed for the first it will be false, but it will be updated after a
+	 * any calls to start()/stop().
+	 *
 	 * Indicates whether the place from which this method is called is a heavy thread or not.
-	 * @return bool If the method caller is part ot a heavy thread returns true otherwise false.
+	 * @param null|bool $isInsideGPhpThread A REFERENCE to a variable. If it's set to null, the function will immediately return the result. Otherwise the variable will be subscribe for the result during program's execution while its initial will be set to false.
+	 * @return null|bool Null if a variable is subscribed for the result. Else if the method caller is part ot a heavy thread returns true otherwise false.
 	 */
-	public static function isInGPhpThread() { // {{{
-		return self::$seed === 0 || self::$originPid === 0 || self::$originPid === getmypid();
+	public static function isInGPhpThread(&$isInsideGPhpThread) { // {{{
+		if ($isInsideGPhpThread === NULL) {
+			return self::$seed !== 0 && self::$originPid !== 0 && self::$originPid !== getmypid();
+		}
+		$isInsideGPhpThread = false;
+		// TODO
+		return NULL;
 	}  // }}}
 
 	/**
