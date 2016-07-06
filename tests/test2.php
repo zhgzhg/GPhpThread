@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 zhgzhg
+ * Copyright (c) 2016 zhgzhg
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -49,11 +49,13 @@ $threadPool = array();
 $tpSize = 20;
 
 for ($i = 1; $i <= $tpSize; ++$i) {
-	$threadPool[$i] = new MyThread($criticalSection);
+	$threadPool[$i] = new MyThread($criticalSection, true);
 }
 
+// xhprof_enable(XHPROF_FLAGS_CPU + XHPROF_FLAGS_NO_BUILTINS);
+
 GPhpThread::BGN_HIGH_PRIOR_EXEC_BLOCK(); // this will result fast thread creation but, because of that all threads will try
-// to reach the critical section at once so it will take twice the time for each one in order to lock the critical section
+// to reach the critical section at once in some cases may take twice the time for each one in order to lock the critical section
 
 for ($i = 1; $i <= $tpSize; ++$i) {
 	$threadPool[$i]->start();
@@ -66,6 +68,15 @@ for ($i = 1; $i <= $tpSize; ++$i) {
 	$threadPool[$i]->join();
 }
 
+// $xhprof_data = xhprof_disable();
+
 echo "\n\n---The last writing in the critical section was done by thread---\n";
 echo "---" . $criticalSection->getResourceValueFast('IAM') . "\n\n";
+
+//uasort($xhprof_data, function ($a, $b) {
+//	if ($a['wt'] > $b['wt']) return -1;
+//	else return 1;
+//});
+
+// print_r($xhprof_data);
 ?>

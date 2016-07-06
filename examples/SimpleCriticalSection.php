@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 zhgzhg
+ * Copyright (c) 2016 zhgzhg
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,7 @@ $criticalSection = new GPhpThreadCriticalSection();
 
 echo "\nLaunching Thread1...\n\n";
 
-$thr1 = new MyThread($criticalSection);
+$thr1 = new MyThread($criticalSection, true);
 $thr1->start();
 $thr1->join();
 
@@ -57,7 +57,7 @@ echo "Master after the join of Thread1.\n\n";
 
 echo "\nLaunching Thread2...\n\n";
 
-$thr2 = new MyThread($criticalSection);
+$thr2 = new MyThread($criticalSection, true);
 $thr2->start();
 $thr2->join();
 

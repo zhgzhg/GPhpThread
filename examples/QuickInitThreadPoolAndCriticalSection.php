@@ -51,7 +51,7 @@ $threadPool = array();
 $tpSize = 20;
 
 for ($i = 1; $i <= $tpSize; ++$i) {
-	$threadPool[$i] = new MyThread($criticalSection);
+	$threadPool[$i] = new MyThread($criticalSection, true);
 }
 
 GPhpThread::BGN_HIGH_PRIOR_EXEC_BLOCK(); // this will result fast thread creation but, because of that all threads will try
