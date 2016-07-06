@@ -629,7 +629,7 @@ class GPhpThreadCriticalSection // {{{ TODO support for use from another gphpthr
 		if ($msg != self::$UNLOCKACK)
 			return false;
 
-		$this->ownerPid = false; // $this->myPid;
+		$this->ownerPid = false;
 		return true;
 	} // }}}
 
