@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-952846990"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1672259739"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-952846990" class="accordion-body collapse in">
+            <div id="namespace-1672259739" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -167,9 +167,10 @@
                                             </nav>
                     <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
 
-                    <h1><small>\</small>GPhpThreadIntercom</h1>
-                    <p><em>Process intercommunication class.</em></p>
-                    <p>A pipe interprocess communication method is used, based on asynchronous or synchronous comminucation.</p>
+                    <h1><small>\</small>GPhpThreadNotCloneableContainer</h1>
+                    <p><em>A data container not allowed to be cloned.</em></p>
+                    <p>Once created, only REFERENCEs to it are allowed.
+It is NOT protected against fork or direct import()/export(). If that is desired it should be wrapped.</p>
                     
                                         
                     <section id="summary">
@@ -187,14 +188,10 @@
                         </section>
                         <section class="row-fluid public">
                             <section class="span4">
-                                                                    <a href="../classes/GPhpThreadIntercom.html#method___construct" class="">__construct()</a><br />
-                                                                    <a href="../classes/GPhpThreadIntercom.html#method_isInitialized" class="">isInitialized()</a><br />
-                                                                    <a href="../classes/GPhpThreadIntercom.html#method_getAutoDeletionFlag" class="">getAutoDeletionFlag()</a><br />
-                                                                    <a href="../classes/GPhpThreadIntercom.html#method_setAutoDeletionFlag" class="">setAutoDeletionFlag()</a><br />
-                                                                    <a href="../classes/GPhpThreadIntercom.html#method___destruct" class="">__destruct()</a><br />
-                                                                    <a href="../classes/GPhpThreadIntercom.html#method_send" class="">send()</a><br />
-                                                                    <a href="../classes/GPhpThreadIntercom.html#method_receive" class="">receive()</a><br />
-                                                                    <a href="../classes/GPhpThreadIntercom.html#method_isReceiveingDataAvailable" class="">isReceiveingDataAvailable()</a><br />
+                                                                    <a href="../classes/GPhpThreadNotCloneableContainer.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/GPhpThreadNotCloneableContainer.html#method___toString" class="">__toString()</a><br />
+                                                                    <a href="../classes/GPhpThreadNotCloneableContainer.html#method_import" class="">import()</a><br />
+                                                                    <a href="../classes/GPhpThreadNotCloneableContainer.html#method_export" class="">export()</a><br />
                                                             </section>
                             <section class="span4">
                                                                     <em>No public properties found</em>
@@ -219,7 +216,7 @@
                                                                     <em>No private methods found</em>
                                                             </section>
                             <section class="span4">
-                                                                    <em>No private properties found</em>
+                                                                    <a href="../classes/GPhpThreadNotCloneableContainer.html#property_variable" class="">$variable</a><br />
                                                             </section>
                             <section class="span4">
                                 <em>N/A</em>
@@ -228,7 +225,8 @@
                     </section>
                 </div>
                 <aside class="span4 detailsbar">
-                                        
+                                                                <span class="label label-info">final</span>
+                    
                     
                     <dl>
                         <dt>File</dt>
@@ -237,9 +235,11 @@
                             <dd><div class="namespace-wrapper">Default</div></dd>
                                                 <dt>Class hierarchy</dt>
                             <dd class="hierarchy">
-                                                                                                                                                                    <div class="namespace-wrapper">\GPhpThreadIntercom</div>
+                                                                                                                                                                    <div class="namespace-wrapper">\GPhpThreadNotCloneableContainer</div>
                             </dd>
 
+                                                                            <dt>Implements</dt>
+                                                        <dd><a href=""><div class="namespace-wrapper"></div></a></dd>
                         
                         
                         
@@ -249,10 +249,10 @@
                     <table class="table table-condensed">
                                             <tr>
                             <th>
-                                api
+                                throws
                             </th>
                             <td>
-                                                                    
+                                                                    <p>When caught clone attempts.</p>
                                                             </td>
                         </tr>
                                         </table>
@@ -260,7 +260,39 @@
             </div>
 
                         
-                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_variable" name="property_variable" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$variable</h3>
+                <pre class="signature">$variable : mixed</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                mixed
+                &mdash; The container holding the user&#039;s value                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
                                     <a id="methods" name="methods"></a>
             <div class="row-fluid">
                 <div class="span8 content class"><h2>Methods</h2></div>
@@ -273,28 +305,10 @@
             <article class="method">
                 <h3 class="public ">__construct()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">__construct(string  <span class="argument">$filePath</span>, boolean  <span class="argument">$isReadMode = true</span>, boolean  <span class="argument">$autoDeletion = false</span>) </pre>
+                <pre class="signature" style="margin-right: 54px;">__construct() </pre>
                 <p><em>Constructor.</em></p>
                 
 
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>string</td>
-                                <td>$filePath </td>
-                                <td><p>The file that is going to store the pipe.</p></td>
-                            </tr>
-                                                    <tr>
-                                <td>boolean</td>
-                                <td>$isReadMode </td>
-                                <td><p>Indicates if the param is goind to be read only</p></td>
-                            </tr>
-                                                    <tr>
-                                <td>boolean</td>
-                                <td>$autoDeletion </td>
-                                <td><p>If it is set during the destriction of the GPhpThreadIntercom instance the pipe file will be also removed.</p></td>
-                            </tr>
-                                            </table>
                 
                 
                 				
@@ -313,18 +327,19 @@
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_isInitialized" name="method_isInitialized" class="anchor"></a>
+            <a id="method___toString" name="method___toString" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">isInitialized()</h3>
+                <h3 class="public ">__toString()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">isInitialized() : boolean</pre>
-                <p><em>Checks if the intercom is initialized and ready for use.</em></p>
+                <pre class="signature" style="margin-right: 54px;">__toString() : string</pre>
+                <p><em>Generates object id.</em></p>
                 
 
                 
                 
                                     <h4>Returns</h4>
-                    boolean
+                    string
+                                            &mdash; <p>The id of the current instance.</p>
                                     				
                             </article>
         </div>
@@ -341,51 +356,28 @@
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_getAutoDeletionFlag" name="method_getAutoDeletionFlag" class="anchor"></a>
+            <a id="method_import" name="method_import" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">getAutoDeletionFlag()</h3>
+                <h3 class="public ">import()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getAutoDeletionFlag() : boolean</pre>
-                <p><em>Returns the state of the option automatic deletion of the pipe file.</em></p>
-                
-
-                
-                
-                                    <h4>Returns</h4>
-                    boolean
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr><td colspan="2"><em>None found</em></td></tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_setAutoDeletionFlag" name="method_setAutoDeletionFlag" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">setAutoDeletionFlag()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">setAutoDeletionFlag(boolean  <span class="argument">$booleanValue</span>) : void</pre>
-                <p><em>Sets the automatic deletion option for the pipe file during the destruction of current instance.</em></p>
+                <pre class="signature" style="margin-right: 54px;">import(mixed  <span class="argument">$value</span>) : void</pre>
+                <p><em>Sets the value desired to be held.</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>boolean</td>
-                                <td>$booleanValue </td>
-                                <td></td>
+                                <td>mixed</td>
+                                <td>$value </td>
+                                <td><p>The value to be held inside this container.</p></td>
                             </tr>
                                             </table>
                 
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\GPhpThreadException</dt>
+                            <dd></dd>
+                                                                    </dl>
                 
                 				
                             </article>
@@ -403,122 +395,20 @@
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method___destruct" name="method___destruct" class="anchor"></a>
+            <a id="method_export" name="method_export" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">__destruct()</h3>
+                <h3 class="public ">export()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">__destruct() </pre>
-                <p><em>Destructor. May try automatically to delete the pipe file.</em></p>
+                <pre class="signature" style="margin-right: 54px;">export() : mixed</pre>
+                <p><em>Returns the contained value.</em></p>
                 
 
-                
-                
-                				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr><td colspan="2"><em>None found</em></td></tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_send" name="method_send" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">send()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">send(string  <span class="argument">$dataString</span>, integer  <span class="argument">$dataLength</span>) : boolean</pre>
-                <p><em>Sends data through the intercom.</em></p>
-                
-
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>string</td>
-                                <td>$dataString </td>
-                                <td><p>The data to be sent</p></td>
-                            </tr>
-                                                    <tr>
-                                <td>integer</td>
-                                <td>$dataLength </td>
-                                <td><p>The length of the data</p></td>
-                            </tr>
-                                            </table>
                 
                 
                                     <h4>Returns</h4>
-                    boolean
-                                            &mdash; <p>On success returns true otherwise false is returned.</p>
+                    mixed
+                                            &mdash; <p>The contained value.</p>
                                     				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr><td colspan="2"><em>None found</em></td></tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_receive" name="method_receive" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">receive()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">receive(integer  <span class="argument">$timeout = 700</span>) : string|null</pre>
-                <p><em>Receives data from the intercom.</em></p>
-                
-
-                                    <h4>Parameters</h4>
-                    <table class="table table-condensed table-hover">
-                                                    <tr>
-                                <td>integer</td>
-                                <td>$timeout </td>
-                                <td><p>The maximum time period in milliseconds during which to wait for data to arrive.</p></td>
-                            </tr>
-                                            </table>
-                
-                
-                                    <h4>Returns</h4>
-                    string|null
-                                            &mdash; <p>If there is no data up to 700 ms after the method is called it returns NULL otherwise returns the data string itself.</p>
-                                    				
-                            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
-                                                                            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">
-                                    <tr><td colspan="2"><em>None found</em></td></tr>
-                            </table>
-        </aside>
-    </div>
-
-                                    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="method_isReceiveingDataAvailable" name="method_isReceiveingDataAvailable" class="anchor"></a>
-            <article class="method">
-                <h3 class="public ">isReceiveingDataAvailable()</h3>
-                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">isReceiveingDataAvailable() </pre>
-                <p><em>Checks if there is pending data for receiving.</em></p>
-                
-
-                
-                
-                				
                             </article>
         </div>
         <aside class="span4 detailsbar">

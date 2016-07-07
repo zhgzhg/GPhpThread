@@ -217,7 +217,7 @@ class GPhpThreadIntercom // {{{
  * @see \GPhpThreadIntercom is used for synchronization between the different processes.
  * @api
  */
-class GPhpThreadCriticalSection // {{{ TODO support for use from another gphpthread when launching sub-threads
+class GPhpThreadCriticalSection // {{{
 {
 	/** @internal */
 	private $uniqueId = 0;								// the identifier of a concrete instance
@@ -1239,13 +1239,36 @@ class GPhpThreadCriticalSection // {{{ TODO support for use from another gphpthr
 
 
 /**
- * A data container not allowed to be cloned. Once created, only REFERENCEs to it are allowed.
- * @throws \GPhpThreadException
+ * A data container not allowed to be cloned.
+ * Once created, only REFERENCEs to it are allowed.
+ * It is NOT protected against fork or direct import()/export(). If that is desired it should be wrapped.
+ * @throws \GPhpThreadException When caught clone attempts.
  */
-final class GPhpThreadUncloneableContainer implements \Serializable // {{{
+final class GPhpThreadNotCloneableContainer implements \Serializable // {{{
 {
+	/** @internal */
+	private static $seed = 0;
+
+	/** @internal */
+	private $id = 0;
+
 	/** @var mixed $variable The container holding the user's value */
 	private $variable;
+
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		$this->id = self::$seed++;
+	}
+
+	/**
+	 * Generates object id.
+	 * @return string The id of the current instance.
+	 */
+	public function __toString() {
+		return "{$this->id}";
+	}
 
 	/**
 	 * Sets the value desired to be held.
@@ -1255,7 +1278,7 @@ final class GPhpThreadUncloneableContainer implements \Serializable // {{{
 	 */
 	public function import($value) {
 		if ($value instanceof self) {
-			throw new \GPhpThreadException("Not allowed cloning of GPhpThreadUncloneableContainer!");
+			throw new \GPhpThreadException("Not allowed cloning of GPhpThreadNotCloneableContainer!");
 		}
 		$this->variable = $value;
 	}
@@ -1270,17 +1293,17 @@ final class GPhpThreadUncloneableContainer implements \Serializable // {{{
 
 	/** @internal */
 	private final function __clone() {
-		throw new GPhpThreadException("Not allowed cloning of GPhpThreadUncloneableContainer!");
+		throw new GPhpThreadException("Not allowed cloning of GPhpThreadNotCloneableContainer!");
 	}
 
 	/** @internal */
 	public final function serialize() {
-		throw new GPhpThreadException("Not allowed cloning of GPhpThreadUncloneableContainer!");
+		throw new GPhpThreadException("Not allowed cloning of GPhpThreadNotCloneableContainer!");
 	}
 
 	/** @internal */
 	public final function unserialize($data) {
-		throw new GPhpThreadException("Not allowed cloning of GPhpThreadUncloneableContainer!");
+		throw new GPhpThreadException("Not allowed cloning of GPhpThreadNotCloneableContainer!");
 	}
 } // }}}
 
@@ -1386,8 +1409,10 @@ abstract class GPhpThread // {{{
 
 	/** @internal */
 	private static $originPid = 0;
+	/** @internal */
+	private static $originDynamicDataArr = array();
 
-		/** @internal */
+	/** @internal */
 	private static $isCriticalSectionDispatcherRegistered = false;
 	/** @internal */
 	private static $isSignalCHLDHandlerInstalled = false;
@@ -1437,15 +1462,20 @@ abstract class GPhpThread // {{{
 	 * any calls to start()/stop().
 	 *
 	 * Indicates whether the place from which this method is called is a heavy thread or not.
-	 * @param null|bool $isInsideGPhpThread A REFERENCE to a variable. If it's set to null, the function will immediately return the result. Otherwise the variable will be subscribe for the result during program's execution while its initial will be set to false.
+	 *
+	 * @throws \GPhpThreadException If the supplied parameter is not of GPhpThreadNotCloneableContainer or NULL type.
+	 * @param null|\GPhpThreadNotCloneableContainer $isInsideGPhpThread A REFERENCE type. If it's set to null, the function will immediately return the result. Otherwise the variable will be subscribe for the result during program's execution and its value will be set to false.
 	 * @return null|bool Null if a variable is subscribed for the result. Else if the method caller is part ot a heavy thread returns true otherwise false.
 	 */
 	public static function isInGPhpThread(&$isInsideGPhpThread) { // {{{
 		if ($isInsideGPhpThread === NULL) {
 			return self::$seed !== 0 && self::$originPid !== 0 && self::$originPid !== getmypid();
 		}
-		$isInsideGPhpThread = false;
-		// TODO
+		if (!($isInsideGPhpThread instanceof \GPhpThreadNotCloneableContainer)) {
+			throw new \GPhpThreadException("Not supported parameter type - must be NULL or GPhpThreadNotCloneableContainer");
+		}
+		$isInsideGPhpThread->import(false);
+		self::$originDynamicDataArr[((string)$isInsideGPhpThread)] = $isInsideGPhpThread;
 		return NULL;
 	}  // }}}
 
@@ -1624,6 +1654,14 @@ abstract class GPhpThread // {{{
 		if (!$this->amIParent()) { // child
 			// no dispatchers needed in the childs; this means that no threads withing threads creation is possible
 			unregister_tick_function('GPhpThreadCriticalSection::dispatch');
+
+			// flag any subscribed variables indicating that the current
+			// instance is located in a GPhpThread
+			foreach (self::$originDynamicDataArr as &$o) {
+				if ($o instanceof \GPhpThreadNotCloneableContainer) {
+					$o->import(true);
+				}
+			}
 
 			if ($csInitializationResult === false) $this->stop(); // don't execute the thread body if critical section is required, but missing
 

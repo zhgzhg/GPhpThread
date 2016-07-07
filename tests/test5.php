@@ -29,14 +29,17 @@ require_once __DIR__ . '/../GPhpThread.php';
 
 class MyStuff {
 	private $postfix;
+	private $inThread;
 
 	public function __construct($postfix) {
 		$this->postfix = $postfix;
+		$this->inThread = new GPhpThreadNotCloneableContainer();
+		GPhpThread::isInGPhpThread($this->inThread);
 		echo "__constr My Stuff - {$this->postfix} " . getmypid() . "\n";
 	}
 
 	public function __destruct() {
-		if (GPhpThread::isInGPhpThread($nothing = NULL)) {
+		if ($this->inThread->export()) {
 			exit;
 		}
 		echo "__deconstr My Stuff - {$this->postfix} " . getmypid() . "\n";
@@ -69,8 +72,6 @@ class MyThread extends GPhpThread {
 		echo "=--- locked " . $this->getPid() . "\n";
 		$this->criticalSection->addOrUpdateResource('IAM', getmypid());
 
-		/*
-
 		$criticalSection2 = new GPhpThreadCriticalSection();
 
 		$a = new MyThreadThread($criticalSection2, true);
@@ -85,7 +86,6 @@ class MyThread extends GPhpThread {
 		$criticalSection2->lock();
 		echo "=###= Last internal cs value: " . $criticalSection2->getResourceValue('IAM') . "\n";
 		$criticalSection2->unlock();
-		// */
 
 		$this->criticalSection->addOrUpdateResource('IAMNOT', '0xdead1');
 		$this->criticalSection->removeResource('IAMNOT');
