@@ -533,7 +533,7 @@ class GPhpThreadCriticalSection // {{{
 	 * @param int $pid The process id of the sender "thread". REFERENCE type.
 	 * @param string $resourceName The name of resource that is holding a particular data that will be "shared". REFERENCE type.
 	 * @param mixed $resourceValue The value of the resource. REFERENCE type.
-	 * @param int $timeInterval Internal wait time in milliseconds between each data check interval.
+	 * @param int $timeInterval Internal wait time interval in milliseconds between each data check.
 	 * @return bool Returns true on success otherwise false.
 	 */
 	private function receive(&$message, &$pid, &$resourceName, &$resourceValue, $timeInterval = 700) { // {{{
@@ -781,7 +781,7 @@ class GPhpThreadCriticalSection // {{{
 					continue;
 				}
 
-				self::dataDispatch($inst, $threadId, $useBlocking);
+				self::dataDispatch($inst, $threadId);
 
 				$mostPrioritizedThreadId = NULL;
 				if ($inst->dispatchPriority !== 2) {
@@ -807,7 +807,7 @@ class GPhpThreadCriticalSection // {{{
 						}
 						continue;
 					}
-					self::dataDispatch($inst, $threadId, $useBlocking);
+					self::dataDispatch($inst, $threadId);
 				}
 			}
 
@@ -901,10 +901,9 @@ class GPhpThreadCriticalSection // {{{
 	 * Operations on the transferred data dispatch helper.
 	 * @param GPhpThreadCriticalSection $inst The instance of the critical section to work with
 	 * @param int $threadId The identifier of the thread whose critical section is currently dispatched.
-	 * @param bool $useBlocking On true blocks the internal execution until communication data is available for the current dispatched thread otherwise it skips it.
 	 * @return void
 	 */
-	private static function dataDispatch(&$inst, $threadId, $useBlocking) { // {{{
+	private static function dataDispatch(&$inst, $threadId) { // {{{
 
 		$msg = $pid = $name = $value = null;
 
@@ -1185,7 +1184,7 @@ class GPhpThreadCriticalSection // {{{
 
 	/**
 	 * Returns an reliable resource value by asking the dispatcher for it. An ownership of the critical section is required.
-	 * @throws \GPhpThreadException
+	 * @throws \GPhpThreadException If the critical section ownership is not obtained.
 	 * @param string $name The name of the desired resource.
 	 * @return mixed The resource value or null if the resource was not found.
 	 */
@@ -1205,7 +1204,7 @@ class GPhpThreadCriticalSection // {{{
 
 	/**
 	 * Returns an unreliable resource value by asking the dispatcher for it. An ownership of the critical section is required.
-	 * @throws \GPhpThreadException
+	 * @throws \GPhpThreadException If the critical section ownership is not obtained.
 	 * @param string $name The name of the desired resource.
 	 * @return mixed The resource value or null if the resource was not found.
 	 */
@@ -1381,7 +1380,8 @@ class GPhpThreadLockGuard implements \Serializable // {{{
  * A heavy thread creation and manipulation class.
  *
  * Provides purely implemented in php instruments for "thread" creation
- * and manipulation. A shell access, linux OS and PHP 5.3+ are required.
+ * and manipulation. A shell access, pcntl, posix, linux OS and PHP 5.3+
+ * are required.
  * @api
  */
 abstract class GPhpThread // {{{
@@ -1451,20 +1451,19 @@ abstract class GPhpThread // {{{
 	/**
 	 * Execution protector. Recommended to be used everywhere where execution is not desired.
 	 * For e.g. destructors which should be executed only in the master process.
+	 * Indicates whether the place from which this method is called is a heavy thread or not.
 	 *
 	 * Can be used in 2 different ways. A direct way where the supplied parameter points to NULL.
 	 * In this case the result is immediately returned, but the user will not be able to ignore
 	 * the effect in any "inner" threads without using resetThreadIdGenerator() method which on the
-	 * other гьха will affect any previously created object instances (before the thread was launched (forked)).
+	 * other hand will affect any previously created object instances (before the thread was launched (forked)).
 	 *
 	 * The other way is by subscribing a variable (most useful when is done in the constructor of your
-	 * affected class). When subscribed for the first it will be false, but it will be updated after a
-	 * any calls to start()/stop().
+	 * affected class). When subscribed initially its value will be set to false, but it will be
+	 * updated after any calls to start()/stop().
 	 *
-	 * Indicates whether the place from which this method is called is a heavy thread or not.
-	 *
-	 * @throws \GPhpThreadException If the supplied parameter is not of GPhpThreadNotCloneableContainer or NULL type.
-	 * @param null|\GPhpThreadNotCloneableContainer $isInsideGPhpThread A REFERENCE type. If it's set to null, the function will immediately return the result. Otherwise the variable will be subscribe for the result during program's execution and its value will be set to false.
+	 * @throws \GPhpThreadException If the supplied parameter is not of a GPhpThreadNotCloneableContainer or NULL type.
+	 * @param null|\GPhpThreadNotCloneableContainer $isInsideGPhpThread A REFERENCE type. If it's set to null, the function will immediately return the result. Otherwise the variable will be subscribed for the result during the program's execution and its initial value will be set to false.
 	 * @return null|bool Null if a variable is subscribed for the result. Else if the method caller is part ot a heavy thread returns true otherwise false.
 	 */
 	public static function isInGPhpThread(&$isInsideGPhpThread) { // {{{
@@ -1481,7 +1480,7 @@ abstract class GPhpThread // {{{
 
 	/**
 	 * Specifies the running thread's exit code when it terminates.
-	 * @param int $exitCode The exit code with which the thread will quir.
+	 * @param int $exitCode The exit code with which the thread will quit.
 	 * @return void
 	 */
 	protected final function setExitCode($exitCode) { // {{{
@@ -1489,7 +1488,7 @@ abstract class GPhpThread // {{{
 	} // }}}
 
 	/**
-	 * Returns the thread exit code.
+	 * Returns the thread's exit code.
 	 * @return int
 	 */
 	public final function getExitCode() { // {{{
@@ -1530,7 +1529,7 @@ abstract class GPhpThread // {{{
 	} // }}}
 
 	/**
-	 * Returns the current thread (process) id.
+	 * Returns the current thread's (process) id.
 	 * @return int
 	 */
 	public function getPid() { // {{{
@@ -1560,7 +1559,7 @@ abstract class GPhpThread // {{{
 	} // }}}
 
 	/**
-	 * Returns the current execution priority.
+	 * Returns the current execution priority of the thread.
 	 * @return int The priority number in the interval [-20; 20] where the lower value means higher priority.
 	 */
 	public function getPriority() { // {{{
@@ -1596,7 +1595,7 @@ abstract class GPhpThread // {{{
 	/**
 	 * Suspends the thread execution for a specific amount of time, redirecting the CPU resources to somewhere else. The total delay is the sum of all passed parameters.
 	 * @param int $microseconds The delay in microseconds.
-	 * @param int $seconds The delay in seconds.
+	 * @param int $seconds (optional) The delay in seconds.
 	 * @return bool Returns true after all of the specified delay time elapsed. If the sleep was interrupted returns false.
 	 */
 	protected function sleep($microseconds, $seconds = 0) { // {{{

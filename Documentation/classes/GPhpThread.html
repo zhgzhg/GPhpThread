@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-42803121"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1616159625"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-42803121" class="accordion-body collapse in">
+            <div id="namespace-1616159625" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -170,7 +170,8 @@
                     <h1><small>\</small>GPhpThread</h1>
                     <p><em>A heavy thread creation and manipulation class.</em></p>
                     <p>Provides purely implemented in php instruments for &quot;thread&quot; creation
-and manipulation. A shell access, linux OS and PHP 5.3+ are required.</p>
+and manipulation. A shell access, pcntl, posix, linux OS and PHP 5.3+
+are required.</p>
                     
                                         
                     <section id="summary">
@@ -383,29 +384,29 @@ and manipulation. A shell access, linux OS and PHP 5.3+ are required.</p>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
                 <pre class="signature" style="margin-right: 54px;">isInGPhpThread(null|\GPhpThreadNotCloneableContainer  <span class="argument">$isInsideGPhpThread</span>) : null|boolean</pre>
                 <p><em>Execution protector. Recommended to be used everywhere where execution is not desired.</em></p>
-                <p>For e.g. destructors which should be executed only in the master process.</p>
+                <p>For e.g. destructors which should be executed only in the master process.
+Indicates whether the place from which this method is called is a heavy thread or not.</p>
 <p>Can be used in 2 different ways. A direct way where the supplied parameter points to NULL.
 In this case the result is immediately returned, but the user will not be able to ignore
 the effect in any &quot;inner&quot; threads without using resetThreadIdGenerator() method which on the
-other гьха will affect any previously created object instances (before the thread was launched (forked)).</p>
+other hand will affect any previously created object instances (before the thread was launched (forked)).</p>
 <p>The other way is by subscribing a variable (most useful when is done in the constructor of your
-affected class). When subscribed for the first it will be false, but it will be updated after a
-any calls to start()/stop().</p>
-<p>Indicates whether the place from which this method is called is a heavy thread or not.</p>
+affected class). When subscribed initially its value will be set to false, but it will be
+updated after any calls to start()/stop().</p>
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
                                 <td>null|<a href="../classes/GPhpThreadNotCloneableContainer.html">\GPhpThreadNotCloneableContainer</a></td>
                                 <td>$isInsideGPhpThread </td>
-                                <td><p>A REFERENCE type. If it's set to null, the function will immediately return the result. Otherwise the variable will be subscribe for the result during program's execution and its value will be set to false.</p></td>
+                                <td><p>A REFERENCE type. If it's set to null, the function will immediately return the result. Otherwise the variable will be subscribed for the result during the program's execution and its initial value will be set to false.</p></td>
                             </tr>
                                             </table>
                 
                                     <h4>Throws</h4>
                     <dl>
                                                     <dt>\GPhpThreadException</dt>
-                            <dd><p>If the supplied parameter is not of GPhpThreadNotCloneableContainer or NULL type.</p></dd>
+                            <dd><p>If the supplied parameter is not of a GPhpThreadNotCloneableContainer or NULL type.</p></dd>
                                                                     </dl>
                 
                                     <h4>Returns</h4>
@@ -433,7 +434,7 @@ any calls to start()/stop().</p>
                 <h3 class="public ">getExitCode()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
                 <pre class="signature" style="margin-right: 54px;">getExitCode() : integer</pre>
-                <p><em>Returns the thread exit code.</em></p>
+                <p><em>Returns the thread&#039;s exit code.</em></p>
                 
 
                 
@@ -518,7 +519,7 @@ any calls to start()/stop().</p>
                 <h3 class="public ">getPid()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
                 <pre class="signature" style="margin-right: 54px;">getPid() : integer</pre>
-                <p><em>Returns the current thread (process) id.</em></p>
+                <p><em>Returns the current thread&#039;s (process) id.</em></p>
                 
 
                 
@@ -583,7 +584,7 @@ any calls to start()/stop().</p>
                 <h3 class="public ">getPriority()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
                 <pre class="signature" style="margin-right: 54px;">getPriority() : integer</pre>
-                <p><em>Returns the current execution priority.</em></p>
+                <p><em>Returns the current execution priority of the thread.</em></p>
                 
 
                 
@@ -842,7 +843,7 @@ any calls to start()/stop().</p>
                                                     <tr>
                                 <td>integer</td>
                                 <td>$exitCode </td>
-                                <td><p>The exit code with which the thread will quir.</p></td>
+                                <td><p>The exit code with which the thread will quit.</p></td>
                             </tr>
                                             </table>
                 
@@ -911,7 +912,7 @@ any calls to start()/stop().</p>
                                                     <tr>
                                 <td>integer</td>
                                 <td>$seconds </td>
-                                <td><p>The delay in seconds.</p></td>
+                                <td><p>(optional) The delay in seconds.</p></td>
                             </tr>
                                             </table>
                 
@@ -1095,7 +1096,7 @@ any calls to start()/stop().</p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on July 8th, 2016 at 00:19.
+                    on July 8th, 2016 at 00:49.
                 </section>
             </section>
         </section>
