@@ -395,6 +395,28 @@ class GPhpThreadCriticalSection // {{{
 		return false;
 	} // }}}
 
+
+	/**
+	 * Cleans pipe files garbage left from any ungracefully terminated instances.
+	 * @return int The total number of unused, cleaned pipe garbage files.
+	 */
+	public function cleanPipeGarbage() {
+		$i = 0;
+		$files = scandir($this->pipeDir);
+		for ($j = 0; $j < count($files); ++$j) {
+			if ($files[$j][0] != '.' && is_file($this->pipeDir . $files[$j])) {
+				if (preg_match("/^gphpthread_\d+_s(\d+)\-d(\d+)$/", $files[$j], $matches)) {
+					if (!posix_kill($matches[1], 0) && !posix_kill($matches[2], 0)) {
+						if (@unlink($this->pipeDir . $files[$j])) {
+							++$i;
+						}
+					}
+				}
+			}
+		}
+		return $i;
+	}
+
 	/**
 	 * Finalization of a thread instance that ended and soon will be destroyed.
 	 * @param int $threadId The internal thread identifier.

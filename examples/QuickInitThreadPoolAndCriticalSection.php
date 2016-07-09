@@ -46,6 +46,7 @@ class MyThread extends GPhpThread {
 echo "Master main EP " . getmypid() . "\n";
 
 $criticalSection = new GPhpThreadCriticalSection();
+$criticalSection->cleanPipeGarbage(); // remove any garbage left from any ungracefully terminated previous executions
 
 $threadPool = array();
 $tpSize = 20;

@@ -45,6 +45,7 @@ class MyThread extends GPhpThread {
 echo "Master main EP pid " . getmypid() . "\n";
 
 $criticalSection = new GPhpThreadCriticalSection();
+$criticalSection->cleanPipeGarbage(); // remove any garbage left from any ungracefully terminated previous executions
 
 echo "\nLaunching Thread1...\n\n";
 
