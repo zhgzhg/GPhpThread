@@ -43,10 +43,3 @@ You can use composer to integrate the library in you project:
 
 Alternatively you can also manually download GPhpThread.php file and
 place it in your project's directory.
-
-TODOes
-------
-
-|Status|Details|
-|:-----|:------------------------------------------------------------------------:|
-|Close to stable|TODO: improved examples|
