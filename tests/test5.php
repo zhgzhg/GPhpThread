@@ -57,7 +57,7 @@ class MyThreadThread extends GPhpThread {
 
 		$lock = new GPhpThreadLockGuard($this->criticalSection);
 		echo "=### locked " . $this->getPid() . "\n";
-		$this->criticalSection->addOrUpdateResource('IAM', getmypid());
+		$this->criticalSection->addOrUpdateResource('IAM', $this->getPid());
 		echo "=### unlocked " . $this->getPid() . "\n";
 
 		$ms3 = new MyStuff('most inner thread thread');
@@ -70,7 +70,7 @@ class MyThread extends GPhpThread {
 
 		$lock = new GPhpThreadLockGuard($this->criticalSection);
 		echo "=--- locked " . $this->getPid() . "\n";
-		$this->criticalSection->addOrUpdateResource('IAM', getmypid());
+		$this->criticalSection->addOrUpdateResource('IAM', $this->getPid());
 
 		$criticalSection2 = new GPhpThreadCriticalSection();
 

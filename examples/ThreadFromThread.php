@@ -27,35 +27,76 @@
 
 require_once __DIR__ . '/../GPhpThread.php';
 
-class MyStuff
-{
-	public $a = 0;
-	public function __construct() {
-		$this->a = getmypid();
-		echo "constr __ {$this->a} \n";
+class MyStuff {
+	private $postfix;
+	private $inThread; // used to determine if the current instance is inside a GPhpThread or not
+
+	public function __construct($postfix) {
+		$this->postfix = $postfix;
+		$this->inThread = new GPhpThreadNotCloneableContainer();
+		GPhpThread::isInGPhpThread($this->inThread);
+		echo "__constr My Stuff - {$this->postfix} " . getmypid() . "\n";
 	}
+
 	public function __destruct() {
-		echo "destr __ " . getmypid() . " \n";
-		debug_print_backtrace();
-		echo "___________________________\n";
+		// Destructors are normally desired to execute only from the
+		// original creator of the instance. Otherwise they may perform
+		// some cleaning twice and the first time may be way more early
+		// than the desired moment.
+		if ($this->inThread->export()) { // Protect from unwanted destcution.
+			exit;
+		}
+		echo "__deconstr My Stuff - {$this->postfix} " . getmypid() . "\n";
 	}
 }
 
-$g = new MyStuff();
+$ms0 = new MyStuff('main 0thread');
+unset($ms0);
+
+$ms1 = new MyStuff('main thread');
+
+class MyThreadThread extends GPhpThread {
+	public function run() {
+		echo 'Hello, I am a thread launched from a thread - id ' . $this->getPid() . "!\n";
+
+		$lock = new GPhpThreadLockGuard($this->criticalSection);
+		echo "=### locked " . $this->getPid() . "\n";
+		$this->criticalSection->addOrUpdateResource('IAM', $this->getPid());
+		echo "=### unlocked " . $this->getPid() . "\n";
+
+		$ms3 = new MyStuff('most inner thread thread');
+	}
+}
 
 class MyThread extends GPhpThread {
 	public function run() {
 		echo 'Hello, I am a thread with id ' . $this->getPid() . "!\nTrying to lock the critical section\n";
 
 		$lock = new GPhpThreadLockGuard($this->criticalSection);
-
 		echo "=--- locked " . $this->getPid() . "\n";
 		$this->criticalSection->addOrUpdateResource('IAM', $this->getPid());
+
+		$criticalSection2 = new GPhpThreadCriticalSection();
+
+		$a = new MyThreadThread($criticalSection2, true);
+		$b = new MyThreadThread($criticalSection2, true);
+
+		$a->start();
+		$b->start();
+
+		$a->join();
+		$b->join();
+
+		$criticalSection2->lock();
+		echo "=###= Last internal cs value: " . $criticalSection2->getResourceValue('IAM') . "\n";
+		$criticalSection2->unlock();
+
 		$this->criticalSection->addOrUpdateResource('IAMNOT', '0xdead1');
 		$this->criticalSection->removeResource('IAMNOT');
 		echo "=--- unlocked " . $this->getPid() . "\n";
 
-		$this->setExitCode(8);
+		GPhpThread::resetThreadIdGenerator();
+		$ms2 = new MyStuff('heavy thread 1');
 	}
 }
 
@@ -66,10 +107,8 @@ $criticalSection->cleanPipeGarbage(); // remove any garbage left from any ungrac
 
 echo "\nLaunching Thread1...\n\n";
 
-$thr1 = new MyThread($criticalSection, false);
+$thr1 = new MyThread($criticalSection, true);
 $thr1->start();
 echo "Thread1 pid is: " . $thr1->getPid() . "\n";
 $thr1->join();
-
-echo "Thread 1 exit code: " . $thr1->getExitCode() . "\n";
 ?>

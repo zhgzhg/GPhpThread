@@ -32,7 +32,7 @@ class MyThread extends GPhpThread {
 		echo 'Hello, I am a thread with id ' . $this->getPid() . "!\nTrying to lock the critical section\n";
 		if ($this->criticalSection->lock()) {
 			echo "=--- locked " . $this->getPid() . "\n";
-			$this->criticalSection->addOrUpdateResource('IAM', getmypid());
+			$this->criticalSection->addOrUpdateResource('IAM', $this->getPid());
 			$this->criticalSection->addOrUpdateResource('IAMNOT', '0xdead1');
 			$this->criticalSection->removeResource('IAMNOT');
 			while (!$this->criticalSection->unlock()) $this->sleep(200000);
