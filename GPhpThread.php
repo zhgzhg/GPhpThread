@@ -1657,6 +1657,7 @@ abstract class GPhpThread // {{{
 	 */
 	public final function start() { // {{{
 		if (!$this->amIParent()) return false;
+		if ($this->amIStarted) return false;
 
 		$this->childPid = pcntl_fork();
 		if ($this->childPid == -1) return false;
