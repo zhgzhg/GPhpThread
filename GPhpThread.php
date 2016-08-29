@@ -1568,32 +1568,28 @@ abstract class GPhpThread // {{{
 	 * @return bool Returns true on success otherwise returns false.
 	 */
 	public function setPriority($priority) { // {{{ super user privileges required
-		$res = false;
-		if (!is_numeric($priority)) return $res;
+		if (!is_numeric($priority)) return false;
 		if ($this->amIParent()) { // I am parent
 			if ($this->amIStarted)
-				@$res = pcntl_setpriority($priority, $this->childPid, PRIO_PROCESS);
-			else return $res;
+				return @pcntl_setpriority($priority, $this->childPid, PRIO_PROCESS);
+			else return false;
 		}
 
-		@$res = pcntl_setpriority($priority, $this->_childPid, PRIO_PROCESS); // I am child
-		return $res;
+		return @pcntl_setpriority($priority, $this->_childPid, PRIO_PROCESS); // I am child
 	} // }}}
 
 	/**
 	 * Returns the current execution priority of the thread.
-	 * @return int The priority number in the interval [-20; 20] where the lower value means higher priority.
+	 * @return int|bool On success the priority number in the interval [-20; 20] where the lower value means higher priority. On failure returns false.
 	 */
 	public function getPriority() { // {{{
-		$res = false;
-
 		if ($this->amIParent()) { // I am parent
-			if ($this->amIStarted) @$res = pcntl_getpriority($this->childPid, PRIO_PROCESS);
-			else return $res;
+			if ($this->amIStarted) 
+				return @pcntl_getpriority($this->childPid, PRIO_PROCESS);
+			else return false;
 		}
 
-		@$res = pcntl_getpriority($this->_childPid, PRIO_PROCESS); // I am child
-		return $res;
+		return @pcntl_getpriority($this->_childPid, PRIO_PROCESS); // I am child
 	} // }}}
 
 	/**
