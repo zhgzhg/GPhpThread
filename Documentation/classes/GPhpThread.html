@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-621489445"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-498221406"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-621489445" class="accordion-body collapse in">
+            <div id="namespace-498221406" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -518,14 +518,15 @@ updated after any calls to start()/stop().</p>
             <article class="method">
                 <h3 class="public ">getPid()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getPid() : integer</pre>
+                <pre class="signature" style="margin-right: 54px;">getPid() : integer|boolean</pre>
                 <p><em>Returns the current thread&#039;s (process) id.</em></p>
                 
 
                 
                 
                                     <h4>Returns</h4>
-                    integer
+                    integer|boolean
+                                            &mdash; <p>On success returns a number different than 0. Otherwise returns false.</p>
                                     				
                             </article>
         </div>
@@ -583,15 +584,15 @@ updated after any calls to start()/stop().</p>
             <article class="method">
                 <h3 class="public ">getPriority()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getPriority() : integer</pre>
+                <pre class="signature" style="margin-right: 54px;">getPriority() : integer|boolean</pre>
                 <p><em>Returns the current execution priority of the thread.</em></p>
                 
 
                 
                 
                                     <h4>Returns</h4>
-                    integer
-                                            &mdash; <p>The priority number in the interval [-20; 20] where the lower value means higher priority.</p>
+                    integer|boolean
+                                            &mdash; <p>On success the priority number in the interval [-20; 20] where the lower value means higher priority. On failure returns false.</p>
                                     				
                             </article>
         </div>
@@ -1096,7 +1097,7 @@ updated after any calls to start()/stop().</p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on July 10th, 2016 at 00:24.
+                    on August 29th, 2016 at 19:47.
                 </section>
             </section>
         </section>
