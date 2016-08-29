@@ -1552,7 +1552,7 @@ abstract class GPhpThread // {{{
 
 	/**
 	 * Returns the current thread's (process) id.
-	 * @return int
+	 * @return int|bool On success returns a number different than 0. Otherwise returns false.
 	 */
 	public function getPid() { // {{{
 		if ($this->amIParent()) { // I am parent
