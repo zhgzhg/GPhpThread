@@ -46,7 +46,7 @@ class GPhpThreadException extends \Exception // {{{
 
 /**
  * Process intercommunication class.
- * A pipe interprocess communication method is used, based on asynchronous or synchronous comminucation.
+ * A pipe inter-process communication method is used, based on asynchronous or synchronous communication.
  * @api
  */
 class GPhpThreadIntercom // {{{
@@ -67,8 +67,8 @@ class GPhpThreadIntercom // {{{
 	/**
 	 * Constructor.
 	 * @param string $filePath The file that is going to store the pipe.
-	 * @param bool $isReadMode Indicates if the param is goind to be read only
-	 * @param bool $autoDeletion If it is set during the destriction of the GPhpThreadIntercom instance the pipe file will be also removed.
+	 * @param bool $isReadMode Indicates if the param is going to be read only
+	 * @param bool $autoDeletion If it is set during the destruction of the GPhpThreadIntercom instance the pipe file will be also removed.
 	 */
 	public function __construct($filePath, $isReadMode = true, $autoDeletion=false) { // {{{
 		$this->ownerPid = getmypid();
@@ -111,7 +111,7 @@ class GPhpThreadIntercom // {{{
 	 * @return bool
 	 */
 	public function getAutoDeletionFlag() { // {{{
-		return $this->$autoDeletion;
+		return $this->autoDeletion;
 	} // }}}
 
 	/**
@@ -120,7 +120,7 @@ class GPhpThreadIntercom // {{{
 	 * @return void
 	 */
 	public function setAutoDeletionFlag($booleanValue) { // {{{
-		$this->$autoDeletion = $booleanValue;
+		$this->autoDeletion = $booleanValue;
 	} // }}}
 
 	/**
@@ -200,9 +200,9 @@ class GPhpThreadIntercom // {{{
 
 	/**
 	 * Checks if there is pending data for receiving.
-	 * @param return mixed Returns 0 or false if there is no data up to 15 ms after the method is called. Otherwise returns the number of contained stream resources (usually 1).
+	 * @return mixed Returns 0 or false if there is no data up to 15 ms after the method is called. Otherwise returns the number of contained stream resources (usually 1).
 	 */
-	public function isReceiveingDataAvailable() { // {{{
+	public function isReceivingDataAvailable() { // {{{
 		if (!$this->success || !$this->isReadMode) return false;
 		if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) return false;
 
@@ -276,7 +276,7 @@ class GPhpThreadCriticalSection // {{{
 
 	/**
 	 * Constructor.
-	 * @param string $pipeDirectory The directory where the pipe files for the interprocess communication will be stored.
+	 * @param string $pipeDirectory The directory where the pipe files for the inter-process communication will be stored.
 	 */
 	public function __construct($pipeDirectory = '/dev/shm') { // {{{
 		$this->uniqueId = self::$uniqueIdSeed++;
@@ -300,7 +300,7 @@ class GPhpThreadCriticalSection // {{{
 	/**
 	 * Initializes the critical section.
 	 * @param int $afterForkPid The process identifier obtained after the execution of a fork() used to differentiate between different processes - pseudo threads.
-	 * @param int $threadId The internal to the GPhpThread identifier of the current thread instance which is unique indentifier in the context of the current process.
+	 * @param int $threadId The internal to the GPhpThread identifier of the current thread instance which is unique identifier in the context of the current process.
 	 * @return bool On success returns true otherwise false.
 	 */
 	public function initialize($afterForkPid, $threadId) { // {{{
@@ -343,7 +343,7 @@ class GPhpThreadCriticalSection // {{{
 			return false;
 		} else { // child
 			self::$instancesCreatedEverAArr = null;  // the child must not know for its neighbours
-			$this->mastersThreadSpecificData = null; // and any defails for the threads inside cs instance simulation
+			$this->mastersThreadSpecificData = null; // and any details for the threads inside cs instance simulation
 			self::$threadsForRemovalAArr = null;
 
 			// these point to the same memory location and also become
@@ -386,7 +386,7 @@ class GPhpThreadCriticalSection // {{{
 			if (!$this->intercomWrite->isInitialized())	$this->intercomWrite = null;
 			if (!$this->intercomRead->isInitialized())	$this->intercomRead = null;
 			if ($this->intercomWrite == null || $this->intercomRead == null) {
-				$this->intercomInterlocutorPid == null;
+				$this->intercomInterlocutorPid = null;
 				return false;
 			}
 
@@ -495,7 +495,6 @@ class GPhpThreadCriticalSection // {{{
 	private function send($operation, $resourceName, $resourceValue) { // {{{
 		if ($this->isIntercomBroken()) return false;
 
-		$isSent = false;
 		$isAlive = true;
 
 		$msg = $this->encodeMessage($operation, $resourceName, $resourceValue);
@@ -562,7 +561,6 @@ class GPhpThreadCriticalSection // {{{
 		if ($this->isIntercomBroken()) return false;
 
 		$data = null;
-		$isDataEmpty = false;
 		$isAlive = true;
 
 		do {
@@ -687,6 +685,7 @@ class GPhpThreadCriticalSection // {{{
 					$result = true;
 					$this->sharedData['unrel'][$name] = $value;
 				}
+			break;
 
 			case self::$ERASEACT:
 				if ($name === null || $name === '') break;
@@ -759,8 +758,6 @@ class GPhpThreadCriticalSection // {{{
 	public static function dispatch($useBlocking = false) { // {{{
 		$NULL = null;
 
-		$_mypid = getmypid();
-
 		// prevent any threads to run their own dispatchers
 		if ((self::$instancesCreatedEverAArr === null) || (count(self::$instancesCreatedEverAArr) == 0))
 			return;
@@ -795,7 +792,7 @@ class GPhpThreadCriticalSection // {{{
 				$inst->intercomWrite = &$specificDataAArr['intercomWrite'];
 				$inst->dispatchPriority = &$specificDataAArr['dispatchPriority'];
 
-				if (!$useBlocking && !$inst->intercomRead->isReceiveingDataAvailable()) {
+				if (!$useBlocking && !$inst->intercomRead->isReceivingDataAvailable()) {
 					$inst->dispatchPriority = 0;
 					if ($inst->isIntercomBroken()) {
 						unset($inst->mastersThreadSpecificData[$threadId]); // remove the thread from the dispatching list as soon as we can
@@ -822,7 +819,7 @@ class GPhpThreadCriticalSection // {{{
 					$inst->intercomWrite = &$inst->mastersThreadSpecificData[$mostPrioritizedThreadId]['intercomWrite'];
 					$inst->dispatchPriority = &$inst->mastersThreadSpecificData[$mostPrioritizedThreadId]['dispatchPriority'];
 
-					if (!$useBlocking && !$inst->intercomRead->isReceiveingDataAvailable()) {
+					if (!$useBlocking && !$inst->intercomRead->isReceivingDataAvailable()) {
 						$inst->dispatchPriority = 0;
 						if ($inst->isIntercomBroken()) {
 							unset($inst->mastersThreadSpecificData[$mostPrioritizedThreadId]); // remove the thread from the dispatching list as soon as we can
@@ -898,7 +895,7 @@ class GPhpThreadCriticalSection // {{{
 
 				// make the tables to have the same amount of keys (rows)
 				foreach ($dispPriorTableA as $key => $value)
-					@$dispPriorTableB[$key] = $dispPriorTableB[$key];
+					@$dispPriorTableB[$key] = $dispPriorTableB[$key]; // this is done on purpose
 				foreach ($dispPriorTableB as $key => $value)
 					@$dispPriorTableA[$key] = $dispPriorTableA[$key];
 
@@ -936,13 +933,12 @@ class GPhpThreadCriticalSection // {{{
 		// 0. total critical sections count
 
 		$dataReceiveTimeoutMs = 700; // default timeout
-		$dataReceiveTimeoutReductor = 0;
 
-		$dataReceiveTimeoutReductor = 2 - $inst->dispatchPriority;
-		$dataReceiveTimeoutReductor += (count($inst->mastersThreadSpecificData) - 1);
-		$dataReceiveTimeoutReductor += ((count(self::$instancesCreatedEverAArr) * 2) - 1);
+		$dataReceiveTimeoutReducer = 2 - $inst->dispatchPriority;
+		$dataReceiveTimeoutReducer += (count($inst->mastersThreadSpecificData) - 1);
+		$dataReceiveTimeoutReducer += ((count(self::$instancesCreatedEverAArr) * 2) - 1);
 
-		$dataReceiveTimeoutMs /= $dataReceiveTimeoutReductor;
+		$dataReceiveTimeoutMs /= $dataReceiveTimeoutReducer;
 		$dataReceiveTimeoutMs = (int)$dataReceiveTimeoutMs;
 		if ($dataReceiveTimeoutMs == 0) $dataReceiveTimeoutMs = 1;
 
@@ -1086,6 +1082,8 @@ class GPhpThreadCriticalSection // {{{
 			}
 
 		} while ($useBlocking && !$this->doIOwnIt());
+
+		return true;
 	} // }}}
 
 	/**
@@ -1317,14 +1315,26 @@ final class GPhpThreadNotCloneableContainer implements \Serializable // {{{
 		throw new GPhpThreadException("Not allowed cloning of GPhpThreadNotCloneableContainer!");
 	}
 
-	/** @internal */
+	/**
+	 * @internal
+	 * @throws \GPhpThreadException Does that every time.
+	 * @return string Always empty string
+	 */
 	public final function serialize() {
 		throw new GPhpThreadException("Not allowed cloning of GPhpThreadNotCloneableContainer!");
+		return '';
 	}
 
-	/** @internal */
-	public final function unserialize($data) {
+	/**
+	 * @internal
+	 * @throws \GPhpThreadException Does that every time.
+	 * @param string $data The serialized string.
+	 * @param array $options Any options to be provided to unserialize(), as an associative array (introduced in PHP 7).
+	 * @return bool Always false
+	 */
+	public final function unserialize($data, $options = array()) {
 		throw new GPhpThreadException("Not allowed cloning of GPhpThreadNotCloneableContainer!");
+		return false;
 	}
 } // }}}
 
@@ -1338,7 +1348,7 @@ final class GPhpThreadNotCloneableContainer implements \Serializable // {{{
 class GPhpThreadLockGuard implements \Serializable // {{{
 {
 	/** @var object $criticalSectionObject The critical section that will be un/locked. REFERENCE type. */
-	private $criticalSectionObject = NULL;
+	private $criticalSectionObj = NULL;
 	/** @var string $unlockMethod The unlock method name of the critical section that will be called during an unlock. */
 	private $unlockMethod = 'unlock';
 	/** @var string $unlockMethodsParams The parameters passed to the critical section's unlock method during an unlock. */
@@ -1388,13 +1398,22 @@ class GPhpThreadLockGuard implements \Serializable // {{{
 		throw new \GPhpThreadException('Attempted to clone GPhpThreadLockGuard!');
 	}
 
-	/** @internal */
+	/**
+	 * @internal
+	 * @return string Always an empty string.
+	 */
 	public final function serialize() {
 		return '';
 	}
 
-	/** @internal */
-	public final function unserialize($data) {
+	/**
+	 * @internal
+	 * @param string $data The serialized string.
+	 * @param array $options Any options to be provided to unserialize(), as an associative array (introduces in PHP 7).
+	 * @return bool Always false.
+	 */
+	public final function unserialize($data, $options = array()) {
+		return false;
 	}
 } // }}}
 
@@ -1436,8 +1455,6 @@ abstract class GPhpThread // {{{
 
 	/** @internal */
 	private static $isCriticalSectionDispatcherRegistered = false;
-	/** @internal */
-	private static $isSignalCHLDHandlerInstalled = false;
 
 	/**
 	 * Constructor.
@@ -1584,7 +1601,7 @@ abstract class GPhpThread // {{{
 	 */
 	public function getPriority() { // {{{
 		if ($this->amIParent()) { // I am parent
-			if ($this->amIStarted) 
+			if ($this->amIStarted)
 				return @pcntl_getpriority($this->childPid, PRIO_PROCESS);
 			else return false;
 		}
@@ -1640,7 +1657,7 @@ abstract class GPhpThread // {{{
 	 * At process level increases the niceness of a heavy "thread" making its priority lower. Multiple calls of the method will accumulate and increase the effect.
 	 * @return bool Returns true on success or false in case of error or lack of privileges.
 	 */
-	protected function makeUnfrendlier() { // {{{ decreases the priority
+	protected function makeUnfriendlier() { // {{{ decreases the priority
 		if ($this->amIParent()) return false;
 		return proc_nice(1);
 	} // }}}
@@ -1670,7 +1687,7 @@ abstract class GPhpThread // {{{
 		}
 
 		if (!$this->amIParent()) { // child
-			// no dispatchers needed in the childs; this means that no threads withing threads creation is possible
+			// no dispatchers needed in the children; this means that no threads withing threads creation is possible
 			unregister_tick_function('GPhpThreadCriticalSection::dispatch');
 
 			// flag any subscribed variables indicating that the current
@@ -1690,7 +1707,7 @@ abstract class GPhpThread // {{{
 		} else { // parent
 			if ($this->childPid != -1 && $this->criticalSection !== null) {
 
-				if ($csInitializationResult === false) { // don't add the thread to the dispatch queue if missing but required critical section is the case (actuallu this is done in the initialize method above)
+				if ($csInitializationResult === false) { // don't add the thread to the dispatch queue if missing but required critical section is the case (actually this is done in the initialize method above)
 					$this->childPid = -1;
 					$this->_childPid = null;
 					$this->amIStarted = false;
@@ -1704,6 +1721,7 @@ abstract class GPhpThread // {{{
 			}
 			return true;
 		}
+		return true;
 	} // }}}
 
 	/**

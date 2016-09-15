@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1511952146"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-261482777"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1511952146" class="accordion-body collapse in">
+            <div id="namespace-261482777" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -169,7 +169,7 @@
 
                     <h1><small>\</small>GPhpThreadIntercom</h1>
                     <p><em>Process intercommunication class.</em></p>
-                    <p>A pipe interprocess communication method is used, based on asynchronous or synchronous comminucation.</p>
+                    <p>A pipe inter-process communication method is used, based on asynchronous or synchronous communication.</p>
                     
                                         
                     <section id="summary">
@@ -194,7 +194,7 @@
                                                                     <a href="../classes/GPhpThreadIntercom.html#method___destruct" class="">__destruct()</a><br />
                                                                     <a href="../classes/GPhpThreadIntercom.html#method_send" class="">send()</a><br />
                                                                     <a href="../classes/GPhpThreadIntercom.html#method_receive" class="">receive()</a><br />
-                                                                    <a href="../classes/GPhpThreadIntercom.html#method_isReceiveingDataAvailable" class="">isReceiveingDataAvailable()</a><br />
+                                                                    <a href="../classes/GPhpThreadIntercom.html#method_isReceivingDataAvailable" class="">isReceivingDataAvailable()</a><br />
                                                             </section>
                             <section class="span4">
                                                                     <em>No public properties found</em>
@@ -287,12 +287,12 @@
                                                     <tr>
                                 <td>boolean</td>
                                 <td>$isReadMode </td>
-                                <td><p>Indicates if the param is goind to be read only</p></td>
+                                <td><p>Indicates if the param is going to be read only</p></td>
                             </tr>
                                                     <tr>
                                 <td>boolean</td>
                                 <td>$autoDeletion </td>
-                                <td><p>If it is set during the destriction of the GPhpThreadIntercom instance the pipe file will be also removed.</p></td>
+                                <td><p>If it is set during the destruction of the GPhpThreadIntercom instance the pipe file will be also removed.</p></td>
                             </tr>
                                             </table>
                 
@@ -508,17 +508,20 @@
 
                                     <div class="row-fluid">
         <div class="span8 content class">
-            <a id="method_isReceiveingDataAvailable" name="method_isReceiveingDataAvailable" class="anchor"></a>
+            <a id="method_isReceivingDataAvailable" name="method_isReceivingDataAvailable" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">isReceiveingDataAvailable()</h3>
+                <h3 class="public ">isReceivingDataAvailable()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">isReceiveingDataAvailable() </pre>
+                <pre class="signature" style="margin-right: 54px;">isReceivingDataAvailable() : mixed</pre>
                 <p><em>Checks if there is pending data for receiving.</em></p>
                 
 
                 
                 
-                				
+                                    <h4>Returns</h4>
+                    mixed
+                                            &mdash; <p>Returns 0 or false if there is no data up to 15 ms after the method is called. Otherwise returns the number of contained stream resources (usually 1).</p>
+                                    				
                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -581,7 +584,7 @@
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on August 29th, 2016 at 19:47.
+                    on September 15th, 2016 at 20:25.
                 </section>
             </section>
         </section>
