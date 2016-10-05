@@ -1624,7 +1624,7 @@ abstract class GPhpThread // {{{
 	protected function isParentAlive() { // {{{
 		if (!$this->amIParent()) // I am child
 			return $this->getPriority() !== false;
-		return true;
+		return @pcntl_getpriority(posix_getppid(), PRIO_PROCESS) !== false;
 	} // }}}
 
 	/**
