@@ -1285,7 +1285,7 @@ final class GPhpThreadNotCloneableContainer implements \Serializable // {{{
 	 * Generates object id.
 	 * @return string The id of the current instance.
 	 */
-	public function __toString() {
+	public final function __toString() {
 		return "{$this->id}";
 	}
 
@@ -1335,6 +1335,50 @@ final class GPhpThreadNotCloneableContainer implements \Serializable // {{{
 	public final function unserialize($data, $options = array()) {
 		throw new GPhpThreadException("Not allowed cloning of GPhpThreadNotCloneableContainer!");
 		return false;
+	}
+
+	/**
+	 * @internal
+	 * @throws \GPhpThreadException Does that every time.
+	 * @param mixed $name Variable name.
+	 * @param mixed $value variable value.
+	 * @return void
+	 */
+	public final function __set($name, $value) {
+		throw new GPhpThreadException("Not allowed use of magic method __set()!");
+	}
+
+	/**
+	 * @internal
+	 * @throws \GPhpThreadException Does that every time.
+	 * @param mixed $name Variable name.
+	 * @param mixed $value variable value.
+	 * @return NULL Always NULL.
+	 */
+	public final function __get($name) {
+		throw new GPhpThreadException("Not allowed use of magic method __get()!");
+		return null;
+	}
+
+	/**
+	 * @internal
+	 * @throws \GPhpThreadException Does that every time.
+	 * @param mixed $name Variable name.
+	 * @return void
+	 */
+	public final function __unset($name) {
+		throw new GPhpThreadException("Not allowed use of magic method __unset()!");
+	}
+
+	/**
+	 * @internal
+	 * @throws \GPhpThreadException Does that every time.
+	 * @param mixed $name Variable name.
+	 * @return NULL Always NULL.
+	 */
+	public static final function __set_state($name) {
+		throw new GPhpThreadException("Not allowed use of magic method __set_state()!");
+		return null;
 	}
 } // }}}
 
@@ -1414,6 +1458,58 @@ class GPhpThreadLockGuard implements \Serializable // {{{
 	 */
 	public final function unserialize($data, $options = array()) {
 		return false;
+	}
+
+	/**
+	 * @internal
+	 * @throws \GPhpThreadException Does that every time.
+	 * @param mixed $name Variable name.
+	 * @param mixed $value variable value.
+	 * @return void
+	 */
+	public final function __set($name, $value) {
+		throw new GPhpThreadException("Not allowed use of magic method __set()!");
+	}
+
+	/**
+	 * @internal
+	 * @throws \GPhpThreadException Does that every time.
+	 * @param mixed $name Variable name.
+	 * @param mixed $value variable value.
+	 * @return NULL Always NULL.
+	 */
+	public final function __get($name) {
+		throw new GPhpThreadException("Not allowed use of magic method __get()!");
+		return null;
+	}
+
+	/**
+	 * @internal
+	 * @throws \GPhpThreadException Does that every time.
+	 * @param mixed $name Variable name.
+	 * @return void
+	 */
+	public final function __unset($name) {
+		throw new GPhpThreadException("Not allowed use of magic method __unset()!");
+	}
+
+	/**
+	 * @internal
+	 * @throws \GPhpThreadException Does that every time.
+	 * @param mixed $name Variable name.
+	 * @return NULL Always NULL.
+	 */
+	public static final function __set_state($name) {
+		throw new GPhpThreadException("Not allowed use of magic method __set_state()!");
+		return null;
+	}
+
+	/**
+	 * @internal
+	 * @return string 'GPhpThreadLockGuard' always.
+	 */
+	public final function __toString() {
+		return 'GPhpThreadLockGuard';
 	}
 } // }}}
 
@@ -1621,7 +1717,7 @@ abstract class GPhpThread // {{{
 	 * Checks if the creator of the heavy thread is alive.
 	 * @return bool Returns true if the parent is alive otherwise returns false.
 	 */
-	public function isParentAlive() { // {{{		
+	public function isParentAlive() { // {{{
 		return @pcntl_getpriority(@posix_getppid(), PRIO_PROCESS) !== false;
 	} // }}}
 
