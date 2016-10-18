@@ -43,7 +43,7 @@ class MyStuff {
 		// original creator of the instance. Otherwise they may perform
 		// some cleaning twice and the first time may be way more early
 		// than the desired moment.
-		if ($this->inThread->export()) { // Protect from unwanted destcution.
+		if ($this->inThread->export()) { // Protect from unwanted destruction.
 			exit;
 		}
 		echo "__deconstr My Stuff - {$this->postfix} " . getmypid() . "\n";
