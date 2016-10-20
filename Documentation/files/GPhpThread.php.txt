@@ -1749,6 +1749,7 @@ abstract class GPhpThread // {{{
 
 	/**
 	 * At process level decreases the niceness of a heavy "thread" making its priority higher. Multiple calls of the method will accumulate and increase the effect.
+	 * @see \GPhpThread::makeUnfriendlier() A method with the opposite effect is GPhpThread::makeUnfriendlier().
 	 * @return bool Returns true on success or false in case of error or lack of privileges.
 	 */
 	protected function makeNicer() { // {{{ increases the priority
@@ -1758,6 +1759,7 @@ abstract class GPhpThread // {{{
 
 	/**
 	 * At process level increases the niceness of a heavy "thread" making its priority lower. Multiple calls of the method will accumulate and increase the effect.
+	 * @see \GPhpThread::makeNicer() A method with the opposite effect is GPhpThread::makeNicer().
 	 * @return bool Returns true on success or false in case of error or lack of privileges.
 	 */
 	protected function makeUnfriendlier() { // {{{ decreases the priority
