@@ -1100,10 +1100,8 @@ class GPhpThreadCriticalSection // {{{
 
 			$res = null;
 			while ((($res = $this->requestUnlock()) === false) && $useBlocking) {
-				if ($useBlocking) {
-					for ($i = 0; $i < 120; ++$i) { }
-					usleep(mt_rand(10000, 200000));
-				}
+				for ($i = 0; $i < 120; ++$i) { }
+				usleep(mt_rand(10000, 200000));
 			}
 			return $res;
 		}
