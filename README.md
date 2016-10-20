@@ -34,16 +34,6 @@ Requirements/Dependencies
 * PHP POSIX
 * OS Linux family
 
-Installation
-------------
-
-You can use composer to integrate the library in you project:
-
-	php composer.phar require zhgzhg/gphpthread:@dev
-
-Alternatively you can also manually download GPhpThread.php file and
-place it in your project's directory.
-
 How To Use
 ----------
 
@@ -87,3 +77,13 @@ echo "Director " . getmypid() . " is done!\n";
 For more information see the files inside "examples" and "tests"
 directories. An html documentation is available inside "Documentation"
 directory.
+
+Installation
+------------
+
+You can use composer to integrate the library in you project:
+
+	php composer.phar require zhgzhg/gphpthread:@dev
+
+Alternatively you can also manually download GPhpThread.php file and
+place it in your project's directory.
