@@ -1723,6 +1723,7 @@ abstract class GPhpThread // {{{
 	 * Suspends the thread execution for a specific amount of time, redirecting the CPU resources to somewhere else. The total delay is the sum of all passed parameters.
 	 * @param int $microseconds The delay in microseconds.
 	 * @param int $seconds (optional) The delay in seconds.
+	 * @see \GPhpThread::milliSleep() Another similar method is milliSleep().
 	 * @return bool Returns true after all of the specified delay time elapsed. If the sleep was interrupted returns false.
 	 */
 	protected function sleep($microseconds, $seconds = 0) { // {{{
@@ -1734,6 +1735,16 @@ abstract class GPhpThread // {{{
 		if (($elapsedMicrotime - ($microseconds + ($seconds * 1000000))) >= $microtime) // the sleep was not interrupted
 			return true;
 		return false;
+	} // }}}
+
+	/**
+	 * Suspends the thread execution for a specific amount of milliseconds, redirecting the CPU resources to somewhere else.
+	 * @param int $milliseconds The delay in milliseconds.
+	 * @see \GPhpThread::sleep() Another similar method is sleep().
+	 * @return bool Returns true after all of the specified delay time elapsed. If the sleep was interrupted returns false.
+	 */
+	protected function milliSleep($milliseconds) { // {{{
+		return $this->sleep($milliseconds * 1000);
 	} // }}}
 
 	/**
