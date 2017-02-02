@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2016 zhgzhg
+ * Copyright (c) 2017 zhgzhg
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,9 +35,9 @@ class GPhpThreadException extends \Exception // {{{
 {
 	/**
 	 * Constructor.
-	 * @param string $msg Exception message
-	 * @param int $code Exception code number
-	 * @param Exception $previous
+	 * @param string $msg Exception message.
+	 * @param int $code Exception code number.
+	 * @param Exception $previous The previous exception used for the exception chaining.
 	 */
 	public function __construct($msg, $code = 0, \Exception $previous = NULL) {
 		parent::__construct($msg, $code, $previous);
@@ -207,14 +207,15 @@ class GPhpThreadIntercom // {{{
 		if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) return false;
 
 		$commChanFdArr = $this->commChanFdArr;
-		return (stream_select($commChanFdArr, $write = null, $except = null, 0, 15000) != 0);
+		$write = null; $except = null;
+		return (stream_select($commChanFdArr, $write, $except, 0, 15000) != 0);
 	} // }}}
 } // }}}
 
 /**
  * Critical section for sharing data between multiple processes.
  * It provides a slower data-safe manipulating methods and unsafe faster methods.
- * @see \GPhpThreadIntercom is used for synchronization between the different processes.
+ * @see \GPhpThreadIntercom \GPhpThreadIntercom is used for synchronization between the different processes.
  * @api
  */
 class GPhpThreadCriticalSection // {{{
@@ -1239,7 +1240,7 @@ class GPhpThreadCriticalSection // {{{
 
 	/**
 	 * Returns the names of all reliable shared resources.
-	 * @return array Associative array of ('resource name' => value, ...)
+	 * @return array An array of (0 => 'resource name1', 1 => 'resource name2', ...)
 	 */
 	public function getResourceNames() { // {{{
 		return array_keys($this->sharedData['rel']);
@@ -1247,7 +1248,7 @@ class GPhpThreadCriticalSection // {{{
 
 	/**
 	 * Returns the names of all unreliable shared resources.
-	 * @return array Associative array of ('resource name' => value, ...)
+	 * @return array An array of (0 => 'resource name1', 1 => 'resource name2', ...)
 	 */
 	public function getUnrelResourceNames() { // {{{
 		return array_keys($this->sharedData['unrel']);
@@ -1291,7 +1292,7 @@ final class GPhpThreadNotCloneableContainer implements \Serializable // {{{
 	 * Sets the value desired to be held.
 	 * @param mixed $value The value to be held inside this container.
 	 * @return void
-	 * @throws \GPhpThreadException
+	 * @throws \GPhpThreadException If an instance of \GPhpThreadNotCloneableContainer is passed.
 	 */
 	public function import($value) {
 		if ($value instanceof self) {
@@ -1384,7 +1385,7 @@ final class GPhpThreadNotCloneableContainer implements \Serializable // {{{
  * A wrapper providing RAII mechanism for locking and unlocking
  * purposes of a critical section objects and a similar ones.
  * @see \GPhpThreadCriticalSection
- * @throws \GPhpThreadException
+ * @throws \GPhpThreadException When improperly passed/configured a critical section or clone attempts are made.
  * @api
  */
 class GPhpThreadLockGuard implements \Serializable // {{{
@@ -1398,7 +1399,7 @@ class GPhpThreadLockGuard implements \Serializable // {{{
 
 	/**
 	* Constructor. Immediately locks the passed critical section.
-	* @throws \GPhpThreadException
+	* @throws \GPhpThreadException Exception is thrown in case an uninitialized critical section is passed or the specified lock or unlock methods are missing.
 	* @param object $criticalSectionObj An initialized critical section object or similar. A REFERENCE type.
 	* @param string $lockMethod The name of the $criticalSectionObj's lock method that will be called.
 	* @param array $lockMethodParams Parameter that will be passed to the lock method of $criticalSectionObj.
