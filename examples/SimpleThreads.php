@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2016 zhgzhg
+ * Copyright (c) 2017 zhgzhg
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,8 +36,9 @@ class MyThread extends GPhpThread {
 
 echo "Master process pid is " . getmypid() . "\n";
 echo "Creating threads...\n";
-$thr1 = new MyThread($nothing = null, true);
-$thr2 = new MyThread($nothing = null, true);
+$nothing = null;
+$thr1 = new MyThread($nothing, true);
+$thr2 = new MyThread($nothing, true);
 
 echo "\nLaunching Thread1...\n\n";
 

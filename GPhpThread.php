@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2016 zhgzhg
+ * Copyright (c) 2017 zhgzhg
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -207,7 +207,8 @@ class GPhpThreadIntercom // {{{
 		if (!isset($this->commChanFdArr[0]) || !is_resource($this->commChanFdArr[0])) return false;
 
 		$commChanFdArr = $this->commChanFdArr;
-		return (stream_select($commChanFdArr, $write = null, $except = null, 0, 15000) != 0);
+		$write = null; $except = null;
+		return (stream_select($commChanFdArr, $write, $except, 0, 15000) != 0);
 	} // }}}
 } // }}}
 
