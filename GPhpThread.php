@@ -1001,7 +1001,7 @@ class GPhpThreadCriticalSection // {{{
 				$inst->dispatchPriority = 1;
 				if ($inst->ownerPid !== $pid) {
 					$inst->send(GPhpThreadCriticalSection::$ERASENACK, null, null);
-					continue;
+					return;
 				}
 				if (!$inst->send(GPhpThreadCriticalSection::$ERASEACK, $name, null)) return;
 				$inst->dispatchPriority = 2;
