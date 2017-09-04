@@ -71,7 +71,7 @@ class GPhpThreadIntercom // {{{
 	 * @param bool $autoDeletion If it is set during the destruction of the GPhpThreadIntercom instance the pipe file will be also removed.
 	 */
 	public function __construct($filePath, $isReadMode = true, $autoDeletion=false) { // {{{
-		$this->ownerPid = getmypid();
+		$this->ownerPid = getmypid();http://www.cplusplus.com/reference/ctime/strftime/
 		if (!file_exists($filePath)) {
 			if (!posix_mkfifo($filePath, 0644)) {
 				$this->success = false;
@@ -403,17 +403,20 @@ class GPhpThreadCriticalSection // {{{
 	 */
 	public function cleanPipeGarbage() {
 		$i = 0;
-		$files = scandir($this->pipeDir);
-		for ($j = 0; $j < count($files); ++$j) {
-			if ($files[$j][0] != '.' && is_file($this->pipeDir . $files[$j])) {
-				if (preg_match("/^gphpthread_\d+_s(\d+)\-d(\d+)$/", $files[$j], $matches)) {
-					if (!posix_kill($matches[1], 0) && !posix_kill($matches[2], 0)) {
-						if (@unlink($this->pipeDir . $files[$j])) {
-							++$i;
+		$dirFp = @opendir($this->pipeDir);
+		if ($dirFp !== false) {
+			while (($fileName = readdir($dirFp)) !== false) {
+				if ($fileName[0] != '.' && is_file($this->pipeDir . $fileName)) {
+					if (preg_match("/^gphpthread_\d+_s(\d+)\-d(\d+)$/", $fileName, $matches)) {
+						if (!posix_kill($matches[1], 0) && !posix_kill($matches[2], 0)) {
+							if (@unlink($this->pipeDir . $fileName)) {
+								++$i;
+							}
 						}
 					}
 				}
 			}
+			closedir($dirFp);
 		}
 		return $i;
 	}
@@ -1001,7 +1004,7 @@ class GPhpThreadCriticalSection // {{{
 				$inst->dispatchPriority = 1;
 				if ($inst->ownerPid !== $pid) {
 					$inst->send(GPhpThreadCriticalSection::$ERASENACK, null, null);
-					continue;
+					return;
 				}
 				if (!$inst->send(GPhpThreadCriticalSection::$ERASEACK, $name, null)) return;
 				$inst->dispatchPriority = 2;
