@@ -71,7 +71,7 @@ class GPhpThreadIntercom // {{{
 	 * @param bool $autoDeletion If it is set during the destruction of the GPhpThreadIntercom instance the pipe file will be also removed.
 	 */
 	public function __construct($filePath, $isReadMode = true, $autoDeletion=false) { // {{{
-		$this->ownerPid = getmypid();http://www.cplusplus.com/reference/ctime/strftime/
+		$this->ownerPid = getmypid();
 		if (!file_exists($filePath)) {
 			if (!posix_mkfifo($filePath, 0644)) {
 				$this->success = false;
