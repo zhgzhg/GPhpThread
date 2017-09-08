@@ -1,0 +1,22 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+
+matrix:
+  fast_finish: false
+
+before_install:
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - composer.phar self-update
+
+install:
+  - composer install
+
+script:
+  - php ./tests/test0.php
