@@ -1,5 +1,8 @@
 language: php
 
+dist: precise
+sudo: required
+
 php:
   - 5.3
   - 5.4
@@ -13,10 +16,11 @@ matrix:
 
 before_install:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - composer.phar self-update
+  - composer self-update
 
 install:
   - composer install
 
 script:
   - php ./tests/test0.php
+  
