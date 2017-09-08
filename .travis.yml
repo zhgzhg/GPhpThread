@@ -22,5 +22,5 @@ install:
   - composer install
 
 script:
-  - php ./tests/test0.php
-  
+  - php ./tests/run_all.php
+
