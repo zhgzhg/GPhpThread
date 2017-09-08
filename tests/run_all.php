@@ -1,4 +1,5 @@
 <?php
+chdir(__DIR__);
 $files = scandir(__DIR__);
 if ($files === false || count($files) < 4) {
 	echo "No tests found!\n";
@@ -16,7 +17,7 @@ foreach ($files as $f) {
 
 		$out = array();
 		$retCode = 0;
-		exec("php \"" . realpath($f) . "\"", $out, $retCode);
+		exec("php \"" . $f . "\"", $out, $retCode);
 
 		foreach ($out as $o) echo $o . "\n";
 		if ($retCode !== 0) exit($retCode);
