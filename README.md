@@ -1,6 +1,8 @@
 GPhpThread - Generic PHP Threads library
 ========================================
 
+![build status badge](https://travis-ci.org/zhgzhg/GPhpThread)
+
 A heavy threads library implementation written using only pure PHP.
 A fully functional component that might come in handy when the host
 system does not have PHP threads module installed and for some reason it
