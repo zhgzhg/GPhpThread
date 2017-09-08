@@ -16,7 +16,7 @@ foreach ($files as $f) {
 
 		$out = array();
 		$retCode = 0;
-		exec("php \"$f\"", $out, $retCode);
+		exec("php \"" . realpath($f) . "\"", $out, $retCode);
 
 		foreach ($out as $o) echo $o . "\n";
 		if ($retCode !== 0) exit($retCode);
