@@ -3,10 +3,16 @@
     "description": "Generic PHP Threads library using only pure PHP",
     "keywords": [
         "thread",
+        "multithreading",
+        "concurrent",
+        "async",
+        "asynchronous",
+        "parallel",
         "pcntl",
         "posix",
         "fork",
-        "shell"
+        "shell",
+        
     ],
     "homepage": "https://github.com/zhgzhg/gphpthread",
     "license": "MIT",
