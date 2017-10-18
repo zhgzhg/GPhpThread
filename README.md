@@ -85,7 +85,7 @@ Installation
 
 You can use composer to integrate the library in you project:
 
-	php composer.phar require zhgzhg/gphpthread:@dev
+	php composer.phar require zhgzhg/gphpthread:1.0.0
 
 Alternatively you can also manually download GPhpThread.php file and
 place it in your project's directory.

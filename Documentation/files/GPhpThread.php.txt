@@ -21,6 +21,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ *
+ * @author zhgzhg @ github.com
+ * @version GIT: $Id$ 1.0.0
+ * @copyright zhgzhg, 2017
  */
 
 // define("DEBUG_MODE", true);
@@ -43,6 +47,7 @@ class GPhpThreadException extends \Exception // {{{
 		parent::__construct($msg, $code, $previous);
 	}
 } // }}}
+
 
 /**
  * Process intercommunication class.
@@ -71,7 +76,7 @@ class GPhpThreadIntercom // {{{
 	 * @param bool $autoDeletion If it is set during the destruction of the GPhpThreadIntercom instance the pipe file will be also removed.
 	 */
 	public function __construct($filePath, $isReadMode = true, $autoDeletion=false) { // {{{
-		$this->ownerPid = getmypid();http://www.cplusplus.com/reference/ctime/strftime/
+		$this->ownerPid = getmypid();
 		if (!file_exists($filePath)) {
 			if (!posix_mkfifo($filePath, 0644)) {
 				$this->success = false;
@@ -212,6 +217,7 @@ class GPhpThreadIntercom // {{{
 	} // }}}
 } // }}}
 
+
 /**
  * Critical section for sharing data between multiple processes.
  * It provides a slower data-safe manipulating methods and unsafe faster methods.
@@ -254,6 +260,15 @@ class GPhpThreadCriticalSection // {{{
 	/** @internal */
 	private $dispatchPriority = 0;
 	// ===========================================
+
+	/**
+	 * @internal Special variable used in PHP 5.3 to emulate a context-specific use operator with lambdas
+	 */
+	private $bindVariable;
+	/**
+	 * @internal Special variable used in PHP 5.3 to emulate a context-specific use operator with lambdas
+	 */
+	private static $bindStaticVariable;
 
 	/** @internal */
 	private static $ADDORUPDATESYN = '00', $ADDORUPDATEACK = '01', $ADDORUPDATENACK = '02',
@@ -754,6 +769,73 @@ class GPhpThreadCriticalSection // {{{
 		return posix_kill($pid, 0);
 	} // }}}
 
+
+	/**
+	 * Sort by occurred lock and dispatch priority. This is workaround
+	 * method required for PHP 5.3 and relies on an initialized
+	 * $bindVariable. inside this class.
+	 * @param mixed $a The first key to be taken into account.
+	 * @param mixed $b The second key to be taken into account.
+	 * @return int -1, 0 or 1 depending on which key is more preferable.
+	 */
+	private function sortByLockAndDispatchPriority($a, $b) {
+		if ($this->bindVariable->mastersThreadSpecificData[$a]['intercomInterlocutorPid'] == $this->bindVariable->ownerPid) return -1;
+		if ($this->bindVariable->mastersThreadSpecificData[$b]['intercomInterlocutorPid'] == $this->bindVariable->ownerPid) return 1;
+		return $this->bindVariable->mastersThreadSpecificData[$a]['dispatchPriority'] < $this->bindVariable->mastersThreadSpecificData[$b]['dispatchPriority'];
+	}
+
+	/**
+	 * Sort by occurred lock, dispatch priority and most threads using
+	 * the critical section. This is workaround method required for
+	 * PHP 5.3 and relies on an initialized $bindVariable inside this
+	 * class.
+	 * @param mixed $a The first key to be taken into account.
+	 * @param mixed $b The second key to be taken into account.
+	 * @return int -1, 0 or 1 depending on which key is more preferable.
+	 */
+	 private static function sortByLockDispatchPriorityAndMostThreadsInside($a, $b) {
+		// the locker thread is with highest priority
+		if (self::$bindStaticVariable[$a]->mastersThreadSpecificData['intercomInterlocutorPid'] == self::$bindStaticVariable[$a]->ownerPid) return -1;
+		if (self::$bindStaticVariable[$b]->mastersThreadSpecificData['intercomInterlocutorPid'] == self::$bindStaticVariable[$b]->ownerPid) return 1;
+
+		// deal with the case of critical sections with no threads
+		if (!empty(self::$bindStaticVariable[$a]->mastersThreadSpecificData) && empty(self::$bindStaticVariable[$b]->mastersThreadSpecificData)) { return -1; }     // a
+		else if (empty(self::$bindStaticVariable[$a]->mastersThreadSpecificData) && !empty(self::$bindStaticVariable[$b]->mastersThreadSpecificData)) { return 1; } // b
+		else if (empty(self::$bindStaticVariable[$b]->mastersThreadSpecificData) && empty(self::$bindStaticVariable[$b]->mastersThreadSpecificData)) { return 0; }  // a
+
+		// gather the thread dispatch priorities for the compared critical sections
+
+		$dispPriorTableA = array(); // priority value => occurrences count
+		$dispPriorTableB = array(); // priority value => occurrences count
+
+		foreach (self::$bindStaticVariable[$a]->mastersThreadSpecificData as $thrdSpecificData)
+			@$dispPriorTableA[$thrdSpecificData['dispatchPriority']] += 1;
+
+		foreach (self::$bindStaticVariable[$b]->mastersThreadSpecificData as $thrdSpecificData)
+			@$dispPriorTableB[$thrdSpecificData['dispatchPriority']] += 1;
+
+		// both critical sections have threads
+
+		// make the tables to have the same amount of keys (rows)
+		foreach ($dispPriorTableA as $key => $value)
+			@$dispPriorTableB[$key] = $dispPriorTableB[$key]; // this is done on purpose
+		foreach ($dispPriorTableB as $key => $value)
+			@$dispPriorTableA[$key] = $dispPriorTableA[$key];
+
+		ksort($dispPriorTableA);
+		ksort($dispPriorTableB);
+
+		// compare the tables while taking into account the priority
+		// and the thread count that have it per critical section
+
+		foreach ($dispPriorTableA as $key => $value) {
+			if ($value < $dispPriorTableB[$key]) { return 1; } // b
+			else if ($value > $dispPriorTableB[$key]) { return -1; } // a
+		}
+
+		return 0; // a
+	 }
+
 	/**
 	 * Dispatcher responsible for the thread intercommunication and communication with their parent process.
 	 * @param bool $useBlocking On true blocks the internal execution until communication data is available for the current dispatched thread otherwise it skips it.
@@ -769,6 +851,7 @@ class GPhpThreadCriticalSection // {{{
 		// for checking SIGCHLD child signals informing that a particular "thread" was paused
 		$sigSet = array(SIGCHLD);
 		$sigInfo = array();
+
 
 		// begin the dispatching process
 		foreach (self::$instancesCreatedEverAArr as $instId => &$inst) { // loop through ALL active instances of GPhpCriticalSection
@@ -839,13 +922,15 @@ class GPhpThreadCriticalSection // {{{
 			// if a lock has already occurred that thread will have the
 			// highest priority
 
-			uksort($inst->mastersThreadSpecificData,
-				function ($a, $b) use ($inst) {
-					if ($inst->mastersThreadSpecificData[$a]['intercomInterlocutorPid'] == $inst->ownerPid) return -1;
-					if ($inst->mastersThreadSpecificData[$b]['intercomInterlocutorPid'] == $inst->ownerPid) return 1;
-					return $inst->mastersThreadSpecificData[$a]['dispatchPriority'] < $inst->mastersThreadSpecificData[$b]['dispatchPriority'];
-				}
-			);
+			$inst->bindVariable = &$inst;
+			uksort($inst->mastersThreadSpecificData, array($inst, 'sortByLockAndDispatchPriority'));
+			//uksort($inst->mastersThreadSpecificData,
+			//	function ($a, $b) use ($inst) {
+			//		if ($inst->mastersThreadSpecificData[$a]['intercomInterlocutorPid'] == $inst->ownerPid) return -1;
+			//		if ($inst->mastersThreadSpecificData[$b]['intercomInterlocutorPid'] == $inst->ownerPid) return 1;
+			//		return $inst->mastersThreadSpecificData[$a]['dispatchPriority'] < $inst->mastersThreadSpecificData[$b]['dispatchPriority'];
+			//	}
+			//);
 
 			$inst->intercomInterlocutorPid = &$NULL;
 			$inst->intercomRead = &$NULL;
@@ -872,51 +957,55 @@ class GPhpThreadCriticalSection // {{{
 		// 1. instances with threads with the highest dispatch priority
 		// 0. instances with the most threads inside
 
-		$instCrtdEver = &self::$instancesCreatedEverAArr;
-		uksort($instCrtdEver,
-			function ($a, $b) use ($instCrtdEver) {
-				// the locker thread is with highest priority
-				if ($instCrtdEver[$a]->mastersThreadSpecificData['intercomInterlocutorPid'] == $instCrtdEver[$a]->ownerPid) return -1;
-				if ($instCrtdEver[$b]->mastersThreadSpecificData['intercomInterlocutorPid'] == $instCrtdEver[$b]->ownerPid) return 1;
+		self::$bindStaticVariable = &self::$instancesCreatedEverAArr;
+		uksort(self::$bindStaticVariable,
+			array('GPhpThreadCriticalSection', 'sortByLockDispatchPriorityAndMostThreadsInside'));
 
-				// deal with the case of critical sections with no threads
-				if (!empty($instCrtdEver[$a]->mastersThreadSpecificData) && empty($instCrtdEver[$b]->mastersThreadSpecificData)) { return -1; }     // a
-				else if (empty($instCrtdEver[$a]->mastersThreadSpecificData) && !empty($instCrtdEver[$b]->mastersThreadSpecificData)) { return 1; } // b
-				else if (empty($instCrtdEver[$b]->mastersThreadSpecificData) && empty($instCrtdEver[$b]->mastersThreadSpecificData)) { return 0; }  // a
-
-				// gather the thread dispatch priorities for the compared critical sections
-
-				$dispPriorTableA = array(); // priority value => occurrences count
-				$dispPriorTableB = array(); // priority value => occurrences count
-
-				foreach ($instCrtdEver[$a]->mastersThreadSpecificData as $thrdSpecificData)
-					@$dispPriorTableA[$thrdSpecificData['dispatchPriority']] += 1;
-
-				foreach ($instCrtdEver[$b]->mastersThreadSpecificData as $thrdSpecificData)
-					@$dispPriorTableB[$thrdSpecificData['dispatchPriority']] += 1;
-
-				// both critical sections have threads
-
-				// make the tables to have the same amount of keys (rows)
-				foreach ($dispPriorTableA as $key => $value)
-					@$dispPriorTableB[$key] = $dispPriorTableB[$key]; // this is done on purpose
-				foreach ($dispPriorTableB as $key => $value)
-					@$dispPriorTableA[$key] = $dispPriorTableA[$key];
-
-				ksort($dispPriorTableA);
-				ksort($dispPriorTableB);
-
-				// compare the tables while taking into account the priority
-				// and the thread count that have it per critical section
-
-				foreach ($dispPriorTableA as $key => $value) {
-					if ($value < $dispPriorTableB[$key]) { return 1; } // b
-					else if ($value > $dispPriorTableB[$key]) { return -1; } // a
-				}
-
-				return 0; // a
-			}
-		);
+		//$instCrtdEver = &self::$instancesCreatedEverAArr;
+		//uksort($instCrtdEver,
+		//	function ($a, $b) use ($instCrtdEver) {
+		//		// the locker thread is with highest priority
+		//		if ($instCrtdEver[$a]->mastersThreadSpecificData['intercomInterlocutorPid'] == $instCrtdEver[$a]->ownerPid) return -1;
+		//		if ($instCrtdEver[$b]->mastersThreadSpecificData['intercomInterlocutorPid'] == $instCrtdEver[$b]->ownerPid) return 1;
+		//
+		//		// deal with the case of critical sections with no threads
+		//		if (!empty($instCrtdEver[$a]->mastersThreadSpecificData) && empty($instCrtdEver[$b]->mastersThreadSpecificData)) { return -1; }     // a
+		//		else if (empty($instCrtdEver[$a]->mastersThreadSpecificData) && !empty($instCrtdEver[$b]->mastersThreadSpecificData)) { return 1; } // b
+		//		else if (empty($instCrtdEver[$b]->mastersThreadSpecificData) && empty($instCrtdEver[$b]->mastersThreadSpecificData)) { return 0; }  // a
+		//
+		//		// gather the thread dispatch priorities for the compared critical sections
+		//
+		//		$dispPriorTableA = array(); // priority value => occurrences count
+		//		$dispPriorTableB = array(); // priority value => occurrences count
+		//
+		//		foreach ($instCrtdEver[$a]->mastersThreadSpecificData as $thrdSpecificData)
+		//			@$dispPriorTableA[$thrdSpecificData['dispatchPriority']] += 1;
+		//
+		//		foreach ($instCrtdEver[$b]->mastersThreadSpecificData as $thrdSpecificData)
+		//			@$dispPriorTableB[$thrdSpecificData['dispatchPriority']] += 1;
+		//
+		//		// both critical sections have threads
+		//
+		//		// make the tables to have the same amount of keys (rows)
+		//		foreach ($dispPriorTableA as $key => $value)
+		//			@$dispPriorTableB[$key] = $dispPriorTableB[$key]; // this is done on purpose
+		//		foreach ($dispPriorTableB as $key => $value)
+		//			@$dispPriorTableA[$key] = $dispPriorTableA[$key];
+		//
+		//		ksort($dispPriorTableA);
+		//		ksort($dispPriorTableB);
+		//
+		//		// compare the tables while taking into account the priority
+		//		// and the thread count that have it per critical section
+		//
+		//		foreach ($dispPriorTableA as $key => $value) {
+		//			if ($value < $dispPriorTableB[$key]) { return 1; } // b
+		//			else if ($value > $dispPriorTableB[$key]) { return -1; } // a
+		//		}
+		//
+		//		return 0; // a
+		//	}
+		//);
 
 	} // }}}
 
@@ -1384,6 +1473,7 @@ final class GPhpThreadNotCloneableContainer implements \Serializable // {{{
 	}
 } // }}}
 
+
 /**
  * A wrapper providing RAII mechanism for locking and unlocking
  * purposes of a critical section objects and a similar ones.
@@ -1514,6 +1604,7 @@ class GPhpThreadLockGuard implements \Serializable // {{{
 		return 'GPhpThreadLockGuard';
 	}
 } // }}}
+
 
 /**
  * A heavy thread creation and manipulation class.

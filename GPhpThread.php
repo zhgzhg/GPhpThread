@@ -21,6 +21,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ *
+ * @author zhgzhg @ github.com
+ * @version GIT: $Id$ 1.0.0
+ * @copyright zhgzhg, 2017
  */
 
 // define("DEBUG_MODE", true);
@@ -257,8 +261,14 @@ class GPhpThreadCriticalSection // {{{
 	private $dispatchPriority = 0;
 	// ===========================================
 
-	private $bindVariable; // special variable used in PHP 5.3 to emulate a context-specific use operator with lambdas
-	private static $bindStaticVariable; // special variable used in PHP 5.3 to emulate a context-specific use operator with lambdas
+	/**
+	 * @internal Special variable used in PHP 5.3 to emulate a context-specific use operator with lambdas
+	 */
+	private $bindVariable;
+	/**
+	 * @internal Special variable used in PHP 5.3 to emulate a context-specific use operator with lambdas
+	 */
+	private static $bindStaticVariable;
 
 	/** @internal */
 	private static $ADDORUPDATESYN = '00', $ADDORUPDATEACK = '01', $ADDORUPDATENACK = '02',
