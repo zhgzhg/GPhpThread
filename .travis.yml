@@ -1,20 +1,44 @@
 language: php
 
-dist: precise
-sudo: required
-
-php:
-  - 5.3
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
-  - 7.1
-  - 7.2
-  - 7.3
-
-matrix:
+jobs:
   fast_finish: false
+  include:
+    - os: linux
+      dist: precise
+      php: 5.3
+      sudo: required
+    - os: linux
+      dist: trusty
+      php: 5.4
+      sudo: required
+    - os: linux
+      dist: trusty
+      php: 5.5
+      sudo: required
+    - os: linux
+      dist: trusty
+      php: 5.6
+      sudo: required
+    - os: linux
+      dist: xenial
+      php: 7.0
+      sudo: required
+    - os: linux
+      dist: xenial
+      php: 7.1
+      sudo: required
+    - os: linux
+      dist: xenial
+      php: 7.2
+      sudo: required
+    - os: linux
+      dist: xenial
+      php: 7.3
+      sudo: required
+    - os: linux
+      dist: bionic
+      php: 7.4
+      sudo: required
 
 before_install:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
