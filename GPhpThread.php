@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 zhgzhg
+ * Copyright (c) 2020 zhgzhg
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,8 +23,8 @@
  * SOFTWARE.
  *
  * @author zhgzhg @ github.com
- * @version GIT: $Id$ 1.0.0
- * @copyright zhgzhg, 2017
+ * @version GIT: $Id$ 1.0.1
+ * @copyright zhgzhg, 2020
  */
 
 // define("DEBUG_MODE", true);
@@ -1550,6 +1550,24 @@ class GPhpThreadLockGuard implements \Serializable // {{{
 	 */
 	public final function unserialize($data, $options = array()) {
 		return false;
+	}
+
+	/**
+	 * PHP 7.4+ alternative serialization technique
+	 * @internal
+	 * @return string Always an empty array.
+	 */
+	public final function __serialize() {
+		return array();
+	}
+
+	/**
+	 * PHP 7.4+ alternative unserialization technique
+	 * @internal
+	 * @return void
+	 */
+	public final function __unserialize($dataArr) {
+		// shall always return nothing
 	}
 
 	/**
