@@ -9,34 +9,35 @@
         <output>Documentation</output>
     </paths>
 
-	<versions>
-		<version>
-			<api format="php">
-				<markers>
-					<marker>TODO</marker>
-					<marker>FIXME</marker>
-					<marker>CHECKME</marker>
-					<marker>REMOVEME</marker>
-					<marker>CHANGEME</marker>
-				</markers>
-				<extensions>
-					<extension>php</extension>
-				</extensions>
-				<source>
-					<path>.</path>
-				</source>
-				<ignore>
-					<path>tests</path>
-					<path>examples</path>
-				</ignore>
-				<include-source>true</include-source>
-				<examples>
-					<paths>
-						<path>examples/*</path>
-					</paths>
-				</examples>
-			</api>
-		</version>
+    <versions>
+        <version>
+            <api format="php">
+                <markers>
+                    <marker>TODO</marker>
+                    <marker>FIXME</marker>
+                    <marker>CHECKME</marker>
+                    <marker>REMOVEME</marker>
+                    <marker>CHANGEME</marker>
+                </markers>
+                <extensions>
+                    <extension>php</extension>
+                </extensions>
+                <source>
+                    <path>.</path>
+                </source>
+                <ignore>
+                    <path>tests</path>
+                    <path>examples</path>
+                    <path>vendor</path>
+                </ignore>
+                <include-source>true</include-source>
+                <examples>
+                    <paths>
+                        <path>examples/*</path>
+                    </paths>
+                </examples>
+            </api>
+        </version>
     </versions>
 
 

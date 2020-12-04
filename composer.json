@@ -8,10 +8,11 @@
         "async",
         "asynchronous",
         "parallel",
+        "promise",
         "pcntl",
         "posix",
         "fork",
-        "shell"        
+        "shell"
     ],
     "homepage": "https://github.com/zhgzhg/gphpthread",
     "license": "MIT",
