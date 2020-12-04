@@ -77,15 +77,14 @@ echo "Director " . getmypid() . " is done!\n";
 ```
 
 For more information see the files inside "examples" and "tests"
-directories. An html documentation is available inside "Documentation"
-directory.
+directories. An html documentation is available at [zhgzhg.github.io/GPhpThread/](https://zhgzhg.github.io/GPhpThread/)
 
 Installation
 ------------
 
 You can use composer to integrate the library in you project:
 
-	php composer.phar require zhgzhg/gphpthread:1.0.1
+	php composer.phar require zhgzhg/gphpthread:1.0.2
 
 Alternatively you can also manually download GPhpThread.php file and
 place it in your project's directory.
