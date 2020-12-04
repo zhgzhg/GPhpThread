@@ -55,8 +55,8 @@ before_install:
 
 install:
   - composer install
-  - if [ ! -f "downloads/phpDocumentor.phar" ]; then
-      mkdir -p downloads
+  - if [[ -v DOCUMENTATION && ! -f "downloads/phpDocumentor.phar" ]]; then
+      mkdir -p downloads ;
       curl -L -o ./downloads/phpDocumentor.phar https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.0.0/phpDocumentor.phar ;
     fi
 
@@ -64,8 +64,8 @@ script:
   - php ./tests/run_all.php
 
 after_success:
-  - cp downloads/phpDocumentor.phar .
-  - if [ -v DOCUMANTATION ]; then
+  - if [ -v DOCUMENTATION ]; then
+      cp downloads/phpDocumentor.phar . ;
       php phpDocumentor.phar -s graphs.enabled=true ;
     fi
 
