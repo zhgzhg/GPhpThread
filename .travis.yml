@@ -46,7 +46,7 @@ jobs:
       env: DOCUMENTATION=1
     - os: linux
       dist: bionic
-      php: 8.0
+      php: 8.0.0
       sudo: required
 
 before_install:
