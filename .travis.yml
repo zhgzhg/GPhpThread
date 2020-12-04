@@ -1,5 +1,9 @@
 language: php
 
+cache:
+  directories:
+    - downloads
+
 jobs:
   fast_finish: false
   include:
@@ -39,6 +43,7 @@ jobs:
       dist: bionic
       php: 7.4
       sudo: required
+      env: DOCUMENTATION=1
     - os: linux
       dist: bionic
       php: 8.0
@@ -50,7 +55,26 @@ before_install:
 
 install:
   - composer install
+  - if [ ! -f "downloads/phpDocumentor.phar" ]; then
+      mkdir -p downloads
+      curl -L -o ./downloads/phpDocumentor.phar https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.0.0/phpDocumentor.phar ;
+    fi
 
 script:
   - php ./tests/run_all.php
+
+after_success:
+  - cp downloads/phpDocumentor.phar .
+  - if [ -v DOCUMANTATION ]; then
+      php phpDocumentor.phar -s graphs.enabled=true ;
+    fi
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  keep_history: false
+  local_dir: Documentation
+  on:
+    branch: gh-pages
 
