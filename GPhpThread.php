@@ -23,7 +23,7 @@
  * SOFTWARE.
  *
  * @author zhgzhg @ github.com
- * @version GIT: $Id$ 1.0.1
+ * @version GIT: $Id$ 1.0.2
  * @copyright zhgzhg, 2020
  */
 
@@ -781,7 +781,7 @@ class GPhpThreadCriticalSection // {{{
 	private function sortByLockAndDispatchPriority($a, $b) {
 		if ($this->bindVariable->mastersThreadSpecificData[$a]['intercomInterlocutorPid'] == $this->bindVariable->ownerPid) return -1;
 		if ($this->bindVariable->mastersThreadSpecificData[$b]['intercomInterlocutorPid'] == $this->bindVariable->ownerPid) return 1;
-		return $this->bindVariable->mastersThreadSpecificData[$a]['dispatchPriority'] < $this->bindVariable->mastersThreadSpecificData[$b]['dispatchPriority'];
+		return (int)($this->bindVariable->mastersThreadSpecificData[$a]['dispatchPriority'] < $this->bindVariable->mastersThreadSpecificData[$b]['dispatchPriority']);
 	}
 
 	/**
@@ -1402,7 +1402,7 @@ final class GPhpThreadNotCloneableContainer implements \Serializable // {{{
 	}
 
 	/** @internal */
-	private final function __clone() {
+	private function __clone() {
 		throw new GPhpThreadException("Not allowed cloning of GPhpThreadNotCloneableContainer!");
 	}
 
@@ -1530,7 +1530,7 @@ class GPhpThreadLockGuard implements \Serializable // {{{
 	}
 
 	/** @internal */
-	private final function __clone() {
+	private function __clone() {
 		throw new \GPhpThreadException('Attempted to clone GPhpThreadLockGuard!');
 	}
 
