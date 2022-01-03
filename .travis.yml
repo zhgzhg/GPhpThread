@@ -55,8 +55,8 @@ jobs:
 
 before_install:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - if [[ -v SKIP_COMPOSER_UPDATE ]]; then
-      composer self-update
+  - if [ -v SKIP_COMPOSER_UPDATE ]; then
+      composer self-update ;
     fi
 
 install:
