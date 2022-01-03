@@ -46,8 +46,11 @@ jobs:
       env: DOCUMENTATION=1
     - os: linux
       dist: bionic
-      php: 8.0.0
+      php: 8.0
       sudo: required
+    - os: linux
+      dist: bionic
+      php: 8.1
 
 before_install:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
@@ -57,7 +60,7 @@ install:
   - composer install
   - if [[ -v DOCUMENTATION && ! -f "downloads/phpDocumentor.phar" ]]; then
       mkdir -p downloads ;
-      curl -L -o ./downloads/phpDocumentor.phar https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.0.0/phpDocumentor.phar ;
+      curl -L -o ./downloads/phpDocumentor.phar https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.3.0/phpDocumentor.phar ;
     fi
 
 script:
