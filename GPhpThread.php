@@ -463,7 +463,7 @@ class GPhpThreadCriticalSection // {{{
 	private function encodeMessage($msg, $name, $value) { // {{{
 		// 2 decimal digits message code, 10 decimal digits PID,
 		// 4 decimal digits name length, name, data
-		return $msg . sprintf('%010d%04d', $this->myPid, strlen($name)) . $name . serialize($value);
+		return $msg . sprintf('%010d%04d', $this->myPid, ($name !== null ? strlen($name) : 0)) . $name . serialize($value);
 	} // }}}
 
 	/**
