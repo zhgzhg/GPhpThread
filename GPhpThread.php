@@ -1435,7 +1435,7 @@ final class GPhpThreadNotCloneableContainer implements \Serializable // {{{
 	 * @return string Always an empty array.
 	 */
 	public final function __serialize() {
-		this->serialize();
+		$this->serialize();
 		return array(); // unlikely
 	}
 
@@ -1446,7 +1446,7 @@ final class GPhpThreadNotCloneableContainer implements \Serializable // {{{
 	 * @return void
 	 */
 	public final function __unserialize($dataArr) {
-		this->unserialize(null);
+		$this->unserialize(null);
 	}
 
 	/**
