@@ -57,7 +57,7 @@ before_install: true
 
 install:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - if [ -v SKIP_COMPOSER_UPDATE ]; then
+  - if [ -z SKIP_COMPOSER_UPDATE ]; then
       composer self-update ;
       composer install ;
     fi
