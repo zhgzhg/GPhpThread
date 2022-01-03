@@ -64,6 +64,7 @@ install:
   - if [[ -v DOCUMENTATION && ! -f "downloads/phpDocumentor.phar" ]]; then
       mkdir -p downloads ;
       curl -L -o ./downloads/phpDocumentor.phar https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.3.0/phpDocumentor.phar ;
+      apt-get update && apt-get install -y graphviz plantuml ;
     fi
 
 script:
