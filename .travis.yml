@@ -11,6 +11,7 @@ jobs:
       dist: precise
       php: 5.3
       sudo: required
+      env: SKIP_COMPOSER_UPDATE=1
     - os: linux
       dist: trusty
       php: 5.4
@@ -49,12 +50,14 @@ jobs:
       php: 8.0
       sudo: required
     - os: linux
-      dist: bionic
+      dist: focal
       php: 8.1
 
 before_install:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - composer self-update
+  - if [[ -v SKIP_COMPOSER_UPDATE ]]; then
+      composer self-update
+    fi
 
 install:
   - composer install
