@@ -41,5 +41,5 @@
     </versions>
 
 
-    <template name="clean" />
+    <template name="default" />
 </phpdocumentor>
