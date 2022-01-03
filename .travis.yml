@@ -60,11 +60,6 @@ before_install:
     fi
 
 install:
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - if [ -z SKIP_COMPOSER_UPDATE ]; then
-      composer self-update ;
-      composer install ;
-    fi
   - if [[ -v DOCUMENTATION && ! -f "downloads/phpDocumentor.phar" ]]; then
       mkdir -p downloads ;
       curl -L -o ./downloads/phpDocumentor.phar https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.3.0/phpDocumentor.phar ;
