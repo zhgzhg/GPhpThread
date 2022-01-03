@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2020 zhgzhg
+ * Copyright (c) 2022 zhgzhg
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,8 +23,8 @@
  * SOFTWARE.
  *
  * @author zhgzhg @ github.com
- * @version GIT: $Id$ 1.0.2
- * @copyright zhgzhg, 2020
+ * @version GIT: $Id$ 1.0.3
+ * @copyright zhgzhg, 2022
  */
 
 // define("DEBUG_MODE", true);
@@ -1413,7 +1413,7 @@ final class GPhpThreadNotCloneableContainer implements \Serializable // {{{
 	 */
 	public final function serialize() {
 		throw new GPhpThreadException("Not allowed cloning of GPhpThreadNotCloneableContainer!");
-		return '';
+		return ''; // unlikely
 	}
 
 	/**
@@ -1426,6 +1426,27 @@ final class GPhpThreadNotCloneableContainer implements \Serializable // {{{
 	public final function unserialize($data, $options = array()) {
 		throw new GPhpThreadException("Not allowed cloning of GPhpThreadNotCloneableContainer!");
 		return false;
+	}
+	
+	/**
+	 * PHP 7.4+ alternative serialization technique
+	 * @internal
+	 * @throws \GPhpThreadException Does that every time.
+	 * @return string Always an empty array.
+	 */
+	public final function __serialize() {
+		this->serialize();
+		return array(); // unlikely
+	}
+
+	/**
+	 * PHP 7.4+ alternative unserialization technique
+	 * @throws \GPhpThreadException Does that every time.
+	 * @internal
+	 * @return void
+	 */
+	public final function __unserialize($dataArr) {
+		this->unserialize(null);
 	}
 
 	/**
