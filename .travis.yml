@@ -52,6 +52,9 @@ jobs:
     - os: linux
       dist: focal
       php: 8.1.0
+    - os: linux
+      dist: jammy
+      php: 8.2
 
 before_install:
   - if [ -v DOCUMENTATION ]; then
@@ -62,7 +65,7 @@ before_install:
 install:
   - if [[ -v DOCUMENTATION && ! -f "downloads/phpDocumentor.phar" ]]; then
       mkdir -p downloads ;
-      curl -L -o ./downloads/phpDocumentor.phar https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.3.0/phpDocumentor.phar ;
+      curl -L -o ./downloads/phpDocumentor.phar https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.3.1/phpDocumentor.phar ;
     fi
 
 script:
