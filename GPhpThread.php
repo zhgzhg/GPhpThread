@@ -23,8 +23,8 @@
  * SOFTWARE.
  *
  * @author zhgzhg @ github.com
- * @version GIT: $Id$ 1.0.3
- * @copyright zhgzhg, 2022
+ * @version GIT: $Id$ 1.0.4
+ * @copyright zhgzhg, 2023
  */
 
 // define("DEBUG_MODE", true);
@@ -239,6 +239,8 @@ class GPhpThreadCriticalSection // {{{
 
 	/** @internal */
 	private $creatorPid;
+	/** @internal */
+	private $pipeDir = '';
 	/** @internal */
 	private $ownerPid = false;  // the thread PID owning the critical section
 	/** @internal */
