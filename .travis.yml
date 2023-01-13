@@ -53,7 +53,7 @@ jobs:
       dist: focal
       php: 8.1.0
     - os: linux
-      dist: jammy
+      dist: focal
       php: 8.2
 
 before_install:
