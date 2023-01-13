@@ -61,6 +61,10 @@ before_install:
       sudo apt-get update ;
       sudo apt-get install -y graphviz plantuml ;
     fi
+  - if [ $TRAVIS_DIST == "focal" ]; then
+      sudo apt-get update ;
+      apt-get install -y libonig ;
+    fi
 
 install:
   - if [[ -v DOCUMENTATION && ! -f "downloads/phpDocumentor.phar" ]]; then
