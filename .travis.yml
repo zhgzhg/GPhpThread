@@ -54,7 +54,7 @@ jobs:
       php: 8.1.0
     - os: linux
       dist: focal
-      php: 8.2
+      php: 8.2.0
 
 before_install:
   - if [ -v DOCUMENTATION ]; then
