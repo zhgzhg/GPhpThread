@@ -1,0 +1,63 @@
+name: Build
+on:
+  push:
+    branches: [ '*', '!gh-pages' ]
+  pull_request:
+    branches: [ '*', '!gh-pages' ]
+
+jobs:
+  test_php_versions:
+    name: GPHPThread on PHP ${{ matrix.php-version }}, ${{ matrix.operating-system }}
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [ubuntu-latest]
+        php-version: ["5.3", "5.4", "5.5", "5.6", "7.0", "7.1", "7.2", "7.3", "7.4", "8.0", "8.1", "8.2", "8.3"]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - name: Run PHP Tests
+        run: |
+          php tests/run_all.php
+
+      - id: cache_phpdocumentor
+        if: ${{ matrix.php-version == '8.2' }}
+        uses: actions/cache@v3
+        with:
+          path: |
+            phpDocumentor.phar
+          key: phpDocumentor-${{ runner.os }}-${{ hashFiles('phpDocumentor.phar') }}
+
+      - name: Download phpDocumentor.phar
+        if: ${{ matrix.php-version == '8.2' }}
+        run: |
+          if [ ! -f phpDocumentor.phar ]; then
+            curl -L -o ./phpDocumentor.phar https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.4.3/phpDocumentor.phar ;
+          fi
+
+      - name: Run PHPDocumentor
+        if: ${{ matrix.php-version == '8.2' }}
+        run: |
+          if [ -f phpDocumentor.phar ]; then
+            sudo apt update ;
+            sudo apt install -y graphviz plantuml ;
+            php phpDocumentor.phar --setting=graphs.enabled=true ;
+          else
+            echo "phpDocumentor.phar not found. Please check the download step." ;
+            exit 1 ;
+          fi
+
+      - name: Upload Documentation
+        uses: JamesIves/github-pages-deploy-action@v4
+        if: ${{ matrix.php-version == '8.2' && success() == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+        with:
+          branch: gh-pages
+          folder: 'Documentation'
+          single-commit: true
