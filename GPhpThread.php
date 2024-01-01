@@ -2,7 +2,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2023 zhgzhg
+ * Copyright (c) 2024 zhgzhg
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,8 +23,8 @@
  * SOFTWARE.
  *
  * @author zhgzhg @ github.com
- * @version GIT: $Id$ 1.0.4
- * @copyright zhgzhg, 2023
+ * @version 1.0.5
+ * @copyright zhgzhg, 2024
  */
 
 // define("DEBUG_MODE", true);
@@ -418,7 +418,7 @@ class GPhpThreadCriticalSection // {{{
 	 * Cleans pipe files garbage left from any ungracefully terminated instances.
 	 * @return int The total number of unused, cleaned pipe garbage files.
 	 */
-	public function cleanPipeGarbage() {
+	public function cleanPipeGarbage() { // {{{
 		$i = 0;
 		$dirFp = @opendir($this->pipeDir);
 		if ($dirFp !== false) {
@@ -436,7 +436,7 @@ class GPhpThreadCriticalSection // {{{
 			closedir($dirFp);
 		}
 		return $i;
-	}
+	} // }}}
 
 	/**
 	 * Finalization of a thread instance that ended and soon will be destroyed.
@@ -773,18 +773,29 @@ class GPhpThreadCriticalSection // {{{
 
 
 	/**
-	 * Sort by occurred lock and dispatch priority. This is workaround
+	 * Sort by occurred lock and dispatch priority. This is a workaround
 	 * method required for PHP 5.3 and relies on an initialized
-	 * $bindVariable. inside this class.
+	 * $bindVariable inside this class.
 	 * @param mixed $a The first key to be taken into account.
 	 * @param mixed $b The second key to be taken into account.
 	 * @return int -1, 0 or 1 depending on which key is more preferable.
 	 */
-	private function sortByLockAndDispatchPriority($a, $b) {
-		if ($this->bindVariable->mastersThreadSpecificData[$a]['intercomInterlocutorPid'] == $this->bindVariable->ownerPid) return -1;
-		if ($this->bindVariable->mastersThreadSpecificData[$b]['intercomInterlocutorPid'] == $this->bindVariable->ownerPid) return 1;
+	private function sortByLockAndDispatchPriority($a, $b) { // {{{
+		$presentIndexA = false;
+		if (isset($this->bindVariable->mastersThreadSpecificData[$a])) {
+			if ($this->bindVariable->mastersThreadSpecificData[$a]['intercomInterlocutorPid'] === $this->bindVariable->ownerPid) return -1;
+			$presentIndexA = true;
+		}
+		$presentIndexB = false;
+		if (isset($this->bindVariable->mastersThreadSpecificData[$b])) {
+			if ($this->bindVariable->mastersThreadSpecificData[$b]['intercomInterlocutorPid'] === $this->bindVariable->ownerPid) return 1;
+			$presentIndexB = true;
+		}
+		if (!($presentIndexA && $presentIndexB)) {
+			return ($presentIndexA ? -1 : (int)$presentIndexB);
+		}
 		return (int)($this->bindVariable->mastersThreadSpecificData[$a]['dispatchPriority'] < $this->bindVariable->mastersThreadSpecificData[$b]['dispatchPriority']);
-	}
+	} // }}}
 
 	/**
 	 * Sort by occurred lock, dispatch priority and most threads using
@@ -795,7 +806,7 @@ class GPhpThreadCriticalSection // {{{
 	 * @param mixed $b The second key to be taken into account.
 	 * @return int -1, 0 or 1 depending on which key is more preferable.
 	 */
-	 private static function sortByLockDispatchPriorityAndMostThreadsInside($a, $b) {
+	 private static function sortByLockDispatchPriorityAndMostThreadsInside($a, $b) { // {{{
 		// the locker thread is with highest priority
 		if (self::$bindStaticVariable[$a]->mastersThreadSpecificData['intercomInterlocutorPid'] == self::$bindStaticVariable[$a]->ownerPid) return -1;
 		if (self::$bindStaticVariable[$b]->mastersThreadSpecificData['intercomInterlocutorPid'] == self::$bindStaticVariable[$b]->ownerPid) return 1;
@@ -836,7 +847,7 @@ class GPhpThreadCriticalSection // {{{
 		}
 
 		return 0; // a
-	 }
+	 } // }}}
 
 	/**
 	 * Dispatcher responsible for the thread intercommunication and communication with their parent process.

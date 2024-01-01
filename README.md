@@ -1,7 +1,7 @@
 GPhpThread - Generic PHP Threads library
 ========================================
 
-![build status badge](https://travis-ci.com/zhgzhg/GPhpThread.svg?branch=master "Build status")
+![build status badge](https://github.com/zhgzhg/GPhpThread/actions/workflows/build.yml/badge.svg?branch=master "Build status")
 
 A heavy threads library implementation written using only pure PHP.
 A fully functional component that might come in handy when the host
@@ -84,7 +84,7 @@ Installation
 
 You can use composer to integrate the library in you project:
 
-	php composer.phar require zhgzhg/gphpthread:^1.0.4
+	php composer.phar require zhgzhg/gphpthread:^1.0.5
 
 Alternatively you can also manually download GPhpThread.php file and
 place it in your project's directory.
