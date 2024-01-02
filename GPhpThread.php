@@ -23,7 +23,7 @@
  * SOFTWARE.
  *
  * @author zhgzhg @ github.com
- * @version 1.0.5
+ * @version 1.0.6
  * @copyright zhgzhg, 2024
  */
 
@@ -1509,9 +1509,11 @@ final class GPhpThreadNotCloneableContainer implements \Serializable // {{{
 
 
 /**
- * A wrapper providing RAII mechanism for locking and unlocking
- * purposes of a critical section objects and a similar ones.
+ * A wrapper providing RAII mechanism for locking and unlocking purposes
+ * of critical section objects or similar, which also accounts for the
+ * thread from which it has been created.
  * @see \GPhpThreadCriticalSection
+ * @see \GPhpThreadNotCloneableContainer
  * @throws \GPhpThreadException When improperly passed/configured a critical section or clone attempts are made.
  * @api
  */
@@ -1523,6 +1525,8 @@ class GPhpThreadLockGuard implements \Serializable // {{{
 	private $unlockMethod = 'unlock';
 	/** @var string $unlockMethodsParams The parameters passed to the critical section's unlock method during an unlock. */
 	private $unlockMethodsParams = array();
+	/** @var \GPhpThreadNotClonableContainer $unlockOnceProtector Used to prevent unlocking of the same critical section from multiple heavy threads. */
+	private $unlockOnceProtector = NULL;
 
 	/**
 	* Constructor. Immediately locks the passed critical section.
@@ -1549,6 +1553,8 @@ class GPhpThreadLockGuard implements \Serializable // {{{
 
 		$this->unlockMethod = $unlockMethod;
 		$this->unlockMethodsParams = $unlockMethodsParams;
+		$this->unlockOnceProtector = new \GPhpThreadNotCloneableContainer();
+		\GPhpThread::isInGPhpThread($this->unlockOnceProtector);
 
 		call_user_func_array(array($this->criticalSectionObj, $lockMethod), $lockMethodParams);
 	}
@@ -1560,7 +1566,9 @@ class GPhpThreadLockGuard implements \Serializable // {{{
 		if (!is_object($this->criticalSectionObj)) {
 			throw new \GPhpThreadException('Uninitialized &$criticalSectionObj attempted to be unlocked via GPhpThreadLockGuard!');
 		}
-		call_user_func_array(array($this->criticalSectionObj, $this->unlockMethod), $this->unlockMethodsParams);
+		if (!$this->unlockOnceProtector->export()) {
+			call_user_func_array(array($this->criticalSectionObj, $this->unlockMethod), $this->unlockMethodsParams);
+		}
 	}
 
 	/** @internal */
