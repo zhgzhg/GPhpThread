@@ -23,8 +23,8 @@
  * SOFTWARE.
  *
  * @author zhgzhg @ github.com
- * @version 1.0.6
- * @copyright zhgzhg, 2024
+ * @version 1.0.7
+ * @copyright zhgzhg, 2025
  */
 
 // define("DEBUG_MODE", true);
@@ -871,7 +871,7 @@ class GPhpThreadCriticalSection // {{{
 
 			foreach ($inst->mastersThreadSpecificData as $threadId => &$specificDataAArr) { // loop though the threads per each instance in GPhpCriticalSection
 				// checking for child signals informing that a thread has exited or was paused
-				while (pcntl_sigtimedwait($sigSet, $sigInfo) == SIGCHLD) {
+				while (pcntl_sigtimedwait($sigSet, $sigInfo, 0, 59) == SIGCHLD) {
 					if ($sigInfo['code'] >= 0 && $sigInfo['code'] <= 3) { // child has exited
 						self::$threadsForRemovalAArr[$sigInfo['pid']] = $sigInfo['pid'];
 					} else if ($sigInfo['code'] == 5) { // stopped (paused) child
