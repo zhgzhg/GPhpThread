@@ -1314,14 +1314,14 @@ class GPhpThreadCriticalSection // {{{
 	 */
 	public function getResourceValue($name) { // {{{
 		if (!$this->doIOwnIt())
-			throw new \GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Not owned critical section!');
+			throw new GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Not owned critical section!');
 
 		if ($this->myPid == $this->creatorPid) { // local resource read request ; added to keep a consistency with getResourceValueFast
 			return $this->getResourceValueFast($name);
 		}
 
 		if (!$this->updateDataContainer(self::$READACT, $name, null))
-			throw new \GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Error while retrieving the value!');
+			throw new GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Error while retrieving the value!');
 
 		return $this->sharedData['rel'][$name];
 	} // }}}
@@ -1338,7 +1338,7 @@ class GPhpThreadCriticalSection // {{{
 		}
 
 		if (!$this->updateDataContainer(self::$UNRELREADACT, $name, null))
-			throw new \GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Error while retrieving the value!');
+			throw new GPhpThreadException('[' . getmypid() . '][' . $this->uniqueId . '] Error while retrieving the value!');
 
 		return $this->sharedData['unrel'][$name];
 	} // }}}
@@ -1401,7 +1401,7 @@ final class GPhpThreadNotCloneableContainer implements \Serializable // {{{
 	 */
 	public function import($value) {
 		if ($value instanceof self) {
-			throw new \GPhpThreadException("Not allowed cloning of GPhpThreadNotCloneableContainer!");
+			throw new GPhpThreadException("Not allowed cloning of GPhpThreadNotCloneableContainer!");
 		}
 		$this->variable = $value;
 	}
@@ -1543,12 +1543,12 @@ class GPhpThreadLockGuard implements \Serializable // {{{
 		$this->criticalSectionObj = &$criticalSectionObj;
 
 		if (!is_object($this->criticalSectionObj)) {
-			throw new \GPhpThreadException('Uninitialized critical section passed to GPhpThreadLockGuard!');
+			throw new GPhpThreadException('Uninitialized critical section passed to GPhpThreadLockGuard!');
 		}
 		if (empty($lockMethod) || empty($unlockMethod) ||
 			!method_exists($this->criticalSectionObj, $lockMethod) ||
 			!method_exists($this->criticalSectionObj, $unlockMethod)) {
-			throw new \GPhpThreadException('Not existing lock/unlock methods in &$criticalSectionObj!');
+			throw new GPhpThreadException('Not existing lock/unlock methods in &$criticalSectionObj!');
 		}
 
 		$this->unlockMethod = $unlockMethod;
@@ -1564,7 +1564,7 @@ class GPhpThreadLockGuard implements \Serializable // {{{
 	*/
 	public final function __destruct() {
 		if (!is_object($this->criticalSectionObj)) {
-			throw new \GPhpThreadException('Uninitialized &$criticalSectionObj attempted to be unlocked via GPhpThreadLockGuard!');
+			throw new GPhpThreadException('Uninitialized &$criticalSectionObj attempted to be unlocked via GPhpThreadLockGuard!');
 		}
 		if (!$this->unlockOnceProtector->export()) {
 			call_user_func_array(array($this->criticalSectionObj, $this->unlockMethod), $this->unlockMethodsParams);
@@ -1573,7 +1573,7 @@ class GPhpThreadLockGuard implements \Serializable // {{{
 
 	/** @internal */
 	private function __clone() {
-		throw new \GPhpThreadException('Attempted to clone GPhpThreadLockGuard!');
+		throw new GPhpThreadException('Attempted to clone GPhpThreadLockGuard!');
 	}
 
 	/**
@@ -1759,7 +1759,7 @@ abstract class GPhpThread // {{{
 			return self::$seed !== 0 && self::$originPid !== 0 && self::$originPid !== getmypid();
 		}
 		if (!($isInsideGPhpThread instanceof \GPhpThreadNotCloneableContainer)) {
-			throw new \GPhpThreadException("Not supported parameter type - must be NULL or GPhpThreadNotCloneableContainer");
+			throw new GPhpThreadException("Not supported parameter type - must be NULL or GPhpThreadNotCloneableContainer");
 		}
 		$isInsideGPhpThread->import(false);
 		self::$originDynamicDataArr[((string)$isInsideGPhpThread)] = $isInsideGPhpThread;
