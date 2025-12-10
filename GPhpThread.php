@@ -41,9 +41,9 @@ class GPhpThreadException extends \Exception // {{{
 	 * Constructor.
 	 * @param string $msg Exception message.
 	 * @param int $code Exception code number.
-	 * @param Exception $previous The previous exception used for the exception chaining.
+	 * @param \Throwable|\Exception|null $previous The previous exception used for the exception chaining.
 	 */
-	public function __construct($msg, $code = 0, \Exception $previous = NULL) {
+	public function __construct($msg, $code = 0, $previous = NULL) {
 		parent::__construct($msg, $code, $previous);
 	}
 } // }}}
