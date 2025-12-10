@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+            <title>GPhpThread - a heavy threads implementation in pure PHP - Documentation</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="../">
+    <link rel="icon" href="images/favicon.ico"/>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/base.css">
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/template.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism-okaidia.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="js/template.js"></script>
+        <script src="js/search.js"></script>
+        <script defer src="js/searchIndex.js"></script>
+    </head>
+<body id="top">
+    <header class="phpdocumentor-header phpdocumentor-section">
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">GPhpThread - a heavy threads implementation in pure PHP - Documentation</a></h1>
+    <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
+    <label class="phpdocumentor-header__menu-icon" for="menu-button">
+        <i class="fas fa-bars"></i>
+    </label>
+    <section data-search-form class="phpdocumentor-search">
+    <label>
+        <span class="visually-hidden">Search for</span>
+        <svg class="phpdocumentor-search__icon" width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="2"/>
+            <line x1="12.4892" y1="12.2727" x2="19.1559" y2="18.9393" stroke="currentColor" stroke-width="3"/>
+        </svg>
+        <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+    </label>
+</section>
+
+    <nav class="phpdocumentor-topnav">
+    <ul class="phpdocumentor-topnav__menu">
+        </ul>
+</nav>
+</header>
+
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <input class="phpdocumentor-sidebar__menu-button" type="checkbox" id="sidebar-button" name="sidebar-button" />
+<label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
+    Menu
+</label>
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category">
+            <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Application.html" class="">Application</a>
+</h4>
+
+                        </section>
+            
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="graphs/classes.html">Class Diagram</a></h3>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
+            <li class="phpdocumentor-breadcrumb"><a href="packages/Application.html">Application</a></li>
+    </ul>
+
+    <article class="phpdocumentor-element -class">
+        <h2 class="phpdocumentor-content__title">
+    GPhpThread
+
+    
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Application.html">Application</a></li>
+                            </ul>
+        </div>
+    
+    
+    </h2>
+
+<div class="phpdocumentor-label-line">
+
+
+    <div class="phpdocumentor-label phpdocumentor-label--success"><span>Abstract</span><span>Yes</span></div>
+
+</div>
+
+        <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1677</span>
+
+            <a href="classes/GPhpThread.html#source-view.1677" class="phpdocumentor-element-found-in__source" data-line="1677" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+            <p class="phpdocumentor-summary">A heavy thread creation and manipulation class.</p>
+
+    <section class="phpdocumentor-description"><p>Provides purely implemented in php instruments for &quot;thread&quot; creation
+and manipulation. A shell access, pcntl, posix, linux OS and PHP 5.3+
+are required.</p>
+</section>
+
+
+
+
+
+<h3 id="toc">
+    Table of Contents
+    <a href="classes/GPhpThread.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h3>
+
+
+
+
+
+
+
+
+
+
+<h4 id="toc-methods">
+    Methods
+    <a href="classes/GPhpThread.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method___construct">__construct()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd>Constructor.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method___destruct">__destruct()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd>Destructor (default). It will not be called in the heavy thread if thread exit codes are disabled!</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method_BGN_HIGH_PRIOR_EXEC_BLOCK">BGN_HIGH_PRIOR_EXEC_BLOCK()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Marks the start of a code block with high execution priority.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method_END_HIGH_PRIOR_EXEC_BLOCK">END_HIGH_PRIOR_EXEC_BLOCK()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Marks the end of a code block with high execution priority.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method_getExitCode">getExitCode()</a>
+    <span>
+                                &nbsp;: int    </span>
+</dt>
+<dd>Returns the thread&#039;s exit code.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method_getPid">getPid()</a>
+    <span>
+                                &nbsp;: int|bool    </span>
+</dt>
+<dd>Returns the current thread&#039;s (process) id.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method_getPriority">getPriority()</a>
+    <span>
+                                &nbsp;: int|bool    </span>
+</dt>
+<dd>Returns the current execution priority of the thread.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method_isAlive">isAlive()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Checks if the thread is alive.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method_isInGPhpThread">isInGPhpThread()</a>
+    <span>
+                                &nbsp;: null|bool    </span>
+</dt>
+<dd>Execution protector. Recommended to be used everywhere where execution is not desired.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method_isParentAlive">isParentAlive()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Checks if the creator of the heavy thread is alive.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method_join">join()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Waits for executing thread to return.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method_pause">pause()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Pauses the execution of the thread.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method_resetThreadIdGenerator">resetThreadIdGenerator()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Resets the internal thread id generator. This can be used to allow creation of threads from another thread.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method_resume">resume()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Resumes the execution of a paused thread.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method_run">run()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Abstract method, the entry point of a particular GPhpThread inheritor implementation.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method_setPriority">setPriority()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Sets the execution priority of the thread. A super user privileges are required.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method_start">start()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Starts the thread.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThread.html#method_stop">stop()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Stops executing thread.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/GPhpThread.html#method_makeNicer">makeNicer()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>At process level decreases the niceness of a heavy &quot;thread&quot; making its priority higher. Multiple calls of the method will accumulate and increase the effect.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/GPhpThread.html#method_makeUnfriendlier">makeUnfriendlier()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>At process level increases the niceness of a heavy &quot;thread&quot; making its priority lower. Multiple calls of the method will accumulate and increase the effect.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/GPhpThread.html#method_milliSleep">milliSleep()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Suspends the thread execution for a specific amount of milliseconds, redirecting the CPU resources to somewhere else.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/GPhpThread.html#method_setExitCode">setExitCode()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Specifies the running thread&#039;s exit code when it terminates.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/GPhpThread.html#method_sleep">sleep()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Suspends the thread execution for a specific amount of time, redirecting the CPU resources to somewhere else. The total delay is the sum of all passed parameters.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GPhpThread.html#method_amIParent">amIParent()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Returns if the current process is a parent (has created thread).</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GPhpThread.html#method_notifyParentThatChildIsTerminated">notifyParentThatChildIsTerminated()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Notifies the parent of the current thread that the thread has exited.</dd>
+
+    </dl>
+
+
+
+
+        
+
+        
+
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/GPhpThread.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___construct">
+        __construct()
+        <a href="classes/GPhpThread.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1713</span>
+
+            <a href="classes/GPhpThread.html#source-view.1713" class="phpdocumentor-element-found-in__source" data-line="1713" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Constructor.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/GPhpThreadCriticalSection.html"><abbr title="\GPhpThreadCriticalSection">GPhpThreadCriticalSection</abbr></a>|null&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$criticalSection</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$allowThreadExitCodes</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$criticalSection</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/GPhpThreadCriticalSection.html"><abbr title="\GPhpThreadCriticalSection">GPhpThreadCriticalSection</abbr></a>|null</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Instance of the critical section that is going to be associated with the created thread. Variable with null value is also valid. REFERENCE type.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$allowThreadExitCodes</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Activates the support of thread exit codes. In that case the programmer needs to make sure that before the creation of a heavy thread there are no initialized objects whose destructors and particularly their multiple execution (in all the children and once in the parent) will affect the execution of the program in an undefined way.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___destruct">
+        __destruct()
+        <a href="classes/GPhpThread.html#method___destruct" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1726</span>
+
+            <a href="classes/GPhpThread.html#source-view.1726" class="phpdocumentor-element-found-in__source" data-line="1726" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Destructor (default). It will not be called in the heavy thread if thread exit codes are disabled!</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">__destruct</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static            -final        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_BGN_HIGH_PRIOR_EXEC_BLOCK">
+        BGN_HIGH_PRIOR_EXEC_BLOCK()
+        <a href="classes/GPhpThread.html#method_BGN_HIGH_PRIOR_EXEC_BLOCK" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1790</span>
+
+            <a href="classes/GPhpThread.html#source-view.1790" class="phpdocumentor-element-found-in__source" data-line="1790" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Marks the start of a code block with high execution priority.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__final">final</span>    <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">BGN_HIGH_PRIOR_EXEC_BLOCK</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static            -final        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_END_HIGH_PRIOR_EXEC_BLOCK">
+        END_HIGH_PRIOR_EXEC_BLOCK()
+        <a href="classes/GPhpThread.html#method_END_HIGH_PRIOR_EXEC_BLOCK" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1799</span>
+
+            <a href="classes/GPhpThread.html#source-view.1799" class="phpdocumentor-element-found-in__source" data-line="1799" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Marks the end of a code block with high execution priority.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__final">final</span>    <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">END_HIGH_PRIOR_EXEC_BLOCK</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                -final        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getExitCode">
+        getExitCode()
+        <a href="classes/GPhpThread.html#method_getExitCode" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1782</span>
+
+            <a href="classes/GPhpThread.html#source-view.1782" class="phpdocumentor-element-found-in__source" data-line="1782" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns the thread&#039;s exit code.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__final">final</span>            <span class="phpdocumentor-signature__name">getExitCode</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">int</span>
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getPid">
+        getPid()
+        <a href="classes/GPhpThread.html#method_getPid" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1823</span>
+
+            <a href="classes/GPhpThread.html#source-view.1823" class="phpdocumentor-element-found-in__source" data-line="1823" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns the current thread&#039;s (process) id.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getPid</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int|bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">int|bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>On success returns a number different than 0. Otherwise returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getPriority">
+        getPriority()
+        <a href="classes/GPhpThread.html#method_getPriority" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1851</span>
+
+            <a href="classes/GPhpThread.html#source-view.1851" class="phpdocumentor-element-found-in__source" data-line="1851" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns the current execution priority of the thread.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getPriority</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int|bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">int|bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>On success the priority number in the interval [-20; 20] where the lower value means higher priority. On failure returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_isAlive">
+        isAlive()
+        <a href="classes/GPhpThread.html#method_isAlive" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1865</span>
+
+            <a href="classes/GPhpThread.html#source-view.1865" class="phpdocumentor-element-found-in__source" data-line="1865" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Checks if the thread is alive.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">isAlive</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true if the thread is alive otherwise returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_isInGPhpThread">
+        isInGPhpThread()
+        <a href="classes/GPhpThread.html#method_isInGPhpThread" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1757</span>
+
+            <a href="classes/GPhpThread.html#source-view.1757" class="phpdocumentor-element-found-in__source" data-line="1757" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Execution protector. Recommended to be used everywhere where execution is not desired.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">isInGPhpThread</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">null|<a href="classes/GPhpThreadNotCloneableContainer.html"><abbr title="\GPhpThreadNotCloneableContainer">GPhpThreadNotCloneableContainer</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$isInsideGPhpThread</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">null|bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+        <section class="phpdocumentor-description"><p>For e.g. destructors which should be executed only in the master process.
+Indicates whether the place from which this method is called is a heavy thread or not.</p>
+<p>Can be used in 2 different ways. A direct way where the supplied parameter points to NULL.
+In this case the result is immediately returned, but the user will not be able to ignore
+the effect in any &quot;inner&quot; threads without using resetThreadIdGenerator() method which on the
+other hand will affect any previously created object instances (before the thread was launched (forked)).</p>
+<p>The other way is by subscribing a variable (most useful when is done in the constructor of your
+affected class). When subscribed initially its value will be set to false, but it will be
+updated after any calls to start()/stop().</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$isInsideGPhpThread</span>
+                : <span class="phpdocumentor-signature__argument__return-type">null|<a href="classes/GPhpThreadNotCloneableContainer.html"><abbr title="\GPhpThreadNotCloneableContainer">GPhpThreadNotCloneableContainer</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>A REFERENCE type. If it's set to null, the function will immediately return the result. Otherwise the variable will be subscribed for the result during the program's execution and its initial value will be set to false.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="classes/GPhpThread.html#method_isInGPhpThread#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/GPhpThreadException.html"><abbr title="\GPhpThreadException">GPhpThreadException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"><p>If the supplied parameter is not of a GPhpThreadNotCloneableContainer or NULL type.</p>
+</section>
+
+                                    </dd>
+                                            </dl>
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">null|bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Null if a variable is subscribed for the result. Else if the method caller is part ot a heavy thread returns true otherwise false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_isParentAlive">
+        isParentAlive()
+        <a href="classes/GPhpThread.html#method_isParentAlive" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1873</span>
+
+            <a href="classes/GPhpThread.html#source-view.1873" class="phpdocumentor-element-found-in__source" data-line="1873" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Checks if the creator of the heavy thread is alive.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">isParentAlive</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true if the parent is alive otherwise returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                -final        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_join">
+        join()
+        <a href="classes/GPhpThread.html#method_join" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">2031</span>
+
+            <a href="classes/GPhpThread.html#source-view.2031" class="phpdocumentor-element-found-in__source" data-line="2031" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Waits for executing thread to return.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__final">final</span>            <span class="phpdocumentor-signature__name">join</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$useBlocking</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">true</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$useBlocking</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">true</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>If is set to true will block the until the thread returns.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>True if the thread has joined otherwise false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                -final        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_pause">
+        pause()
+        <a href="classes/GPhpThread.html#method_pause" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">2080</span>
+
+            <a href="classes/GPhpThread.html#source-view.2080" class="phpdocumentor-element-found-in__source" data-line="2080" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Pauses the execution of the thread.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__final">final</span>            <span class="phpdocumentor-signature__name">pause</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>True if the pause request was successfully sent otherwise false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_resetThreadIdGenerator">
+        resetThreadIdGenerator()
+        <a href="classes/GPhpThread.html#method_resetThreadIdGenerator" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1735</span>
+
+            <a href="classes/GPhpThread.html#source-view.1735" class="phpdocumentor-element-found-in__source" data-line="1735" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Resets the internal thread id generator. This can be used to allow creation of threads from another thread.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">resetThreadIdGenerator</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+        <section class="phpdocumentor-description"><p>Not recommended to be used especially in a more complex cases.</p>
+</section>
+
+    
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                -final        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_resume">
+        resume()
+        <a href="classes/GPhpThread.html#method_resume" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">2089</span>
+
+            <a href="classes/GPhpThread.html#source-view.2089" class="phpdocumentor-element-found-in__source" data-line="2089" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Resumes the execution of a paused thread.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__final">final</span>            <span class="phpdocumentor-signature__name">resume</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>True if the execution resume request was successfully sent otherwise false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                        -abstract                                "
+>
+    <h4 class="phpdocumentor-element__name" id="method_run">
+        run()
+        <a href="classes/GPhpThread.html#method_run" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1929</span>
+
+            <a href="classes/GPhpThread.html#source-view.1929" class="phpdocumentor-element-found-in__source" data-line="1929" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Abstract method, the entry point of a particular GPhpThread inheritor implementation.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__abstract">abstract</span>                <span class="phpdocumentor-signature__name">run</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_setPriority">
+        setPriority()
+        <a href="classes/GPhpThread.html#method_setPriority" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1836</span>
+
+            <a href="classes/GPhpThread.html#source-view.1836" class="phpdocumentor-element-found-in__source" data-line="1836" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Sets the execution priority of the thread. A super user privileges are required.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">setPriority</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$priority</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$priority</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The priority number in the interval [-20; 20] where the lower value means higher priority.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true on success otherwise returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                -final        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_start">
+        start()
+        <a href="classes/GPhpThread.html#method_start" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1935</span>
+
+            <a href="classes/GPhpThread.html#source-view.1935" class="phpdocumentor-element-found-in__source" data-line="1935" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Starts the thread.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__final">final</span>            <span class="phpdocumentor-signature__name">start</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>On successful execution returns true otherwise returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                -final        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_stop">
+        stop()
+        <a href="classes/GPhpThread.html#method_stop" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1992</span>
+
+            <a href="classes/GPhpThread.html#source-view.1992" class="phpdocumentor-element-found-in__source" data-line="1992" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Stops executing thread.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__final">final</span>            <span class="phpdocumentor-signature__name">stop</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$force</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$force</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>If it is set to true if performs forced stop (termination).</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>True if the stop request was sent successfully otherwise false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_makeNicer">
+        makeNicer()
+        <a href="classes/GPhpThread.html#method_makeNicer" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1910</span>
+
+            <a href="classes/GPhpThread.html#source-view.1910" class="phpdocumentor-element-found-in__source" data-line="1910" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">At process level decreases the niceness of a heavy &quot;thread&quot; making its priority higher. Multiple calls of the method will accumulate and increase the effect.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                    <span class="phpdocumentor-signature__name">makeNicer</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="classes/GPhpThread.html#method_makeNicer#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">see</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                    <span class="phpdocumentor-tag-link"><a href="classes/GPhpThread.html#method_makeUnfriendlier"><abbr title="\GPhpThread::makeUnfriendlier()">GPhpThread::makeUnfriendlier()</abbr></a></span>
+                                        
+                                                 <section class="phpdocumentor-description"><p>A method with the opposite effect is GPhpThread::makeUnfriendlier().</p>
+</section>
+
+                                    </dd>
+                                            </dl>
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true on success or false in case of error or lack of privileges.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_makeUnfriendlier">
+        makeUnfriendlier()
+        <a href="classes/GPhpThread.html#method_makeUnfriendlier" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1920</span>
+
+            <a href="classes/GPhpThread.html#source-view.1920" class="phpdocumentor-element-found-in__source" data-line="1920" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">At process level increases the niceness of a heavy &quot;thread&quot; making its priority lower. Multiple calls of the method will accumulate and increase the effect.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                    <span class="phpdocumentor-signature__name">makeUnfriendlier</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="classes/GPhpThread.html#method_makeUnfriendlier#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">see</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                    <span class="phpdocumentor-tag-link"><a href="classes/GPhpThread.html#method_makeNicer"><abbr title="\GPhpThread::makeNicer()">GPhpThread::makeNicer()</abbr></a></span>
+                                        
+                                                 <section class="phpdocumentor-description"><p>A method with the opposite effect is GPhpThread::makeNicer().</p>
+</section>
+
+                                    </dd>
+                                            </dl>
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true on success or false in case of error or lack of privileges.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_milliSleep">
+        milliSleep()
+        <a href="classes/GPhpThread.html#method_milliSleep" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1901</span>
+
+            <a href="classes/GPhpThread.html#source-view.1901" class="phpdocumentor-element-found-in__source" data-line="1901" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Suspends the thread execution for a specific amount of milliseconds, redirecting the CPU resources to somewhere else.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                    <span class="phpdocumentor-signature__name">milliSleep</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$milliseconds</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$milliseconds</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The delay in milliseconds.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="classes/GPhpThread.html#method_milliSleep#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">see</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                    <span class="phpdocumentor-tag-link"><a href="classes/GPhpThread.html#method_sleep"><abbr title="\GPhpThread::sleep()">GPhpThread::sleep()</abbr></a></span>
+                                        
+                                                 <section class="phpdocumentor-description"><p>Another similar method is sleep().</p>
+</section>
+
+                                    </dd>
+                                            </dl>
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true after all of the specified delay time elapsed. If the sleep was interrupted returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
+                                                -final        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_setExitCode">
+        setExitCode()
+        <a href="classes/GPhpThread.html#method_setExitCode" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1774</span>
+
+            <a href="classes/GPhpThread.html#source-view.1774" class="phpdocumentor-element-found-in__source" data-line="1774" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Specifies the running thread&#039;s exit code when it terminates.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+        <span class="phpdocumentor-signature__final">final</span>            <span class="phpdocumentor-signature__name">setExitCode</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$exitCode</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$exitCode</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The exit code with which the thread will quit.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_sleep">
+        sleep()
+        <a href="classes/GPhpThread.html#method_sleep" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1884</span>
+
+            <a href="classes/GPhpThread.html#source-view.1884" class="phpdocumentor-element-found-in__source" data-line="1884" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Suspends the thread execution for a specific amount of time, redirecting the CPU resources to somewhere else. The total delay is the sum of all passed parameters.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                    <span class="phpdocumentor-signature__name">sleep</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$microseconds</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$seconds</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">0</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$microseconds</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The delay in microseconds.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$seconds</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">0</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>(optional) The delay in seconds.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="classes/GPhpThread.html#method_sleep#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">see</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                    <span class="phpdocumentor-tag-link"><a href="classes/GPhpThread.html#method_milliSleep"><abbr title="\GPhpThread::milliSleep()">GPhpThread::milliSleep()</abbr></a></span>
+                                        
+                                                 <section class="phpdocumentor-description"><p>Another similar method is milliSleep().</p>
+</section>
+
+                                    </dd>
+                                            </dl>
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true after all of the specified delay time elapsed. If the sleep was interrupted returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_amIParent">
+        amIParent()
+        <a href="classes/GPhpThread.html#method_amIParent" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1807</span>
+
+            <a href="classes/GPhpThread.html#source-view.1807" class="phpdocumentor-element-found-in__source" data-line="1807" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns if the current process is a parent (has created thread).</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">amIParent</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>If it is a parent returns true otherwise returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_notifyParentThatChildIsTerminated">
+        notifyParentThatChildIsTerminated()
+        <a href="classes/GPhpThread.html#method_notifyParentThatChildIsTerminated" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1815</span>
+
+            <a href="classes/GPhpThread.html#source-view.1815" class="phpdocumentor-element-found-in__source" data-line="1815" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Notifies the parent of the current thread that the thread has exited.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">notifyParentThatChildIsTerminated</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+    
+</article>
+            </section>
+
+        <div class="phpdocumentor-modal" id="source-view">
+    <div class="phpdocumentor-modal-bg" data-exit-button></div>
+    <div class="phpdocumentor-modal-container">
+        <div class="phpdocumentor-modal-content">
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/GPhpThread.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+        </div>
+        <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
+    </div>
+</div>
+
+    <script type="text/javascript">
+        (function () {
+            function loadExternalCodeSnippet(el, url, line) {
+                Array.prototype.slice.call(el.querySelectorAll('pre[data-src]')).forEach((pre) => {
+                    const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
+                    const language = 'php';
+
+                    const code = document.createElement('code');
+                    code.className = 'language-' + language;
+                    pre.textContent = '';
+                    pre.setAttribute('data-line', line)
+                    code.textContent = 'Loading…';
+                    pre.appendChild(code);
+
+                    var xhr = new XMLHttpRequest();
+
+                    xhr.open('GET', src, true);
+
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState !== 4) {
+                            return;
+                        }
+
+                        if (xhr.status < 400 && xhr.responseText) {
+                            code.textContent = xhr.responseText;
+                            Prism.highlightElement(code);
+                            return;
+                        }
+
+                        if (xhr.status === 404) {
+                            code.textContent = '✖ Error: File could not be found';
+                            return;
+                        }
+
+                        if (xhr.status >= 400) {
+                            code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                            return;
+                        }
+
+                        code.textContent = '✖ Error: An unknown error occurred';
+                    };
+
+                    xhr.send(null);
+                });
+            }
+
+            const modalButtons = document.querySelectorAll("[data-modal]");
+            const openedAsLocalFile = window.location.protocol === 'file:';
+            if (modalButtons.length > 0 && openedAsLocalFile) {
+                console.warn(
+                    'Viewing the source code is unavailable because you are opening this page from the file:// scheme; ' +
+                    'browsers block XHR requests when a page is opened this way'
+                );
+            }
+
+            modalButtons.forEach(function (trigger) {
+                if (openedAsLocalFile) {
+                    trigger.setAttribute("hidden", "hidden");
+                }
+
+                trigger.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    const modal = document.getElementById(trigger.dataset.modal);
+                    if (!modal) {
+                        console.error(`Modal with id "${trigger.dataset.modal}" could not be found`);
+                        return;
+                    }
+                    modal.classList.add("phpdocumentor-modal__open");
+
+                    loadExternalCodeSnippet(modal, trigger.dataset.src || null, trigger.dataset.line)
+                    const exits = modal.querySelectorAll("[data-exit-button]");
+                    exits.forEach(function (exit) {
+                        exit.addEventListener("click", function (event) {
+                            event.preventDefault();
+                            modal.classList.remove("phpdocumentor-modal__open");
+                        });
+                    });
+                });
+            });
+        })();
+    </script>
+
+    </article>
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                                
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                                                                <li><a href="classes/GPhpThread.html#toc-methods">Methods</a></li>
+                                    </ul>
+            </li>
+            
+            
+                        <li class="phpdocumentor-on-this-page-section__title">Methods</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                            <li><a href="classes/GPhpThread.html#method___construct">__construct()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method___destruct">__destruct()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_BGN_HIGH_PRIOR_EXEC_BLOCK">BGN_HIGH_PRIOR_EXEC_BLOCK()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_END_HIGH_PRIOR_EXEC_BLOCK">END_HIGH_PRIOR_EXEC_BLOCK()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_getExitCode">getExitCode()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_getPid">getPid()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_getPriority">getPriority()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_isAlive">isAlive()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_isInGPhpThread">isInGPhpThread()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_isParentAlive">isParentAlive()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_join">join()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_pause">pause()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_resetThreadIdGenerator">resetThreadIdGenerator()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_resume">resume()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_run">run()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_setPriority">setPriority()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_start">start()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_stop">stop()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_makeNicer">makeNicer()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_makeUnfriendlier">makeUnfriendlier()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_milliSleep">milliSleep()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_setExitCode">setExitCode()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_sleep">sleep()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_amIParent">amIParent()</a></li>
+                                            <li><a href="classes/GPhpThread.html#method_notifyParentThatChildIsTerminated">notifyParentThatChildIsTerminated()</a></li>
+                                    </ul>
+            </li>
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+    <section class="phpdocumentor-search-results__dialog">
+        <header class="phpdocumentor-search-results__header">
+            <h2 class="phpdocumentor-search-results__title">Search results</h2>
+            <button class="phpdocumentor-search-results__close"><i class="fas fa-times"></i></button>
+        </header>
+        <section class="phpdocumentor-search-results__body">
+            <ul class="phpdocumentor-search-results__entries"></ul>
+        </section>
+    </section>
+</section>
+        </div>
+        <a href="classes/GPhpThread.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+
+    </main>
+
+    <script>
+        cssVars({});
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
+</body>
+</html>

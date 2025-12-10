@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="319px" preserveAspectRatio="none" style="width:529px;height:319px;" version="1.1" viewBox="0 0 529 319" width="529px" zoomAndPan="magnify"><defs/><g><!--MD5=[855d026cbccc38db736b2c3f81b79b2c]
+class GPhpThreadException--><rect fill="#FEFECE" height="32" id="GPhpThreadException" style="stroke: #A80036; stroke-width: 1.5;" width="170" x="306" y="142"/><ellipse cx="321" cy="158" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M323.9688,163.6406 Q323.3906,163.9375 322.75,164.0781 Q322.1094,164.2344 321.4063,164.2344 Q318.9063,164.2344 317.5781,162.5938 Q316.2656,160.9375 316.2656,157.8125 Q316.2656,154.6875 317.5781,153.0313 Q318.9063,151.375 321.4063,151.375 Q322.1094,151.375 322.75,151.5313 Q323.4063,151.6875 323.9688,151.9844 L323.9688,154.7031 Q323.3438,154.125 322.75,153.8594 Q322.1563,153.5781 321.5313,153.5781 Q320.1875,153.5781 319.5,154.6563 Q318.8125,155.7188 318.8125,157.8125 Q318.8125,159.9063 319.5,160.9844 Q320.1875,162.0469 321.5313,162.0469 Q322.1563,162.0469 322.75,161.7813 Q323.3438,161.5 323.9688,160.9219 L323.9688,163.6406 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="138" x="335" y="162.1543">GPhpThreadException</text><!--MD5=[8db60afef7a3447bbe27c5ed187fdac2]
+class Exception--><rect fill="#FEFECE" height="32" id="Exception" style="stroke: #A80036; stroke-width: 1.5;" width="93" x="58.5" y="142"/><ellipse cx="73.5" cy="158" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M76.4688,163.6406 Q75.8906,163.9375 75.25,164.0781 Q74.6094,164.2344 73.9063,164.2344 Q71.4063,164.2344 70.0781,162.5938 Q68.7656,160.9375 68.7656,157.8125 Q68.7656,154.6875 70.0781,153.0313 Q71.4063,151.375 73.9063,151.375 Q74.6094,151.375 75.25,151.5313 Q75.9063,151.6875 76.4688,151.9844 L76.4688,154.7031 Q75.8438,154.125 75.25,153.8594 Q74.6563,153.5781 74.0313,153.5781 Q72.6875,153.5781 72,154.6563 Q71.3125,155.7188 71.3125,157.8125 Q71.3125,159.9063 72,160.9844 Q72.6875,162.0469 74.0313,162.0469 Q74.6563,162.0469 75.25,161.7813 Q75.8438,161.5 76.4688,160.9219 L76.4688,163.6406 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="61" x="87.5" y="162.1543">Exception</text><!--MD5=[2478d39a03d1db7ff05084340dc45098]
+class GPhpThreadIntercom--><rect fill="#FEFECE" height="32" id="GPhpThreadIntercom" style="stroke: #A80036; stroke-width: 1.5;" width="164" x="23" y="209"/><ellipse cx="38" cy="225" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M40.9688,230.6406 Q40.3906,230.9375 39.75,231.0781 Q39.1094,231.2344 38.4063,231.2344 Q35.9063,231.2344 34.5781,229.5938 Q33.2656,227.9375 33.2656,224.8125 Q33.2656,221.6875 34.5781,220.0313 Q35.9063,218.375 38.4063,218.375 Q39.1094,218.375 39.75,218.5313 Q40.4063,218.6875 40.9688,218.9844 L40.9688,221.7031 Q40.3438,221.125 39.75,220.8594 Q39.1563,220.5781 38.5313,220.5781 Q37.1875,220.5781 36.5,221.6563 Q35.8125,222.7188 35.8125,224.8125 Q35.8125,226.9063 36.5,227.9844 Q37.1875,229.0469 38.5313,229.0469 Q39.1563,229.0469 39.75,228.7813 Q40.3438,228.5 40.9688,227.9219 L40.9688,230.6406 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="132" x="52" y="229.1543">GPhpThreadIntercom</text><!--MD5=[0b69d287a74b828fd1563996d25c02b1]
+class GPhpThreadCriticalSection--><rect fill="#FEFECE" height="32" id="GPhpThreadCriticalSection" style="stroke: #A80036; stroke-width: 1.5;" width="198" x="6" y="276"/><ellipse cx="21" cy="292" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M23.9688,297.6406 Q23.3906,297.9375 22.75,298.0781 Q22.1094,298.2344 21.4063,298.2344 Q18.9063,298.2344 17.5781,296.5938 Q16.2656,294.9375 16.2656,291.8125 Q16.2656,288.6875 17.5781,287.0313 Q18.9063,285.375 21.4063,285.375 Q22.1094,285.375 22.75,285.5313 Q23.4063,285.6875 23.9688,285.9844 L23.9688,288.7031 Q23.3438,288.125 22.75,287.8594 Q22.1563,287.5781 21.5313,287.5781 Q20.1875,287.5781 19.5,288.6563 Q18.8125,289.7188 18.8125,291.8125 Q18.8125,293.9063 19.5,294.9844 Q20.1875,296.0469 21.5313,296.0469 Q22.1563,296.0469 22.75,295.7813 Q23.3438,295.5 23.9688,294.9219 L23.9688,297.6406 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="166" x="35" y="296.1543">GPhpThreadCriticalSection</text><!--MD5=[5003dc72014e03f7e68d0ce4570d199e]
+class GPhpThreadNotCloneableContainer--><rect fill="#FEFECE" height="32" id="GPhpThreadNotCloneableContainer" style="stroke: #A80036; stroke-width: 1.5;" width="254" x="264" y="8"/><ellipse cx="279" cy="24" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M281.9688,29.6406 Q281.3906,29.9375 280.75,30.0781 Q280.1094,30.2344 279.4063,30.2344 Q276.9063,30.2344 275.5781,28.5938 Q274.2656,26.9375 274.2656,23.8125 Q274.2656,20.6875 275.5781,19.0313 Q276.9063,17.375 279.4063,17.375 Q280.1094,17.375 280.75,17.5313 Q281.4063,17.6875 281.9688,17.9844 L281.9688,20.7031 Q281.3438,20.125 280.75,19.8594 Q280.1563,19.5781 279.5313,19.5781 Q278.1875,19.5781 277.5,20.6563 Q276.8125,21.7188 276.8125,23.8125 Q276.8125,25.9063 277.5,26.9844 Q278.1875,28.0469 279.5313,28.0469 Q280.1563,28.0469 280.75,27.7813 Q281.3438,27.5 281.9688,26.9219 L281.9688,29.6406 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="222" x="293" y="28.1543">GPhpThreadNotCloneableContainer</text><!--MD5=[cc3de0a176daa3c4ec875deafdf5ddd1]
+class Serializable--><rect fill="#FEFECE" height="32" id="Serializable" style="stroke: #A80036; stroke-width: 1.5;" width="103" x="53.5" y="42"/><ellipse cx="68.5" cy="58" fill="#B4A7E5" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M64.4219,53.7656 L64.4219,51.6094 L71.8125,51.6094 L71.8125,53.7656 L69.3438,53.7656 L69.3438,61.8438 L71.8125,61.8438 L71.8125,64 L64.4219,64 L64.4219,61.8438 L66.8906,61.8438 L66.8906,53.7656 L64.4219,53.7656 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="71" x="82.5" y="62.1543">Serializable</text><!--MD5=[86e7117770137f3d67dd402eab5d49bb]
+class GPhpThreadLockGuard--><rect fill="#FEFECE" height="32" id="GPhpThreadLockGuard" style="stroke: #A80036; stroke-width: 1.5;" width="175" x="303.5" y="75"/><ellipse cx="318.5" cy="91" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M321.4688,96.6406 Q320.8906,96.9375 320.25,97.0781 Q319.6094,97.2344 318.9063,97.2344 Q316.4063,97.2344 315.0781,95.5938 Q313.7656,93.9375 313.7656,90.8125 Q313.7656,87.6875 315.0781,86.0313 Q316.4063,84.375 318.9063,84.375 Q319.6094,84.375 320.25,84.5313 Q320.9063,84.6875 321.4688,84.9844 L321.4688,87.7031 Q320.8438,87.125 320.25,86.8594 Q319.6563,86.5781 319.0313,86.5781 Q317.6875,86.5781 317,87.6563 Q316.3125,88.7188 316.3125,90.8125 Q316.3125,92.9063 317,93.9844 Q317.6875,95.0469 319.0313,95.0469 Q319.6563,95.0469 320.25,94.7813 Q320.8438,94.5 321.4688,93.9219 L321.4688,96.6406 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="143" x="332.5" y="95.1543">GPhpThreadLockGuard</text><!--MD5=[41b2547a9f9fb7baaeb879a6f90fcb97]
+class GPhpThread--><rect fill="#FEFECE" height="32" id="GPhpThread" style="stroke: #A80036; stroke-width: 1.5;" width="108" x="337" y="209"/><ellipse cx="352" cy="225" fill="#A9DCDF" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"/><path d="M352.1094,220.3438 L350.9531,225.4219 L353.2813,225.4219 L352.1094,220.3438 Z M350.625,218.1094 L353.6094,218.1094 L356.9688,230.5 L354.5156,230.5 L353.75,227.4375 L350.4688,227.4375 L349.7188,230.5 L347.2813,230.5 L350.625,218.1094 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="76" x="366" y="229.1543">GPhpThread</text><!--MD5=[f54dc2a94eed9d5bd09c18ac7354564d]
+reverse link Exception to GPhpThreadException--><path d="M171.59,158 C171.59,158 305.74,158 305.74,158 " fill="none" id="Exception&lt;-GPhpThreadException" style="stroke: #516F42; stroke-width: 1.0;"/><polygon fill="none" points="171.59,165,151.59,158,171.59,151,171.59,165" style="stroke: #516F42; stroke-width: 1.0;"/><!--MD5=[dd4b9cbd2877a03bc1715eb3bfbdd287]
+reverse link Serializable to GPhpThreadNotCloneableContainer--><path d="M176.77,58 C176.77,58 284,58 284,58 C284,58 284,48.96 284,40.2 " fill="none" id="Serializable&lt;-GPhpThreadNotCloneableContainer" style="stroke: #516F42; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="none" points="176.77,65,156.77,58,176.77,51,176.77,65" style="stroke: #516F42; stroke-width: 1.0;"/><!--MD5=[7b3dcdd243e66549cd53079890703f90]
+reverse link Serializable to GPhpThreadLockGuard--><path d="M105,89.31 C105,89.31 105,91 105,91 C105,91 219.18,91 303.25,91 " fill="none" id="Serializable&lt;-GPhpThreadLockGuard" style="stroke: #516F42; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="none" points="98,94.11,105,74.11,112,94.11,98,94.11" style="stroke: #516F42; stroke-width: 1.0;"/><!--MD5=[422224f2439a00ab41eaee61ec744731]
+link GPhpThreadIntercom to GPhpThreadCriticalSection--><!--MD5=[c5dfce319cd917c67eea39784ff567cd]
+link GPhpThreadIntercom to GPhpThread--><!--MD5=[12139c87f4f7223d7572ecd258a849b1]
+@startuml
+   skinparam ArrowColor #516f42
+   skinparam activityBorderColor #516f42
+   skinparam activityBackgroundColor #ffffff
+   skinparam activityDiamondBorderColor #516f42
+   skinparam activityDiamondBackgroundColor #ffffff
+   skinparam shadowing false
+
+skinparam shadowing false
+skinparam linetype ortho
+hide empty members
+left to right direction
+set namespaceSeparator \\
+
+
+class \\GPhpThreadException extends \\Exception {
+}
+
+class \\GPhpThreadIntercom {
+}
+
+class \\GPhpThreadCriticalSection {
+}
+
+class \\GPhpThreadNotCloneableContainer implements \\Serializable {
+}
+
+class \\GPhpThreadLockGuard implements \\Serializable {
+}
+
+abstract class \\GPhpThread {
+}
+
+@enduml
+
+PlantUML version 1.2020.02(Sun Mar 01 10:22:07 UTC 2020)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 17.0.17+10
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>

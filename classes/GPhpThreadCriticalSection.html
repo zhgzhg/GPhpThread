@@ -1,0 +1,2286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+            <title>GPhpThread - a heavy threads implementation in pure PHP - Documentation</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="../">
+    <link rel="icon" href="images/favicon.ico"/>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/base.css">
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/template.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism-okaidia.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="js/template.js"></script>
+        <script src="js/search.js"></script>
+        <script defer src="js/searchIndex.js"></script>
+    </head>
+<body id="top">
+    <header class="phpdocumentor-header phpdocumentor-section">
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">GPhpThread - a heavy threads implementation in pure PHP - Documentation</a></h1>
+    <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
+    <label class="phpdocumentor-header__menu-icon" for="menu-button">
+        <i class="fas fa-bars"></i>
+    </label>
+    <section data-search-form class="phpdocumentor-search">
+    <label>
+        <span class="visually-hidden">Search for</span>
+        <svg class="phpdocumentor-search__icon" width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="2"/>
+            <line x1="12.4892" y1="12.2727" x2="19.1559" y2="18.9393" stroke="currentColor" stroke-width="3"/>
+        </svg>
+        <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+    </label>
+</section>
+
+    <nav class="phpdocumentor-topnav">
+    <ul class="phpdocumentor-topnav__menu">
+        </ul>
+</nav>
+</header>
+
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <input class="phpdocumentor-sidebar__menu-button" type="checkbox" id="sidebar-button" name="sidebar-button" />
+<label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
+    Menu
+</label>
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category">
+            <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Application.html" class="">Application</a>
+</h4>
+
+                        </section>
+            
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="graphs/classes.html">Class Diagram</a></h3>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
+            <li class="phpdocumentor-breadcrumb"><a href="packages/Application.html">Application</a></li>
+    </ul>
+
+    <article class="phpdocumentor-element -class">
+        <h2 class="phpdocumentor-content__title">
+    GPhpThreadCriticalSection
+
+    
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Application.html">Application</a></li>
+                            </ul>
+        </div>
+    
+    
+    </h2>
+
+<div class="phpdocumentor-label-line">
+
+
+</div>
+
+        <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">227</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.227" class="phpdocumentor-element-found-in__source" data-line="227" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+            <p class="phpdocumentor-summary">Critical section for sharing data between multiple processes.</p>
+
+    <section class="phpdocumentor-description"><p>It provides a slower data-safe manipulating methods and unsafe faster methods.</p>
+</section>
+
+
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="classes/GPhpThreadCriticalSection.html#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">see</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                    <span class="phpdocumentor-tag-link"><a href="classes/GPhpThreadIntercom.html"><abbr title="\GPhpThreadIntercom">GPhpThreadIntercom</abbr></a></span>
+                                        
+                                                 <section class="phpdocumentor-description"><p>\GPhpThreadIntercom is used for synchronization between the different processes.</p>
+</section>
+
+                                    </dd>
+                                            </dl>
+
+
+
+<h3 id="toc">
+    Table of Contents
+    <a href="classes/GPhpThreadCriticalSection.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h3>
+
+
+
+
+
+
+
+
+
+
+<h4 id="toc-methods">
+    Methods
+    <a href="classes/GPhpThreadCriticalSection.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method___construct">__construct()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd>Constructor.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method___destruct">__destruct()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd>Destructor.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method_addOrUpdateResource">addOrUpdateResource()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Adds or updates shared resource in a reliable, slower way. A lock of the critical section is required.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method_addOrUpdateUnrelResource">addOrUpdateUnrelResource()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Adds or updates shared resource in an unreliable, faster way. A lock of the critical section is NOT required.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method_cleanPipeGarbage">cleanPipeGarbage()</a>
+    <span>
+                                &nbsp;: int    </span>
+</dt>
+<dd>Cleans pipe files garbage left from any ungracefully terminated instances.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method_dispatch">dispatch()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Dispatcher responsible for the thread intercommunication and communication with their parent process.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method_finalize">finalize()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Finalization of a thread instance that ended and soon will be destroyed.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method_getResourceNames">getResourceNames()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Returns the names of all reliable shared resources.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method_getResourceValue">getResourceValue()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd>Returns an reliable resource value by asking the dispatcher for it. An ownership of the critical section is required.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method_getResourceValueFast">getResourceValueFast()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd>Returns an reliable resource without trying to ask for it the dispatcher.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method_getUnrelResourceNames">getUnrelResourceNames()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Returns the names of all unreliable shared resources.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method_getUnrelResourceValue">getUnrelResourceValue()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd>Returns an unreliable resource value by asking the dispatcher for it. An ownership of the critical section is required.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method_getUnrelResourceValueFast">getUnrelResourceValueFast()</a>
+    <span>
+                                &nbsp;: mixed    </span>
+</dt>
+<dd>Returns an unreliable resource without trying to ask for it the dispatcher.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method_initialize">initialize()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Initializes the critical section.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method_lock">lock()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Tries to lock the associated with the instance critical section.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method_removeResource">removeResource()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Removes shared resource in a reliable, slower way. A lock of the critical section is required.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method_removeUnrelResource">removeUnrelResource()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Removes shared resource in an unreliable, faster way. A lock of the critical section is NOT required.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/GPhpThreadCriticalSection.html#method_unlock">unlock()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Tries to unlock the associated with the instance critical section.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GPhpThreadCriticalSection.html#method_dataDispatch">dataDispatch()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Operations on the transferred data dispatch helper.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GPhpThreadCriticalSection.html#method_decodeMessage">decodeMessage()</a>
+    <span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Decodes encoded from GPhpThread&#039;s instance message.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GPhpThreadCriticalSection.html#method_doIOwnIt">doIOwnIt()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Confirms if the current thread has the ownership of the critical section associated with it.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GPhpThreadCriticalSection.html#method_encodeMessage">encodeMessage()</a>
+    <span>
+                                &nbsp;: string    </span>
+</dt>
+<dd>Encodes data in a message that will be sent to the thread process dispatcher.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GPhpThreadCriticalSection.html#method_isIntercomBroken">isIntercomBroken()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Checks if the internal intercom is broken.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GPhpThreadCriticalSection.html#method_isPidAlive">isPidAlive()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Checks if specific process id is still alive.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GPhpThreadCriticalSection.html#method_receive">receive()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Receives data operation from the main process dispatcher.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GPhpThreadCriticalSection.html#method_requestLock">requestLock()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Tries to lock the critical section.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GPhpThreadCriticalSection.html#method_requestUnlock">requestUnlock()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Tries to unlock the critical section.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GPhpThreadCriticalSection.html#method_send">send()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Sends data operation to the main process dispatcher.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GPhpThreadCriticalSection.html#method_sortByLockAndDispatchPriority">sortByLockAndDispatchPriority()</a>
+    <span>
+                                &nbsp;: int    </span>
+</dt>
+<dd>Sort by occurred lock and dispatch priority. This is a workaround
+method required for PHP 5.3 and relies on an initialized
+$bindVariable inside this class.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GPhpThreadCriticalSection.html#method_sortByLockDispatchPriorityAndMostThreadsInside">sortByLockDispatchPriorityAndMostThreadsInside()</a>
+    <span>
+                                &nbsp;: int    </span>
+</dt>
+<dd>Sort by occurred lock, dispatch priority and most threads using
+the critical section. This is workaround method required for
+PHP 5.3 and relies on an initialized $bindVariable inside this
+class.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/GPhpThreadCriticalSection.html#method_updateDataContainer">updateDataContainer()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Executes data operation on the internal shared data container.</dd>
+
+    </dl>
+
+
+
+
+        
+
+        
+
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/GPhpThreadCriticalSection.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___construct">
+        __construct()
+        <a href="classes/GPhpThreadCriticalSection.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">299</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.299" class="phpdocumentor-element-found-in__source" data-line="299" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Constructor.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$pipeDirectory</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;/dev/shm&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$pipeDirectory</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">&#039;/dev/shm&#039;</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The directory where the pipe files for the inter-process communication will be stored.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___destruct">
+        __destruct()
+        <a href="classes/GPhpThreadCriticalSection.html#method___destruct" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">311</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.311" class="phpdocumentor-element-found-in__source" data-line="311" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Destructor.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">__destruct</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_addOrUpdateResource">
+        addOrUpdateResource()
+        <a href="classes/GPhpThreadCriticalSection.html#method_addOrUpdateResource" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1223</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.1223" class="phpdocumentor-element-found-in__source" data-line="1223" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Adds or updates shared resource in a reliable, slower way. A lock of the critical section is required.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">addOrUpdateResource</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The name of the resource.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$value</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The value of the resource.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true on success otherwise returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_addOrUpdateUnrelResource">
+        addOrUpdateUnrelResource()
+        <a href="classes/GPhpThreadCriticalSection.html#method_addOrUpdateUnrelResource" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1241</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.1241" class="phpdocumentor-element-found-in__source" data-line="1241" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Adds or updates shared resource in an unreliable, faster way. A lock of the critical section is NOT required.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">addOrUpdateUnrelResource</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The name of the resource.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$value</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The value of the resource.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true on success otherwise returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_cleanPipeGarbage">
+        cleanPipeGarbage()
+        <a href="classes/GPhpThreadCriticalSection.html#method_cleanPipeGarbage" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">421</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.421" class="phpdocumentor-element-found-in__source" data-line="421" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Cleans pipe files garbage left from any ungracefully terminated instances.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">cleanPipeGarbage</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">int</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The total number of unused, cleaned pipe garbage files.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_dispatch">
+        dispatch()
+        <a href="classes/GPhpThreadCriticalSection.html#method_dispatch" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">857</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.857" class="phpdocumentor-element-found-in__source" data-line="857" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Dispatcher responsible for the thread intercommunication and communication with their parent process.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">dispatch</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$useBlocking</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$useBlocking</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>On true blocks the internal execution until communication data is available for the current dispatched thread otherwise it skips it.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_finalize">
+        finalize()
+        <a href="classes/GPhpThreadCriticalSection.html#method_finalize" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">446</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.446" class="phpdocumentor-element-found-in__source" data-line="446" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Finalization of a thread instance that ended and soon will be destroyed.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">finalize</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$threadId</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$threadId</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The internal thread identifier.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getResourceNames">
+        getResourceNames()
+        <a href="classes/GPhpThreadCriticalSection.html#method_getResourceNames" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1350</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.1350" class="phpdocumentor-element-found-in__source" data-line="1350" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns the names of all reliable shared resources.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getResourceNames</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>An array of (0 =&gt; 'resource name1', 1 =&gt; 'resource name2', ...)</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getResourceValue">
+        getResourceValue()
+        <a href="classes/GPhpThreadCriticalSection.html#method_getResourceValue" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1315</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.1315" class="phpdocumentor-element-found-in__source" data-line="1315" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns an reliable resource value by asking the dispatcher for it. An ownership of the critical section is required.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getResourceValue</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The name of the desired resource.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="classes/GPhpThreadCriticalSection.html#method_getResourceValue#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/GPhpThreadException.html"><abbr title="\GPhpThreadException">GPhpThreadException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"><p>If the critical section ownership is not obtained.</p>
+</section>
+
+                                    </dd>
+                                            </dl>
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The resource value or null if the resource was not found.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getResourceValueFast">
+        getResourceValueFast()
+        <a href="classes/GPhpThreadCriticalSection.html#method_getResourceValueFast" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1296</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.1296" class="phpdocumentor-element-found-in__source" data-line="1296" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns an reliable resource without trying to ask for it the dispatcher.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getResourceValueFast</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The name of the resource.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns the resource value or null on failure or if the resource name was not found.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getUnrelResourceNames">
+        getUnrelResourceNames()
+        <a href="classes/GPhpThreadCriticalSection.html#method_getUnrelResourceNames" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1358</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.1358" class="phpdocumentor-element-found-in__source" data-line="1358" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns the names of all unreliable shared resources.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getUnrelResourceNames</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>An array of (0 =&gt; 'resource name1', 1 =&gt; 'resource name2', ...)</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getUnrelResourceValue">
+        getUnrelResourceValue()
+        <a href="classes/GPhpThreadCriticalSection.html#method_getUnrelResourceValue" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1335</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.1335" class="phpdocumentor-element-found-in__source" data-line="1335" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns an unreliable resource value by asking the dispatcher for it. An ownership of the critical section is required.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getUnrelResourceValue</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The name of the desired resource.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="classes/GPhpThreadCriticalSection.html#method_getUnrelResourceValue#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">throws</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                <span class="phpdocumentor-tag-link"><a href="classes/GPhpThreadException.html"><abbr title="\GPhpThreadException">GPhpThreadException</abbr></a></span>
+                                                            
+                                                 <section class="phpdocumentor-description"><p>If the critical section ownership is not obtained.</p>
+</section>
+
+                                    </dd>
+                                            </dl>
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The resource value or null if the resource was not found.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getUnrelResourceValueFast">
+        getUnrelResourceValueFast()
+        <a href="classes/GPhpThreadCriticalSection.html#method_getUnrelResourceValueFast" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1305</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.1305" class="phpdocumentor-element-found-in__source" data-line="1305" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Returns an unreliable resource without trying to ask for it the dispatcher.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">getUnrelResourceValueFast</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The name of the resource.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">mixed</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns the resource value or null on failure or if the resource name was not found.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_initialize">
+        initialize()
+        <a href="classes/GPhpThreadCriticalSection.html#method_initialize" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">324</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.324" class="phpdocumentor-element-found-in__source" data-line="324" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Initializes the critical section.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">initialize</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$afterForkPid</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$threadId</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$afterForkPid</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The process identifier obtained after the execution of a fork() used to differentiate between different processes - pseudo threads.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$threadId</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The internal to the GPhpThread identifier of the current thread instance which is unique identifier in the context of the current process.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>On success returns true otherwise false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_lock">
+        lock()
+        <a href="classes/GPhpThreadCriticalSection.html#method_lock" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1156</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.1156" class="phpdocumentor-element-found-in__source" data-line="1156" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Tries to lock the associated with the instance critical section.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">lock</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$useBlocking</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">true</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$useBlocking</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">true</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>If it's set to true the method will block until a lock is successfully established.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true on success otherwise returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_removeResource">
+        removeResource()
+        <a href="classes/GPhpThreadCriticalSection.html#method_removeResource" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1255</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.1255" class="phpdocumentor-element-found-in__source" data-line="1255" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Removes shared resource in a reliable, slower way. A lock of the critical section is required.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">removeResource</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The name of the resource.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true on success otherwise returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_removeUnrelResource">
+        removeUnrelResource()
+        <a href="classes/GPhpThreadCriticalSection.html#method_removeUnrelResource" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1276</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.1276" class="phpdocumentor-element-found-in__source" data-line="1276" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Removes shared resource in an unreliable, faster way. A lock of the critical section is NOT required.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">removeUnrelResource</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The name of the resource.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true on success otherwise returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_unlock">
+        unlock()
+        <a href="classes/GPhpThreadCriticalSection.html#method_unlock" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1200</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.1200" class="phpdocumentor-element-found-in__source" data-line="1200" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Tries to unlock the associated with the instance critical section.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">unlock</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$useBlocking</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">false</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$useBlocking</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">false</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>If it's set to true the method will block until an unlock is successfully established.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true on success otherwise returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_dataDispatch">
+        dataDispatch()
+        <a href="classes/GPhpThreadCriticalSection.html#method_dataDispatch" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1031</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.1031" class="phpdocumentor-element-found-in__source" data-line="1031" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Operations on the transferred data dispatch helper.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">dataDispatch</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/GPhpThreadCriticalSection.html"><abbr title="\GPhpThreadCriticalSection">GPhpThreadCriticalSection</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$inst</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$threadId</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$inst</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/GPhpThreadCriticalSection.html"><abbr title="\GPhpThreadCriticalSection">GPhpThreadCriticalSection</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The instance of the critical section to work with</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$threadId</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The identifier of the thread whose critical section is currently dispatched.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_decodeMessage">
+        decodeMessage()
+        <a href="classes/GPhpThreadCriticalSection.html#method_decodeMessage" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">480</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.480" class="phpdocumentor-element-found-in__source" data-line="480" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Decodes encoded from GPhpThread&#039;s instance message.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">decodeMessage</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$encodedMsg</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$msg</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$pid</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$encodedMsg</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The encoded message</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$msg</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The encoded message type identifier. REFERENCE type.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$pid</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The process id of the sender. REFERENCE type.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The variable name whose data was sent. REFERENCE type.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$value</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The variable data contained in the encoded message. REFERENCE type.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_doIOwnIt">
+        doIOwnIt()
+        <a href="classes/GPhpThreadCriticalSection.html#method_doIOwnIt" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">454</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.454" class="phpdocumentor-element-found-in__source" data-line="454" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Confirms if the current thread has the ownership of the critical section associated with it.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">doIOwnIt</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_encodeMessage">
+        encodeMessage()
+        <a href="classes/GPhpThreadCriticalSection.html#method_encodeMessage" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">465</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.465" class="phpdocumentor-element-found-in__source" data-line="465" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Encodes data in a message that will be sent to the thread process dispatcher.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">encodeMessage</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$msg</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$msg</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The message type identifier.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The variable name whose data is going to be sent.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$value</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The current value of the desired for sending variable.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>The composed message string</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_isIntercomBroken">
+        isIntercomBroken()
+        <a href="classes/GPhpThreadCriticalSection.html#method_isIntercomBroken" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">502</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.502" class="phpdocumentor-element-found-in__source" data-line="502" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Checks if the internal intercom is broken.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">isIntercomBroken</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true if the intercom is broken otherwise returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_isPidAlive">
+        isPidAlive()
+        <a href="classes/GPhpThreadCriticalSection.html#method_isPidAlive" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">769</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.769" class="phpdocumentor-element-found-in__source" data-line="769" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Checks if specific process id is still alive.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">isPidAlive</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$pid</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$pid</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The process identifier.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true if the pid is alive otherwise returns false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_receive">
+        receive()
+        <a href="classes/GPhpThreadCriticalSection.html#method_receive" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">581</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.581" class="phpdocumentor-element-found-in__source" data-line="581" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Receives data operation from the main process dispatcher.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">receive</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$pid</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$resourceName</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__reference-operator">&amp;</span><span class="phpdocumentor-signature__argument__name">$resourceValue</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$timeInterval</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">700</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$message</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The operation type code. REFERENCE type.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$pid</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The process id of the sender &quot;thread&quot;. REFERENCE type.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$resourceName</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The name of resource that is holding a particular data that will be &quot;shared&quot;. REFERENCE type.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$resourceValue</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The value of the resource. REFERENCE type.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$timeInterval</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">700</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Internal wait time interval in milliseconds between each data check.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true on success otherwise false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_requestLock">
+        requestLock()
+        <a href="classes/GPhpThreadCriticalSection.html#method_requestLock" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">643</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.643" class="phpdocumentor-element-found-in__source" data-line="643" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Tries to lock the critical section.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">requestLock</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true on success otherwise false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_requestUnlock">
+        requestUnlock()
+        <a href="classes/GPhpThreadCriticalSection.html#method_requestUnlock" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">661</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.661" class="phpdocumentor-element-found-in__source" data-line="661" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Tries to unlock the critical section.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">requestUnlock</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true on success otherwise false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_send">
+        send()
+        <a href="classes/GPhpThreadCriticalSection.html#method_send" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">516</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.516" class="phpdocumentor-element-found-in__source" data-line="516" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Sends data operation to the main process dispatcher.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">send</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$operation</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$resourceName</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$resourceValue</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$operation</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The operation type code.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$resourceName</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The name of resource that is holding a particular data that will be &quot;shared&quot;.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$resourceValue</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The value of the resource.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true on success otherwise false.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_sortByLockAndDispatchPriority">
+        sortByLockAndDispatchPriority()
+        <a href="classes/GPhpThreadCriticalSection.html#method_sortByLockAndDispatchPriority" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">783</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.783" class="phpdocumentor-element-found-in__source" data-line="783" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Sort by occurred lock and dispatch priority. This is a workaround
+method required for PHP 5.3 and relies on an initialized
+$bindVariable inside this class.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">sortByLockAndDispatchPriority</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$a</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$b</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$a</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The first key to be taken into account.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$b</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The second key to be taken into account.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">int</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>-1, 0 or 1 depending on which key is more preferable.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_sortByLockDispatchPriorityAndMostThreadsInside">
+        sortByLockDispatchPriorityAndMostThreadsInside()
+        <a href="classes/GPhpThreadCriticalSection.html#method_sortByLockDispatchPriorityAndMostThreadsInside" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">809</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.809" class="phpdocumentor-element-found-in__source" data-line="809" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Sort by occurred lock, dispatch priority and most threads using
+the critical section. This is workaround method required for
+PHP 5.3 and relies on an initialized $bindVariable inside this
+class.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">sortByLockDispatchPriorityAndMostThreadsInside</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$a</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$b</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$a</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The first key to be taken into account.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$b</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The second key to be taken into account.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">int</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>-1, 0 or 1 depending on which key is more preferable.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_updateDataContainer">
+        updateDataContainer()
+        <a href="classes/GPhpThreadCriticalSection.html#method_updateDataContainer" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="GPhpThread.php"><a href="files/gphpthread.html">GPhpThread.php</a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">684</span>
+
+            <a href="classes/GPhpThreadCriticalSection.html#source-view.684" class="phpdocumentor-element-found-in__source" data-line="684" data-modal="source-view" data-src="files/GPhpThread.php.txt"></a>
+    </aside>
+
+        <p class="phpdocumentor-summary">Executes data operation on the internal shared data container.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                    <span class="phpdocumentor-signature__name">updateDataContainer</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$actionType</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$value</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$actionType</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The performed operation code.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$name</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The name of the resource.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$value</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The value of the resource.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Returns true on success otherwise false.</p>
+</section>
+
+            </section>
+
+</article>
+            </section>
+
+        <div class="phpdocumentor-modal" id="source-view">
+    <div class="phpdocumentor-modal-bg" data-exit-button></div>
+    <div class="phpdocumentor-modal-container">
+        <div class="phpdocumentor-modal-content">
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/GPhpThread.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+        </div>
+        <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
+    </div>
+</div>
+
+    <script type="text/javascript">
+        (function () {
+            function loadExternalCodeSnippet(el, url, line) {
+                Array.prototype.slice.call(el.querySelectorAll('pre[data-src]')).forEach((pre) => {
+                    const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
+                    const language = 'php';
+
+                    const code = document.createElement('code');
+                    code.className = 'language-' + language;
+                    pre.textContent = '';
+                    pre.setAttribute('data-line', line)
+                    code.textContent = 'Loading…';
+                    pre.appendChild(code);
+
+                    var xhr = new XMLHttpRequest();
+
+                    xhr.open('GET', src, true);
+
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState !== 4) {
+                            return;
+                        }
+
+                        if (xhr.status < 400 && xhr.responseText) {
+                            code.textContent = xhr.responseText;
+                            Prism.highlightElement(code);
+                            return;
+                        }
+
+                        if (xhr.status === 404) {
+                            code.textContent = '✖ Error: File could not be found';
+                            return;
+                        }
+
+                        if (xhr.status >= 400) {
+                            code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                            return;
+                        }
+
+                        code.textContent = '✖ Error: An unknown error occurred';
+                    };
+
+                    xhr.send(null);
+                });
+            }
+
+            const modalButtons = document.querySelectorAll("[data-modal]");
+            const openedAsLocalFile = window.location.protocol === 'file:';
+            if (modalButtons.length > 0 && openedAsLocalFile) {
+                console.warn(
+                    'Viewing the source code is unavailable because you are opening this page from the file:// scheme; ' +
+                    'browsers block XHR requests when a page is opened this way'
+                );
+            }
+
+            modalButtons.forEach(function (trigger) {
+                if (openedAsLocalFile) {
+                    trigger.setAttribute("hidden", "hidden");
+                }
+
+                trigger.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    const modal = document.getElementById(trigger.dataset.modal);
+                    if (!modal) {
+                        console.error(`Modal with id "${trigger.dataset.modal}" could not be found`);
+                        return;
+                    }
+                    modal.classList.add("phpdocumentor-modal__open");
+
+                    loadExternalCodeSnippet(modal, trigger.dataset.src || null, trigger.dataset.line)
+                    const exits = modal.querySelectorAll("[data-exit-button]");
+                    exits.forEach(function (exit) {
+                        exit.addEventListener("click", function (event) {
+                            event.preventDefault();
+                            modal.classList.remove("phpdocumentor-modal__open");
+                        });
+                    });
+                });
+            });
+        })();
+    </script>
+
+    </article>
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                                
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                                                                <li><a href="classes/GPhpThreadCriticalSection.html#toc-methods">Methods</a></li>
+                                    </ul>
+            </li>
+            
+            
+                        <li class="phpdocumentor-on-this-page-section__title">Methods</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method___construct">__construct()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method___destruct">__destruct()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_addOrUpdateResource">addOrUpdateResource()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_addOrUpdateUnrelResource">addOrUpdateUnrelResource()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_cleanPipeGarbage">cleanPipeGarbage()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_dispatch">dispatch()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_finalize">finalize()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_getResourceNames">getResourceNames()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_getResourceValue">getResourceValue()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_getResourceValueFast">getResourceValueFast()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_getUnrelResourceNames">getUnrelResourceNames()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_getUnrelResourceValue">getUnrelResourceValue()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_getUnrelResourceValueFast">getUnrelResourceValueFast()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_initialize">initialize()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_lock">lock()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_removeResource">removeResource()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_removeUnrelResource">removeUnrelResource()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_unlock">unlock()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_dataDispatch">dataDispatch()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_decodeMessage">decodeMessage()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_doIOwnIt">doIOwnIt()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_encodeMessage">encodeMessage()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_isIntercomBroken">isIntercomBroken()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_isPidAlive">isPidAlive()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_receive">receive()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_requestLock">requestLock()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_requestUnlock">requestUnlock()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_send">send()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_sortByLockAndDispatchPriority">sortByLockAndDispatchPriority()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_sortByLockDispatchPriorityAndMostThreadsInside">sortByLockDispatchPriorityAndMostThreadsInside()</a></li>
+                                            <li><a href="classes/GPhpThreadCriticalSection.html#method_updateDataContainer">updateDataContainer()</a></li>
+                                    </ul>
+            </li>
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+    <section class="phpdocumentor-search-results__dialog">
+        <header class="phpdocumentor-search-results__header">
+            <h2 class="phpdocumentor-search-results__title">Search results</h2>
+            <button class="phpdocumentor-search-results__close"><i class="fas fa-times"></i></button>
+        </header>
+        <section class="phpdocumentor-search-results__body">
+            <ul class="phpdocumentor-search-results__entries"></ul>
+        </section>
+    </section>
+</section>
+        </div>
+        <a href="classes/GPhpThreadCriticalSection.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+
+    </main>
+
+    <script>
+        cssVars({});
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
+</body>
+</html>
