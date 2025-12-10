@@ -48,6 +48,7 @@ jobs:
           if [ -f phpDocumentor.phar ]; then
             sudo apt update ;
             sudo apt install -y graphviz plantuml ;
+            export PHPDOC_PLANTUML_BIN="$(which plantuml)"
             php phpDocumentor.phar --setting=graphs.enabled=true ;
           else
             echo "phpDocumentor.phar not found. Please check the download step." ;
