@@ -23,7 +23,7 @@
  * SOFTWARE.
  *
  * @author zhgzhg @ github.com
- * @version 1.0.7
+ * @version 1.0.8
  * @copyright zhgzhg, 2025
  */
 
